@@ -1,0 +1,25 @@
+{
+  "name": "testproj",
+  "version": "1.0.0",
+  "description": "Test project",
+  "author": "Alexey Tsivunin",
+  "license": "ISC",
+  "main": "index.js",
+  "scripts": {
+    "start": "node dist/index.js",
+    "build": "tsc",
+    "watch-ts": "tsc -w",
+    "watch-node": "nodemon dist/index.js",
+    "watch": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"cyan.bold,green.bold\" \"npm run watch-ts\" \"npm run watch-node\""
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.1",
+    "@types/node": "^12.7.8",
+    "concurrently": "^4.1.2",
+    "nodemon": "^1.19.2",
+    "typescript": "^3.6.3"
+  }
+}
