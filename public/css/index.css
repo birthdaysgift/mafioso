@@ -1,0 +1,72 @@
+html, body {
+    height: 100%;
+    width: 100%;
+    margin: 0px 0px; 
+    padding: 0px 0px;
+} 
+
+.Background {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background-image: url("../img/background.jpg");
+}
+
+.NameInputFieldText {
+    font-family: 'Algerian Regular';
+    font-size: 20px;
+    color: lightgray;
+}
+
+.NameInputField {
+    border-radius: 5px;
+    width: 200px;
+    height: 15px;
+    margin: 5px;
+}
+
+.StartButton {
+    border: 2px solid grey;
+    border-radius: 2px;
+    font-family: 'Algerian Regular';
+    margin: 5px;
+    padding-left: 3px;
+    padding-right: 3px;
+    font-size: 20px;
+    background: linear-gradient(to top, white, grey);
+    box-shadow: 0px 3px 3px black;
+    user-select: none;
+    position: relative;
+    top: 0px;
+}
+
+.StartButton:active {
+    box-shadow: 0px 0px 0px;
+    background: linear-gradient(to top, white, rgb(150, 150, 150));
+    top: 1px;
+}
+
+.RulesButton {
+    border: 2px solid grey; 
+    border-radius: 2px;
+    font-family: 'Algerian Regular';
+    margin: 5px;
+    padding-left: 3px;
+    padding-right: 3px;
+    font-size: 20px;
+    background: linear-gradient(to top, white, grey);
+    box-shadow: 0px 3px 3px black;
+    user-select: none;
+    position: relative;
+    top: 0px;
+}
+
+.RulesButton:active {
+    box-shadow: 0px 0px 0px;
+    background: linear-gradient(to top, white, rgb(150, 150, 150));
+    top: 1px;
+}
+
+
