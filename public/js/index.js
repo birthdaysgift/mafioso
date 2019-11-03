@@ -9,9 +9,7 @@ btn.addEventListener('click', (e) => {
     socket.on('created player', (playerJSON) => {
         player = JSON.parse(playerJSON);
         
-        d.querySelectorAll(
-            '.NameInputFieldText, form, .StartButton, .RulesButton'
-        ).forEach((elem) => elem.remove());
+        d.querySelector('form').remove();
         d.querySelector('.Background').insertAdjacentHTML(
             'afterbegin', `<h1 style="color:#fff;">Hello, ${player.name}!</h1>`
         );

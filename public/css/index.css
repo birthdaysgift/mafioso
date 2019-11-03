@@ -10,8 +10,14 @@ html, body {
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-direction: column;
     background-image: url("../img/background.jpg");
+}
+
+form {
+    display: flex;
+    align-items:center;
+    justify-content: center;
+    flex-direction: column;
 }
 
 .NameInputFieldText {
