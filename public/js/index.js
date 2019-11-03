@@ -8,11 +8,16 @@ btn.addEventListener('click', (e) => {
     socket.emit('create player', name);
     socket.on('created player', (playerJSON) => {
         player = JSON.parse(playerJSON);
-        
-        d.querySelector('form').remove();
-        d.querySelector('.Background').insertAdjacentHTML(
-            'afterbegin', `<h1 style="color:#fff;">Hello, ${player.name}!</h1>`
-        );
+        axios.get('/new_game/')
+            .then((response) => {
+                d.querySelector('form').remove();
+                d.querySelector('.Background').insertAdjacentHTML(
+                    'afterbegin', response.data
+                );
+                d.querySelector('h1').innerHTML = `Hello, ${player.name}!`;
+            })
+            .catch((error) => {
+                console.log(error);
+            })
     });
-
 });

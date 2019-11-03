@@ -1,3 +1,4 @@
+import fs from 'fs'
 import http from 'http'
 import express from 'express'
 import socketio from 'socket.io'
@@ -30,6 +31,9 @@ class Player {
 app.use(express.static('public'));
 
 app.get('/', (req, res) => res.sendFile('index.html'));
+app.get('/new_game/', (req, res) => res.send(fs.readFileSync(
+    `${__dirname}/../public/new_game.html`
+)));
 
 io.on('connection', (socket) => {
     socket.on('create player', (playerName) => {
