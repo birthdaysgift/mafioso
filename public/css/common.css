@@ -1,0 +1,31 @@
+html, body {
+    height: 100%;
+    width: 100%;
+    margin: 0px 0px; 
+    padding: 0px 0px;
+    font-family: 'Algerian Regular';
+    color: white;
+    font-size: 20px;
+} 
+
+.BUTTON {
+    color: black;
+    border: 2px solid grey;
+    border-radius: 2px;
+    margin: 5px;
+    padding-left: 3px;
+    padding-right: 3px;
+    background: linear-gradient(to top, white, grey);
+    box-shadow: 0px 3px 3px black;
+    user-select: none;
+}
+
+.BUTTON:active {
+    box-shadow: 0px 0px 0px;
+    background: linear-gradient(to top, white, rgb(150, 150, 150));
+}
+
+.INPUT {
+    border-radius: 5px;
+    margin: 5px;
+}
