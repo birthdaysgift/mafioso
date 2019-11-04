@@ -12,10 +12,11 @@ html(lang='en')
             div
                 h1 Hello, #{name}!
                 div Now you can create a new game
-                form.CreateForm(method='post')
-                    input.INPUT(type='text')
+                form.CreateForm(method='post' action='/create_game/')
+                    input.INPUT(type='text' name='title')
                     .CreateButton.BUTTON Create
                 div or join to an existing one
-                form.JoinForm(method='post')
-                    input.INPUT(type='text')
+                form.JoinForm(method='post' action='/join_game/')
+                    input.INPUT(type='text' name='id')
                     .JoinButton.BUTTON Join
+        script(src='/js/new_game.js')

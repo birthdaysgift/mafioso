@@ -31,6 +31,17 @@ app.route('/new_game/')
             : 'Anonymous'
         res.render('new_game', {name: name});
     });
+app.post('/create_game/', (req, res) => {
+    console.log('Create');
+    console.log(JSON.stringify(req.body));
+    res.redirect('/lobby/');
+});
+app.post('/join_game/', (req, res) => {
+    console.log('Join');
+    console.log(JSON.stringify(req.body));
+    res.redirect('/lobby/');
+})
+app.get('/lobby/', (req, res) => res.send('LOBBY'));
 
 server.listen(PORT, () => {
     console.log(`Server is listening on ${PORT}`);
