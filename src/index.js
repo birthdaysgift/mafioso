@@ -11,9 +11,15 @@ const STATIC_DIR = path.join(__dirname, '..', '/public');
 app.set('views', './views');
 app.set('view engine', 'pug');
 
+app.use(express.urlencoded({extended: true}));
 app.use(express.static(STATIC_DIR, {index: false}));
 
-app.get('/', (req, res) => res.render('index'));
+app.route('/')
+    .get((req, res) => res.render('index'))
+    .post((req, res) => {
+        console.log(req.body.name);
+        res.redirect('/');
+    });
 
 server.listen(PORT, () => {
     console.log(`Server is listening on ${PORT}`);

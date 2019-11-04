@@ -9,8 +9,9 @@ html(lang='en')
 		link(rel='stylesheet', href='/css/index.css')
 	body
 		.Background
-			form
+			form(method='post')
 				div Enter your name:
-				input.NameInputField.INPUT(type='text')
+				input.NameInputField.INPUT(type='text' name='name')
 				.StartButton.BUTTON Start Game
 				.RulesButton.BUTTON Rules
+		script(src='/js/index.js')
