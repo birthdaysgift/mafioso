@@ -1,6 +1,7 @@
 const express = require('express');
 const http = require('http');
 const path = require('path');
+const session = require('express-session');
 
 const app = express();
 const server = http.createServer(app);
@@ -13,11 +14,19 @@ app.set('view engine', 'pug');
 
 app.use(express.urlencoded({extended: true}));
 app.use(express.static(STATIC_DIR, {index: false}));
+app.use(session({secret: 'keyboard cat'}));
 
 app.route('/')
-    .get((req, res) => res.render('index'))
+    .get((req, res) => {
+        if (req.session.user) {
+            console.log(req.session.user.name);
+        }
+        res.render('index')
+    })
     .post((req, res) => {
-        console.log(req.body.name);
+        req.session.user = {
+            name: req.body.name
+        }
         res.redirect('/');
     });
 
