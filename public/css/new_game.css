@@ -1,0 +1,15 @@
+.CreateForm, .JoinForm {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.Background > div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+form {
+    flex-direction: row;
+}

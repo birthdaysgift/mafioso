@@ -17,17 +17,19 @@ app.use(express.static(STATIC_DIR, {index: false}));
 app.use(session({secret: 'keyboard cat'}));
 
 app.route('/')
-    .get((req, res) => {
-        if (req.session.user) {
-            console.log(req.session.user.name);
-        }
-        res.render('index')
-    })
+    .get((req, res) => res.render('index'))
     .post((req, res) => {
         req.session.user = {
             name: req.body.name
         }
-        res.redirect('/');
+        res.redirect('/new_game/');
+    });
+app.route('/new_game/')
+    .get((req, res) => {
+        let name = req.session.user
+            ? req.session.user.name
+            : 'Anonymous'
+        res.render('new_game', {name: name});
     });
 
 server.listen(PORT, () => {
