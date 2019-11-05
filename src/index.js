@@ -2,9 +2,11 @@ const express = require('express');
 const http = require('http');
 const path = require('path');
 const session = require('express-session');
+const socketio = require('socket.io');
 
 const app = express();
 const server = http.createServer(app);
+const io = socketio(server);
 
 const PORT = 3000;
 const STATIC_DIR = path.join(__dirname, '..', '/public');
@@ -17,6 +19,7 @@ app.use(express.static(STATIC_DIR, {index: false}));
 app.use(session({secret: 'keyboard cat'}));
 
 var games = new Map(); 
+var gameSockets = new Map();
 
 class User {
     constructor(name) {
@@ -37,6 +40,14 @@ class Game {
         this.host = host;
         this.id = Game.nextId++;
         this.members = [host];
+
+        let socket = io.of(
+            `/${this.id}-${this.title}`.replace(' ', '-')
+        );
+        socket.on('connection', (socket) => {
+            console.log('Somebody connected');
+        });
+        gameSockets.set(this.id, socket);
     }
 
     toString () {
