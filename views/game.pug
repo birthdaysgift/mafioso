@@ -1,0 +1,19 @@
+doctype html
+html(lang='en')
+    head
+        meta(charset='UTF-8')
+        meta(name='viewport', content='width=device-width, initial-scale=1.0')
+        meta(http-equiv='X-UA-Compatible', content='ie=edge')
+        title Mafia Moderator
+        link(rel='stylesheet', href='/css/common.css')
+    body
+        .Background
+            div
+                h1 #{game.title}
+                div Host: #{game.host.name}
+                ul
+                    each m in game.members
+                        if m.name === user.name
+                            li <b>#{m.name}</b>
+                        else
+                            li #{m.name}

@@ -52,9 +52,10 @@ app.post('/join_game/', (req, res) => {
     res.redirect('/game/');
 })
 app.get('/game/', (req, res) => {
-    console.log(JSON.stringify(req.session.user));
-    console.log(JSON.stringify(req.session.game));
-    res.send('GAME');
+    res.render('game', {
+        game: req.session.game,
+        user: req.session.user
+    });
 });
 
 server.listen(PORT, () => {
