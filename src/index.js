@@ -76,6 +76,12 @@ app.get('/game/', (req, res) => {
         user: req.session.user
     });
 });
+app.get('/whatishappening/', (req, res) => {
+    res.send({
+        user: req.session.user,
+        game: req.session.game
+    });
+})
 
 server.listen(PORT, () => {
     console.log(`Server is listening on ${PORT}`);
