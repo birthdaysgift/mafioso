@@ -50,6 +50,13 @@ class Game {
         gameSockets.set(this.id, socket);
     }
 
+    addMember(user) {
+        this.members.push(user);
+        gameSockets.get(this.id).emit(
+            'new member', JSON.stringify(user)
+        );
+    }
+
     toString () {
         return `${this.id} ${this.title}`
     }
@@ -77,7 +84,7 @@ app.post('/create_game/', (req, res) => {
 });
 app.post('/join_game/', (req, res) => {
     let g = games.get(parseInt(req.body.id));
-    g.members.push(req.session.user);
+    g.addMember(req.session.user);
     req.session.game = g;
     res.redirect('/game/');
 })

@@ -1,3 +1,4 @@
+d = document;
 var user;
 var game;
 var socket;
@@ -9,4 +10,10 @@ axios.get('/whatishappening/')
         socket = io(
             `/${game.id}-${game.title}`.replace(' ', '-')
         );
-    })
+        socket.on('new member', (userJSON) => {
+            let u = JSON.parse(userJSON);
+            d.querySelector('ul').insertAdjacentHTML(
+                'beforeend', `<li>${u.name}</li>`
+            );
+        });
+    });
