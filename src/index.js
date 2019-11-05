@@ -17,14 +17,38 @@ app.use(express.static(STATIC_DIR, {index: false}));
 app.use(session({secret: 'keyboard cat'}));
 
 var games = new Map(); 
-var nextGameId = 0;
+
+class User {
+    constructor(name) {
+        this.name = name;
+        this.id = User.nextId++;
+    }
+
+    toString() {
+        return `${this.id} ${this.name}`
+    }
+}
+User.nextId = 0;
+
+
+class Game {
+    constructor(title, host) {
+        this.title = title;
+        this.host = host;
+        this.id = Game.nextId++;
+        this.members = [host];
+    }
+
+    toString () {
+        return `${this.id} ${this.title}`
+    }
+}
+Game.nextId = 0;
 
 app.route('/')
     .get((req, res) => res.render('index'))
     .post((req, res) => {
-        req.session.user = {
-            name: req.body.name
-        }
+        req.session.user = new User(req.body.name);
         res.redirect('/new_game/');
     });
 app.route('/new_game/')
@@ -35,20 +59,15 @@ app.route('/new_game/')
         res.render('new_game', {name: name});
     });
 app.post('/create_game/', (req, res) => {
-    let game = {
-        "id": nextGameId++,
-        "title": req.body.title,
-        "host": req.session.user,
-        "members": [req.session.user]
-    }
-    games.set(game.id, game);
-    req.session.game = game;
+    let g = new Game(req.body.title, req.session.user);
+    games.set(g.id, g);
+    req.session.game = g;
     res.redirect('/game/');
 });
 app.post('/join_game/', (req, res) => {
-    let game = games.get(parseInt(req.body.id));
-    game.members.push(req.session.user);
-    req.session.game = game;
+    let g = games.get(parseInt(req.body.id));
+    g.members.push(req.session.user);
+    req.session.game = g;
     res.redirect('/game/');
 })
 app.get('/game/', (req, res) => {
