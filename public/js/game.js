@@ -16,4 +16,15 @@ axios.get('/whatishappening/')
                 'beforeend', `<li>${u.name}</li>`
             );
         });
+        socket.on('user ready', (userJSON) => {
+            let u = JSON.parse(userJSON);
+            d.querySelector('ul').insertAdjacentHTML(
+                'afterend', `<div>${u.name} READY`
+            );
+        });
     });
+
+let btn = d.querySelector('h1')
+btn.addEventListener('click', () => {
+    socket.emit('user ready', JSON.stringify(user));
+})

@@ -44,8 +44,11 @@ class Game {
         let socket = io.of(
             `/${this.id}-${this.title}`.replace(' ', '-')
         );
-        socket.on('connection', (socket) => {
+        socket.on('connection', (sock) => {
             console.log('Somebody connected');
+            sock.on('user ready', (userJSON) => {
+                socket.emit('user ready', userJSON);
+            });
         });
         gameSockets.set(this.id, socket);
     }
