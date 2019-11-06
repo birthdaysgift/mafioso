@@ -25,6 +25,11 @@ class User {
     constructor(name) {
         this.name = name;
         this.id = User.nextId++;
+        this.state = User.NOT_READY;
+    }
+
+    isReady() {
+        return this.state === User.READY;
     }
 
     toString() {
@@ -32,6 +37,8 @@ class User {
     }
 }
 User.nextId = 0;
+User.NOT_READY = 'not ready';
+User.READY = 'ready';
 
 
 class Game {
@@ -47,6 +54,7 @@ class Game {
             sock.on('user ready', (data) => {
                 let g = games.get(data.gameId);
                 let u = g.getMember(data.userId);
+                u.state = User.READY;
                 socket.emit('user ready', JSON.stringify(u));
             });
         });
