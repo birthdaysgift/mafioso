@@ -20,6 +20,11 @@ axios.get('/whatishappening/')
                 'afterend', `<div>${u.name} READY`
             );
         });
+        socket.on('everybody ready', () => {
+            d.querySelector('h1').insertAdjacentHTML(
+                'afterend', '<div>START</div>'
+            );
+        });
     });
 
 let btn = d.querySelector('h1')

@@ -57,9 +57,18 @@ class Game {
                 let u = g.getMember(data.userId);
                 u.state = User.READY;
                 socket.emit('user ready', JSON.stringify(u));
+                if (g.isEverybodyReady()) {
+                    socket.emit('everybody ready');
+                }
             });
         });
         gameSockets.set(this.id, socket);
+    }
+
+    isEverybodyReady() {
+        return this.members.every(
+            (m) => m.isReady()
+        );
     }
 
     addMember(user) {
