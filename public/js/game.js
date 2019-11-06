@@ -9,15 +9,15 @@ axios.get('/whatishappening/')
         gameId = response.data.gameId;
         socket = io(`/${gameId}-game`);
         socket.on('new member', (userJSON) => {
-            console.log('new member');
             let u = JSON.parse(userJSON);
             d.querySelector('ul').insertAdjacentHTML(
                 'beforeend', `<li>${u.name}</li>`
             );
         });
-        socket.on('user ready', (data) => {
+        socket.on('user ready', (userJSON) => {
+            let u = JSON.parse(userJSON);
             d.querySelector('ul').insertAdjacentHTML(
-                'afterend', `<div>${data.userId} READY`
+                'afterend', `<div>${u.name} READY`
             );
         });
     });

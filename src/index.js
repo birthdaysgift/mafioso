@@ -45,7 +45,9 @@ class Game {
         socket.on('connection', (sock) => {
             console.log('Somebody connected');
             sock.on('user ready', (data) => {
-                socket.emit('user ready', data);
+                let g = games.get(data.gameId);
+                let u = g.getMember(data.userId);
+                socket.emit('user ready', JSON.stringify(u));
             });
         });
         gameSockets.set(this.id, socket);
