@@ -41,13 +41,11 @@ class Game {
         this.id = Game.nextId++;
         this.members = [host];
 
-        let socket = io.of(
-            `/${this.id}-${this.title}`.replace(' ', '-')
-        );
+        let socket = io.of(`/${this.id}-game`);
         socket.on('connection', (sock) => {
             console.log('Somebody connected');
-            sock.on('user ready', (userJSON) => {
-                socket.emit('user ready', userJSON);
+            sock.on('user ready', (data) => {
+                socket.emit('user ready', data);
             });
         });
         gameSockets.set(this.id, socket);
@@ -99,8 +97,8 @@ app.get('/game/', (req, res) => {
 });
 app.get('/whatishappening/', (req, res) => {
     res.send({
-        user: req.session.user,
-        game: req.session.game
+        userId: req.session.user.id,
+        gameId: req.session.game.id
     });
 })
 
