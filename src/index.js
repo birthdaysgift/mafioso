@@ -18,6 +18,7 @@ app.use(express.urlencoded({extended: true}));
 app.use(express.static(STATIC_DIR, {index: false}));
 app.use(session({secret: 'keyboard cat'}));
 
+var users = new Map();
 var games = new Map(); 
 var gameSockets = new Map();
 
@@ -81,7 +82,9 @@ Game.nextId = 0;
 app.route('/')
     .get((req, res) => res.render('index'))
     .post((req, res) => {
-        req.session.user = new User(req.body.name);
+        let u = new User(req.body.name);
+        users.set(u.id, u);
+        req.session.user = u;
         res.redirect('/new_game/');
     });
 app.route('/new_game/')
@@ -92,14 +95,16 @@ app.route('/new_game/')
         res.render('new_game', {name: name});
     });
 app.post('/create_game/', (req, res) => {
-    let g = new Game(req.body.title, req.session.user);
+    let u = users.get(req.session.user.id);
+    let g = new Game(req.body.title, u);
     games.set(g.id, g);
     req.session.game = g;
     res.redirect('/game/');
 });
 app.post('/join_game/', (req, res) => {
     let g = games.get(parseInt(req.body.id));
-    g.addMember(req.session.user);
+    let u = users.get(req.session.user.id);
+    g.addMember(u);
     req.session.game = g;
     res.redirect('/game/');
 })
