@@ -58,6 +58,10 @@ class Game {
         );
     }
 
+    getMember(userId) {
+        return this.members.filter((m) => m.id === userId)[0];
+    }
+
     toString () {
         return `${this.id} ${this.title}`
     }
