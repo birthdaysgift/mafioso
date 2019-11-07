@@ -61,6 +61,12 @@ class Game {
                     socket.emit('everybody ready');
                 }
             });
+            sock.on('user not ready', (data) => {
+                let g = games.get(data.gameId);
+                let u = g.getMember(data.userId);
+                u.state = User.NOT_READY;
+                socket.emit('user not ready', JSON.stringify(u));
+            })
         });
         gameSockets.set(this.id, socket);
     }

@@ -51,6 +51,8 @@ class ReadyButton extends React.Component {
         let data = {userId: userId, gameId: gameId}
         if (this.state.showReady) {
             socket.emit('user ready', data);
+        } else {
+            socket.emit('user not ready', data);
         }
         this.setState((state) => ({showReady: !state.showReady}));
         this.props.onReadyClick(e);
@@ -76,6 +78,9 @@ class Buttons extends React.Component {
     handleReadyClick(e) {
         socket.on('everybody ready', () => {
             this.setState({showStart: true});
+        });
+        socket.on('user not ready', (userJSON) => {
+            this.setState({showStart: false});
         });
     }
 
