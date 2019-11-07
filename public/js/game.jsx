@@ -72,9 +72,12 @@ class Buttons extends React.Component {
         });
         socket.on('everybody ready', () => {
             this.setState({showStart: true});
+            console.log('everybody ready');
         });
         socket.on('user not ready', (userJSON) => {
+            let u = JSON.parse(userJSON);
             this.setState({showStart: false});
+            console.log(`${u.name} NOT READY`);
         });
     }
 
