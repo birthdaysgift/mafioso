@@ -18,6 +18,9 @@ axios.get('/whatishappening/')
             let u = JSON.parse(userJSON);
             console.log(`${u.name} READY`);
         });
+        ReactDOM.render(
+            <Buttons />, d.querySelector('.buttons')
+        );
     });
 
 class StartButton extends React.Component {
@@ -92,7 +95,3 @@ class Buttons extends React.Component {
         );
     }
 }
-
-ReactDOM.render(
-    <Buttons />, d.querySelector('.buttons')
-);
