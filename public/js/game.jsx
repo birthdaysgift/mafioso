@@ -1,13 +1,12 @@
 var d = document;
-var userId;
-var gameId;
+var clientData = {userId: undefined, gameId: undefined}
 var socket;
 
 axios.get('/whatishappening/')
     .then((response) => {
-        userId = response.data.userId;
-        gameId = response.data.gameId;
-        socket = io(`/${gameId}-game`);
+        clientData.userId = response.data.userId;
+        clientData.gameId = response.data.gameId;
+        socket = io(`/${clientData.gameId}-game`);
         socket.on('new member', (userJSON) => {
             let u = JSON.parse(userJSON);
             d.querySelector('ul').insertAdjacentHTML(
@@ -45,11 +44,10 @@ class ReadyButton extends React.Component {
     }
 
     handleClick(e) {
-        let data = {userId: userId, gameId: gameId}
         if (this.state.showReady) {
-            socket.emit('user ready', data);
+            socket.emit('user ready', clientData);
         } else {
-            socket.emit('user not ready', data);
+            socket.emit('user not ready', clientData);
         }
         this.setState((state) => ({showReady: !state.showReady}));
     }
