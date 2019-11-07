@@ -24,14 +24,14 @@ var gameSockets = new Map();
 var userSockets = new Map();
 
 function socketBindings(serverSocket, clientSocket) {
+    let u, g;
     clientSocket.on('register socket', (data) => {
-        let u = users.get(data.userId);
+        u = users.get(data.userId);
+        g = games.get(data.gameId);
         userSockets.set(u.id, clientSocket);
         serverSocket.emit('register socket', JSON.stringify(u));
     })
     clientSocket.on('user ready', (data) => {
-        let g = games.get(data.gameId);
-        let u = g.getMember(data.userId);
         u.state = User.READY;
         serverSocket.emit('user ready', JSON.stringify(u));
         if (g.isEverybodyReady()) {
@@ -39,8 +39,6 @@ function socketBindings(serverSocket, clientSocket) {
         }
     });
     clientSocket.on('user not ready', (data) => {
-        let g = games.get(data.gameId);
-        let u = g.getMember(data.userId);
         u.state = User.NOT_READY;
         serverSocket.emit('user not ready', JSON.stringify(u));
     });
