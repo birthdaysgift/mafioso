@@ -14,10 +14,6 @@ axios.get('/whatishappening/')
                 'beforeend', `<li>${u.name}</li>`
             );
         });
-        socket.on('user ready', (userJSON) => {
-            let u = JSON.parse(userJSON);
-            console.log(`${u.name} READY`);
-        });
         ReactDOM.render(
             <Buttons />, d.querySelector('.buttons')
         );
@@ -56,7 +52,6 @@ class ReadyButton extends React.Component {
             socket.emit('user not ready', data);
         }
         this.setState((state) => ({showReady: !state.showReady}));
-        this.props.onReadyClick(e);
     }
 
     render() {
@@ -73,10 +68,10 @@ class Buttons extends React.Component {
         super(props);
         this.state = {showStart: false, showReady: true};
 
-        this.handleReadyClick = this.handleReadyClick.bind(this);
-    }
-
-    handleReadyClick(e) {
+        socket.on('user ready', (userJSON) => {
+            let u = JSON.parse(userJSON);
+            console.log(`${u.name} READY`);
+        });
         socket.on('everybody ready', () => {
             this.setState({showStart: true});
         });
@@ -89,8 +84,7 @@ class Buttons extends React.Component {
         return (
             <div>
                 <StartButton showStart={this.state.showStart} />
-                <ReadyButton 
-                    onReadyClick={this.handleReadyClick} />
+                <ReadyButton />
             </div>
         );
     }
