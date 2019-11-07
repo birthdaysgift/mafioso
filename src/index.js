@@ -21,9 +21,14 @@ app.use(session({secret: 'keyboard cat'}));
 var users = new Map();
 var games = new Map(); 
 var gameSockets = new Map();
+var userSockets = new Map();
 
 function socketBindings(serverSocket, clientSocket) {
-    console.log('Somebody connected');
+    clientSocket.on('register socket', (data) => {
+        let u = users.get(data.userId);
+        userSockets.set(u.id, clientSocket);
+        serverSocket.emit('register socket', JSON.stringify(u));
+    })
     clientSocket.on('user ready', (data) => {
         let g = games.get(data.gameId);
         let u = g.getMember(data.userId);

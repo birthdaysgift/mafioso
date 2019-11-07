@@ -7,6 +7,7 @@ axios.get('/whatishappening/')
         clientData.userId = response.data.userId;
         clientData.gameId = response.data.gameId;
         socket = io(`/${clientData.gameId}-game`);
+        socket.emit('register socket', clientData);
         socket.on('new member', (userJSON) => {
             let u = JSON.parse(userJSON);
             d.querySelector('ul').insertAdjacentHTML(
@@ -66,6 +67,10 @@ class Buttons extends React.Component {
         super(props);
         this.state = {showStart: false, showReady: true};
 
+        socket.on('register socket', (userJSON) => {
+            let u = JSON.parse(userJSON);
+            console.log(`${u.name} connected`);
+        })
         socket.on('user ready', (userJSON) => {
             let u = JSON.parse(userJSON);
             console.log(`${u.name} READY`);
