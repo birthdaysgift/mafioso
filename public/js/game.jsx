@@ -16,9 +16,7 @@ axios.get('/whatishappening/')
         });
         socket.on('user ready', (userJSON) => {
             let u = JSON.parse(userJSON);
-            d.querySelector('ul').insertAdjacentHTML(
-                'afterend', `<div>${u.name} READY`
-            );
+            console.log(`${u.name} READY`);
         });
     });
 
