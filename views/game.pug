@@ -10,7 +10,7 @@ html(lang='en')
         .Background
             div
                 h1 #{game.title}
-                div ^click on title if you're ready to play^
+                div.buttons
                 div Host: #{game.host.name}
                 ul
                     each m in game.members
@@ -20,4 +20,9 @@ html(lang='en')
                             li #{m.name}
         script(src='https://unpkg.com/axios/dist/axios.min.js')
         script(src='https://cdn.jsdelivr.net/npm/socket.io-client@2/dist/socket.io.js')
-        script(src='/js/game.js')
+        
+        script(src="https://unpkg.com/react@16/umd/react.development.js" crossorigin)
+        script(src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin)
+        script(src="https://unpkg.com/babel-standalone@6/babel.min.js")
+
+        script(src='/js/game.jsx' type='text/babel')
