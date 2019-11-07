@@ -84,6 +84,10 @@ class Buttons extends React.Component {
             this.setState({showStart: false});
             console.log(`${u.name} NOT READY`);
         });
+        socket.on('user disconnected', (userJSON) => {
+            let u = JSON.parse(userJSON);
+            console.log(`${u.name} disconnected`);
+        });
     }
 
     render() {

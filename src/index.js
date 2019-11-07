@@ -30,7 +30,15 @@ function socketBindings(serverSocket, clientSocket) {
         g = games.get(data.gameId);
         userSockets.set(u.id, clientSocket);
         serverSocket.emit('register socket', JSON.stringify(u));
-    })
+    });
+    clientSocket.on('disconnect', () => {
+        clientSocket.broadcast.emit(
+            'user disconnected', JSON.stringify(u)
+        );
+        g.removeMember(u);
+        users.delete(u.id);
+        userSockets.delete(u.id);
+    });
     clientSocket.on('user ready', (data) => {
         u.state = User.READY;
         serverSocket.emit('user ready', JSON.stringify(u));
@@ -87,6 +95,11 @@ class Game {
         gameSockets.get(this.id).emit(
             'new member', JSON.stringify(user)
         );
+    }
+    
+    removeMember(user) {
+        let i = this.members.indexOf(user);
+        this.members.splice(i, 1);
     }
 
     getMember(userId) {
