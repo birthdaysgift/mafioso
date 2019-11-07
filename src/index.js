@@ -22,6 +22,25 @@ var users = new Map();
 var games = new Map(); 
 var gameSockets = new Map();
 
+function socketBindings(serverSocket, clientSocket) {
+    console.log('Somebody connected');
+    clientSocket.on('user ready', (data) => {
+        let g = games.get(data.gameId);
+        let u = g.getMember(data.userId);
+        u.state = User.READY;
+        serverSocket.emit('user ready', JSON.stringify(u));
+        if (g.isEverybodyReady()) {
+            serverSocket.emit('everybody ready');
+        }
+    });
+    clientSocket.on('user not ready', (data) => {
+        let g = games.get(data.gameId);
+        let u = g.getMember(data.userId);
+        u.state = User.NOT_READY;
+        serverSocket.emit('user not ready', JSON.stringify(u));
+    });
+}
+
 class User {
     constructor(name) {
         this.name = name;
@@ -50,24 +69,7 @@ class Game {
         this.members = [host];
 
         let socket = io.of(`/${this.id}-game`);
-        socket.on('connection', (sock) => {
-            console.log('Somebody connected');
-            sock.on('user ready', (data) => {
-                let g = games.get(data.gameId);
-                let u = g.getMember(data.userId);
-                u.state = User.READY;
-                socket.emit('user ready', JSON.stringify(u));
-                if (g.isEverybodyReady()) {
-                    socket.emit('everybody ready');
-                }
-            });
-            sock.on('user not ready', (data) => {
-                let g = games.get(data.gameId);
-                let u = g.getMember(data.userId);
-                u.state = User.NOT_READY;
-                socket.emit('user not ready', JSON.stringify(u));
-            })
-        });
+        socket.on('connection', (sock) => socketBindings(socket, sock));
         gameSockets.set(this.id, socket);
     }
 
