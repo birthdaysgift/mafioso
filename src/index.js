@@ -43,7 +43,8 @@ function socketBindings(serverSocket, clientSocket) {
         u.state = User.READY;
         serverSocket.emit('user ready', JSON.stringify(u));
         if (g.isEverybodyReady()) {
-            serverSocket.emit('everybody ready');
+            let hostSocket = userSockets.get(g.host.id);
+            hostSocket.emit('everybody ready');
         }
     });
     clientSocket.on('user not ready', (data) => {
