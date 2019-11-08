@@ -75,9 +75,7 @@ class Buttons extends React.Component {
             console.log('everybody ready');
         });
         socket.on('user not ready', (userJSON) => {
-            let u = JSON.parse(userJSON);
             this.setState({showStart: false});
-            console.log(`${u.name} NOT READY`);
         });
     }
 
@@ -99,6 +97,30 @@ class UsersList extends React.Component {
             this.setState((state) => {
                 state.members.push(JSON.parse(userJSON));
                 return {members: state.members};
+            });
+        });
+        socket.on('user ready', (userJSON) => {
+            let u = JSON.parse(userJSON);
+            this.setState((state) => {
+                let members = state.members.map((m) => {
+                    if (m.id === u.id) {
+                        m.state = 'ready';
+                    }
+                    return m
+                });
+                return {members: members};
+            });
+        });
+        socket.on('user not ready', (userJSON) => {
+            let u = JSON.parse(userJSON);
+            this.setState((state) => {
+                let members = state.members.map((m) => {
+                    if (m.id === u.id) {
+                        m.state = 'not ready';
+                    }
+                    return m
+                });
+                return {members: members};
             });
         });
         socket.on('user disconnected', (userJSON) => {
