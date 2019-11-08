@@ -75,6 +75,7 @@ class Buttons extends React.Component {
 
         socket.on('register socket', (userJSON) => {
             let u = JSON.parse(userJSON);
+            this.setState({showStart: false});
             console.log(`${u.name} connected`);
         })
         socket.on('everybody ready', () => {
