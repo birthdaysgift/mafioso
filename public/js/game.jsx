@@ -6,14 +6,13 @@ axios.get('/whatishappening/')
     .then((response) => {
         clientData.userId = response.data.userId;
         clientData.gameId = response.data.gameId;
+        let members = response.data.members;
+
         socket = io(`/${clientData.gameId}-game`);
         socket.emit('register socket', clientData);
-        socket.on('new member', (userJSON) => {
-            let u = JSON.parse(userJSON);
-            d.querySelector('ul').insertAdjacentHTML(
-                'beforeend', `<li>${u.name}</li>`
-            );
-        });
+        ReactDOM.render(
+            <UsersList members={members}/>, d.querySelector('.usersList')
+        );
         ReactDOM.render(
             <Buttons />, d.querySelector('.buttons')
         );
@@ -71,10 +70,6 @@ class Buttons extends React.Component {
             let u = JSON.parse(userJSON);
             console.log(`${u.name} connected`);
         })
-        socket.on('user ready', (userJSON) => {
-            let u = JSON.parse(userJSON);
-            console.log(`${u.name} READY`);
-        });
         socket.on('everybody ready', () => {
             this.setState({showStart: true});
             console.log('everybody ready');
@@ -83,10 +78,6 @@ class Buttons extends React.Component {
             let u = JSON.parse(userJSON);
             this.setState({showStart: false});
             console.log(`${u.name} NOT READY`);
-        });
-        socket.on('user disconnected', (userJSON) => {
-            let u = JSON.parse(userJSON);
-            console.log(`${u.name} disconnected`);
         });
     }
 
@@ -97,5 +88,34 @@ class Buttons extends React.Component {
                 <ReadyButton />
             </div>
         );
+    }
+}
+
+class UsersList extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {members: props.members}
+        socket.on('new member', (userJSON) => {
+            this.setState((state) => {
+                state.members.push(JSON.parse(userJSON));
+                return {members: state.members};
+            });
+        });
+        socket.on('user disconnected', (userJSON) => {
+            let u = JSON.parse(userJSON);
+            this.setState((state) => {
+                let members = state.members.filter((m) => {
+                    return m.id != u.id;
+                });
+                return {members: members};
+            });
+        });
+    }
+
+    render() {
+        let listItems = this.state.members.map((m) => {
+            return <li key={m.id}>{m.name} {m.state.toUpperCase()}</li>;
+        });
+        return <ul>{listItems}</ul>;
     }
 }

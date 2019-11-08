@@ -12,12 +12,7 @@ html(lang='en')
                 h1 #{game.title}
                 div.buttons
                 div Host: #{game.host.name}
-                ul
-                    each m in game.members
-                        if m.name === user.name
-                            li <b>#{m.name}</b>
-                        else
-                            li #{m.name}
+                div.usersList
         script(src='https://unpkg.com/axios/dist/axios.min.js')
         script(src='https://cdn.jsdelivr.net/npm/socket.io-client@2/dist/socket.io.js')
         

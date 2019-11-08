@@ -148,9 +148,11 @@ app.get('/game/', (req, res) => {
     });
 });
 app.get('/whatishappening/', (req, res) => {
+    let g = games.get(req.session.game.id);
     res.send({
         userId: req.session.user.id,
-        gameId: req.session.game.id
+        gameId: req.session.game.id,
+        members: g.members
     });
 })
 
