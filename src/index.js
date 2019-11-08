@@ -153,7 +153,7 @@ app.get('/whatishappening/', (req, res) => {
     res.send({
         userId: req.session.user.id,
         gameId: req.session.game.id,
-        members: g.members
+        game: g
     });
 })
 

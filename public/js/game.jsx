@@ -6,17 +6,24 @@ axios.get('/whatishappening/')
     .then((response) => {
         clientData.userId = response.data.userId;
         clientData.gameId = response.data.gameId;
-        let members = response.data.members;
 
         socket = io(`/${clientData.gameId}-game`);
         socket.emit('register socket', clientData);
         ReactDOM.render(
-            <UsersList members={members}/>, d.querySelector('.usersList')
-        );
-        ReactDOM.render(
-            <Buttons />, d.querySelector('.buttons')
+            <Game game={response.data.game}/>, d.querySelector('.game')
         );
     });
+
+function Game(props) {
+    return (
+        <div>
+            <h1>{props.game.title}</h1>
+            <Buttons/>
+            <div>Host: {props.game.host.name}</div>
+            <UsersList members={props.game.members}/>
+        </div>
+    );
+}
 
 class StartButton extends React.Component {
     constructor(props) {
