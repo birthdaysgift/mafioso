@@ -25,11 +25,12 @@ var userSockets = new Map();
 
 function socketBindings(serverSocket, clientSocket) {
     let u, g;
-    clientSocket.on('register socket', (data) => {
+    clientSocket.on('new member', (data) => {
         u = users.get(data.userId);
         g = games.get(data.gameId);
+        g.addMember(u);
         userSockets.set(u.id, clientSocket);
-        serverSocket.emit('register socket', JSON.stringify(u));
+        serverSocket.emit('new member', JSON.stringify(u));
     });
     clientSocket.on('disconnect', () => {
         clientSocket.broadcast.emit(
@@ -82,7 +83,7 @@ class Game {
         this.title = title;
         this.host = host;
         this.id = Game.nextId++;
-        this.members = [host];
+        this.members = [];
 
         let socket = io.of(`/${this.id}-game`);
         socket.on('connection', (sock) => socketBindings(socket, sock));
@@ -97,9 +98,6 @@ class Game {
 
     addMember(user) {
         this.members.push(user);
-        gameSockets.get(this.id).emit(
-            'new member', JSON.stringify(user)
-        );
     }
     
     removeMember(user) {
@@ -141,8 +139,6 @@ app.post('/create_game/', (req, res) => {
 });
 app.post('/join_game/', (req, res) => {
     let g = games.get(parseInt(req.body.id));
-    let u = users.get(req.session.user.id);
-    g.addMember(u);
     req.session.game = g;
     res.redirect('/game/');
 })
@@ -153,11 +149,10 @@ app.get('/game/', (req, res) => {
     });
 });
 app.get('/whatishappening/', (req, res) => {
-    let g = games.get(req.session.game.id);
     res.send({
         userId: req.session.user.id,
         gameId: req.session.game.id,
-        game: g
+        game: games.get(req.session.game.id)
     });
 })
 

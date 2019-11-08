@@ -8,7 +8,7 @@ axios.get('/whatishappening/')
         clientData.gameId = response.data.gameId;
 
         socket = io(`/${clientData.gameId}-game`);
-        socket.emit('register socket', clientData);
+        socket.emit('new member', clientData);
         ReactDOM.render(
             <Game game={response.data.game}/>, d.querySelector('.game')
         );
@@ -73,7 +73,7 @@ class Buttons extends React.Component {
         super(props);
         this.state = {showStart: false, showReady: true};
 
-        socket.on('register socket', (userJSON) => {
+        socket.on('new member', (userJSON) => {
             let u = JSON.parse(userJSON);
             this.setState({showStart: false});
             console.log(`${u.name} connected`);
