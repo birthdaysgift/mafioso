@@ -38,6 +38,10 @@ function socketBindings(serverSocket, clientSocket) {
         g.removeMember(u);
         users.delete(u.id);
         userSockets.delete(u.id);
+        if (g.isEverybodyReady()) {
+            let hostSocket = userSockets.get(g.host.id);
+            hostSocket.emit('everybody ready');
+        }
     });
     clientSocket.on('user ready', (data) => {
         u.state = User.READY;
