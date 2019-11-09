@@ -24,6 +24,9 @@ class Window extends React.Component {
         this.state = {gameStarted: false}
 
         this.handleStartClick = this.handleStartClick.bind(this);
+        socket.on('start game', () => {
+            this.setState({gameStarted: true});
+        });
     }
 
     handleStartClick() {
@@ -71,7 +74,7 @@ class StartButton extends React.Component {
     }
 
     handleClick() {
-        console.log('start clicked');
+        socket.emit('start game', clientData);
         this.props.onStartClicked();
     }
 

@@ -56,6 +56,9 @@ function socketBindings(serverSocket, clientSocket) {
         u.state = User.STATES.NOT_READY;
         serverSocket.emit('user not ready', JSON.stringify(u));
     });
+    clientSocket.on('start game', (data) => {
+        serverSocket.emit('start game');
+    });
 }
 
 class User {
