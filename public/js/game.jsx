@@ -14,18 +14,40 @@ axios.get('/whatishappening/')
         );
     });
 
-function Game(props) {
-    let g = props.game;
-    let u = g.members.filter((m) => {
-        return m.id === clientData.userId;
-    })[0];
-    let role;
-    if (u.role === u.ROLES.MAFIA) {
-        role = 'MAFIA';
-    } else if (u.role === u.ROLES.INNOCENT) {
-        role = 'INNOCENT';
+class Game extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {showRole: false};
+
+        this.handleClick = this.handleClick.bind(this);
     }
-    return <h1>{role}</h1>;
+
+    handleClick() {
+        this.setState((state) => ({
+            showRole: !state.showRole
+        }));
+    }
+
+    render() {
+        let g = this.props.game;
+        let u = g.members.filter((m) => {
+            return m.id === clientData.userId;
+        })[0];
+        let role;
+        if (u.role === u.ROLES.MAFIA) {
+            role = 'MAFIA';
+        } else if (u.role === u.ROLES.INNOCENT) {
+            role = 'INNOCENT';
+        }
+        return (
+            <div>
+                <h1>{this.state.showRole ? role : null}</h1>
+                <div onClick={this.handleClick}>
+                    {!this.state.showRole ? 'SHOW' : 'HIDE'} ROLE
+                </div>
+            </div>
+        );
+    }
 }
 
 class Window extends React.Component {
