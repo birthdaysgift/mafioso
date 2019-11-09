@@ -10,19 +10,57 @@ axios.get('/whatishappening/')
         socket = io(`/${clientData.gameId}-game`);
         socket.emit('new member', clientData);
         ReactDOM.render(
-            <Game game={response.data.game}/>, d.querySelector('.game')
+            <Window game={response.data.game}/>, d.querySelector('.game')
         );
     });
 
 function Game(props) {
-    return (
-        <div>
-            <h1>{props.game.title}</h1>
-            <Buttons/>
-            <div>Host: {props.game.host.name}</div>
-            <UsersList members={props.game.members}/>
-        </div>
-    );
+    return <h1>CONGRATULATIONS</h1>;
+}
+
+class Window extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {gameStarted: false}
+
+        this.handleStartClick = this.handleStartClick.bind(this);
+    }
+
+    handleStartClick() {
+        this.setState((state) => ({
+            gameStarted: true
+        }));
+    }
+
+    render() {
+        if (this.state.gameStarted) {
+            return <Game/>;
+        } else {
+            return <Lobby game={this.props.game} onStartClicked={this.handleStartClick}/>;
+        }
+    }
+}
+
+class Lobby extends React.Component {
+    constructor(props) {
+        super(props);
+        this.handleStartClick = this.handleStartClick.bind(this);
+    }
+
+    handleStartClick() {
+        this.props.onStartClicked();
+    }
+
+    render() {
+        return (
+            <div>
+                <h1>{this.props.game.title}</h1>
+                <Buttons onStartClicked={this.handleStartClick}/>
+                <div>Host: {this.props.game.host.name}</div>
+                <UsersList members={this.props.game.members}/>
+            </div>
+        );
+    }
 }
 
 class StartButton extends React.Component {
@@ -34,6 +72,7 @@ class StartButton extends React.Component {
 
     handleClick() {
         console.log('start clicked');
+        this.props.onStartClicked();
     }
 
     render() {
@@ -73,6 +112,8 @@ class Buttons extends React.Component {
         super(props);
         this.state = {showStart: false, showReady: true};
 
+        this.handleStartClick = this.handleStartClick.bind(this);
+
         socket.on('new member', (userJSON) => {
             let u = JSON.parse(userJSON);
             this.setState({showStart: false});
@@ -87,10 +128,16 @@ class Buttons extends React.Component {
         });
     }
 
+    handleStartClick() {
+        this.props.onStartClicked();
+    }
+
     render() {
         return (
             <div>
-                <StartButton showStart={this.state.showStart} />
+                <StartButton 
+                    showStart={this.state.showStart} 
+                    onStartClicked={this.handleStartClick}/>
                 <ReadyButton />
             </div>
         );
