@@ -100,9 +100,12 @@ class Game {
     }
 
     isEverybodyReady() {
-        return this.members.every(
-            (m) => m.isReady()
-        );
+        if (this.members.length) {
+            return this.members.every(
+                (m) => m.isReady()
+            );
+        }
+        return false;
     }
 
     addMember(user) {
