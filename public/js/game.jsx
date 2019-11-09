@@ -15,31 +15,41 @@ axios.get('/whatishappening/')
     });
 
 function Game(props) {
-    return <h1>CONGRATULATIONS</h1>;
+    let g = props.game;
+    let u = g.members.filter((m) => {
+        return m.id === clientData.userId;
+    })[0];
+    let role;
+    if (u.role === u.ROLES.MAFIA) {
+        role = 'MAFIA';
+    } else if (u.role === u.ROLES.INNOCENT) {
+        role = 'INNOCENT';
+    }
+    return <h1>{role}</h1>;
 }
 
 class Window extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {gameStarted: false}
+        this.state = {
+            gameStarted: false, 
+            game: {}
+        };
 
-        this.handleStartClick = this.handleStartClick.bind(this);
-        socket.on('start game', () => {
-            this.setState({gameStarted: true});
+        socket.on('start game', (gameJSON) => {
+            let ga = JSON.parse(gameJSON);
+            this.setState({
+                gameStarted: true,
+                game: ga
+            });
         });
-    }
-
-    handleStartClick() {
-        this.setState((state) => ({
-            gameStarted: true
-        }));
     }
 
     render() {
         if (this.state.gameStarted) {
-            return <Game/>;
+            return <Game game={this.state.game}/>;
         } else {
-            return <Lobby game={this.props.game} onStartClicked={this.handleStartClick}/>;
+            return <Lobby game={this.props.game}/>;
         }
     }
 }
@@ -47,18 +57,13 @@ class Window extends React.Component {
 class Lobby extends React.Component {
     constructor(props) {
         super(props);
-        this.handleStartClick = this.handleStartClick.bind(this);
-    }
-
-    handleStartClick() {
-        this.props.onStartClicked();
     }
 
     render() {
         return (
             <div>
                 <h1>{this.props.game.title}</h1>
-                <Buttons onStartClicked={this.handleStartClick}/>
+                <Buttons />
                 <div>Host: {this.props.game.host.name}</div>
                 <UsersList members={this.props.game.members}/>
             </div>
@@ -75,7 +80,6 @@ class StartButton extends React.Component {
 
     handleClick() {
         socket.emit('start game', clientData);
-        this.props.onStartClicked();
     }
 
     render() {
@@ -115,8 +119,6 @@ class Buttons extends React.Component {
         super(props);
         this.state = {showStart: false, showReady: true};
 
-        this.handleStartClick = this.handleStartClick.bind(this);
-
         socket.on('new member', (userJSON) => {
             let u = JSON.parse(userJSON);
             this.setState({showStart: false});
@@ -131,16 +133,11 @@ class Buttons extends React.Component {
         });
     }
 
-    handleStartClick() {
-        this.props.onStartClicked();
-    }
-
     render() {
         return (
             <div>
                 <StartButton 
-                    showStart={this.state.showStart} 
-                    onStartClicked={this.handleStartClick}/>
+                    showStart={this.state.showStart} />
                 <ReadyButton />
             </div>
         );

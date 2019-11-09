@@ -57,7 +57,11 @@ function socketBindings(serverSocket, clientSocket) {
         serverSocket.emit('user not ready', JSON.stringify(u));
     });
     clientSocket.on('start game', (data) => {
-        serverSocket.emit('start game');
+        let g = games.get(data.gameId);
+        let max = g.members.length - 1;
+        let n = Math.floor(Math.random() * Math.floor(max));
+        g.members[n].role = User.ROLES.MAFIA;
+        serverSocket.emit('start game', JSON.stringify(g));
     });
 }
 
@@ -66,6 +70,7 @@ class User {
         this.name = name;
         this.id = User.nextId++;
         this.state = User.STATES.NOT_READY;
+        this.role = User.ROLES.INNOCENT;
     }
 
     isReady() {
@@ -80,6 +85,7 @@ class User {
         let newobj = {};
         newobj = Object.assign(newobj, this);
         newobj.STATES = User.STATES;
+        newobj.ROLES = User.ROLES;
         return newobj;
     }
 }
@@ -87,6 +93,11 @@ User.nextId = 0;
 User.STATES = {
     NOT_READY: 'not ready',
     READY: 'ready'
+}
+User.ROLES = {
+    INNOCENT: 'innocent',
+    MAFIA: 'mafia',
+    DETECTIVE: 'detective'
 }
 
 
