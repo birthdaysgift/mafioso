@@ -112,7 +112,7 @@ class UsersList extends React.Component {
             this.setState((state) => {
                 let members = state.members.map((m) => {
                     if (m.id === u.id) {
-                        m.state = 'ready';
+                        m.state = m.STATES.READY;
                     }
                     return m
                 });
@@ -124,7 +124,7 @@ class UsersList extends React.Component {
             this.setState((state) => {
                 let members = state.members.map((m) => {
                     if (m.id === u.id) {
-                        m.state = 'not ready';
+                        m.state = m.STATES.NOT_READY;
                     }
                     return m
                 });
@@ -144,7 +144,13 @@ class UsersList extends React.Component {
 
     render() {
         let listItems = this.state.members.map((m) => {
-            return <li key={m.id}>{m.name} {m.state.toUpperCase()}</li>;
+            let state;
+            if (m.state === m.STATES.READY) {
+                state = 'READY';
+            } else if (m.state === m.STATES.NOT_READY) {
+                state = 'NOT READY';
+            }
+            return <li key={m.id}>{m.name} {state}</li>;
         });
         return <ul>{listItems}</ul>;
     }

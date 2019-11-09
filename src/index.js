@@ -45,7 +45,7 @@ function socketBindings(serverSocket, clientSocket) {
         }
     });
     clientSocket.on('user ready', (data) => {
-        u.state = User.READY;
+        u.state = User.STATES.READY;
         serverSocket.emit('user ready', JSON.stringify(u));
         if (g.isEverybodyReady()) {
             let hostSocket = userSockets.get(g.host.id);
@@ -53,7 +53,7 @@ function socketBindings(serverSocket, clientSocket) {
         }
     });
     clientSocket.on('user not ready', (data) => {
-        u.state = User.NOT_READY;
+        u.state = User.STATES.NOT_READY;
         serverSocket.emit('user not ready', JSON.stringify(u));
     });
 }
@@ -62,20 +62,29 @@ class User {
     constructor(name) {
         this.name = name;
         this.id = User.nextId++;
-        this.state = User.NOT_READY;
+        this.state = User.STATES.NOT_READY;
     }
 
     isReady() {
-        return this.state === User.READY;
+        return this.state === User.STATES.READY;
     }
 
     toString() {
         return `${this.id} ${this.name}`
     }
+
+    toJSON() {
+        let newobj = {};
+        newobj = Object.assign(newobj, this);
+        newobj.STATES = User.STATES;
+        return newobj;
+    }
 }
 User.nextId = 0;
-User.NOT_READY = 'not ready';
-User.READY = 'ready';
+User.STATES = {
+    NOT_READY: 'not ready',
+    READY: 'ready'
+}
 
 
 class Game {
