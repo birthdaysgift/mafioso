@@ -12,7 +12,10 @@ axios.get('/whatishappening/')
         socket = io(`/${clientData.gameId}-game`);
         socket.emit('new member', clientData);
         ReactDOM.render(
-            <Window game={response.data.game}/>, d.querySelector('.game')
+            <Window
+                game={response.data.game}
+                user={response.data.user}/>,
+            d.querySelector('.game')
         );
     });
 
@@ -20,24 +23,20 @@ class Window extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            gameStarted: false, 
-            game: {}
+            user: this.props.user,
+            game: this.props.game
         };
 
         socket.on('start game', (gameJSON) => {
-            let ga = JSON.parse(gameJSON);
-            this.setState({
-                gameStarted: true,
-                game: ga
-            });
+            this.setState({game: JSON.parse(gameJSON)});
         });
     }
 
     render() {
-        if (this.state.gameStarted) {
-            return <Game game={this.state.game}/>;
+        if (this.state.game.state === STATES.GAME.NOT_STARTED) {
+            return <Lobby game={this.state.game}/>;
         } else {
-            return <Lobby game={this.props.game}/>;
+            return <Game game={this.state.game}/>;
         }
     }
 }

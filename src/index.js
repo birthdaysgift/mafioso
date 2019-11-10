@@ -60,6 +60,7 @@ function socketBindings(serverSocket, clientSocket) {
         let max = g.members.length - 1;
         let n = Math.floor(Math.random() * Math.floor(max));
         g.members[n].role = User.ROLES.MAFIA;
+        g.state = Game.STATES.DAY;
         serverSocket.emit('start game', JSON.stringify(g));
     });
     clientSocket.on('ready for night', () => {
@@ -115,7 +116,7 @@ class Game {
         this.host = host;
         this.id = Game.nextId++;
         this.members = [];
-        this.state = Game.STATES.DAY;
+        this.state = Game.STATES.NOT_STARTED;
 
         let socket = io.of(`/${this.id}-game`);
         socket.on('connection', (sock) => socketBindings(socket, sock));
