@@ -33,6 +33,9 @@ class Window extends React.Component {
         socket.on('new member', (userJSON, gameJSON) => {
             this.setState({game: JSON.parse(gameJSON)});
         });
+        socket.on('user disconnected', (userJSON, gameJSON) => {
+            this.setState({game: JSON.parse(gameJSON)});
+        });
 
         socket.on('start game', (userJSON, gameJSON) => {
             this.setState({
@@ -144,15 +147,6 @@ class UsersList extends React.Component {
                         m.state = STATES.USER.NOT_READY;
                     }
                     return m
-                });
-                return {members: members};
-            });
-        });
-        socket.on('user disconnected', (userJSON, gameJSON) => {
-            let u = JSON.parse(userJSON);
-            this.setState((state) => {
-                let members = state.members.filter((m) => {
-                    return m.id != u.id;
                 });
                 return {members: members};
             });
