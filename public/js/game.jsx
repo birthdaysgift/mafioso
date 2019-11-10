@@ -17,7 +17,10 @@ axios.get('/whatishappening/')
 class Game extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {showRole: false};
+        this.state = {
+            game: this.props.game,
+            showRole: false
+        };
 
         this.handleRoleClick = this.handleRoleClick.bind(this);
         this.handleReadyClick = this.handleReadyClick.bind(this);
@@ -26,8 +29,11 @@ class Game extends React.Component {
             let u = JSON.parse(userJSON);
             console.log(`${u.name} ready for night`);
         });
-        socket.on('everybody ready for night', () => {
-            this.setState({showStart: true});
+        socket.on('everybody ready for night', (gameJSON) => {
+            this.setState({
+                showStart: true,
+                game: JSON.parse(gameJSON)
+            });
             console.log('everybody ready for night');
         });
     }
@@ -53,16 +59,22 @@ class Game extends React.Component {
         } else if (u.role === u.ROLES.INNOCENT) {
             role = 'INNOCENT';
         }
-        return (
-            <div>
-                <h1>{this.state.showRole ? role : null}</h1>
-                {this.state.showStart ? <div>START NIGHT</div> : null}
-                <div onClick={this.handleRoleClick}>
-                    {!this.state.showRole ? 'SHOW' : 'HIDE'} ROLE
+        let element;
+        if (this.state.game.state === this.state.game.STATES.NIGHT) {
+            element = <h1>night</h1>;
+        } else {
+            element = (
+                <div>
+                    <h1>{this.state.showRole ? role : null}</h1>
+                    {this.state.showStart ? <div>START NIGHT</div> : null}
+                    <div onClick={this.handleRoleClick}>
+                        {!this.state.showRole ? 'SHOW' : 'HIDE'} ROLE
+                    </div>
+                    <div onClick={this.handleReadyClick}>READY TO SLEEP</div>
                 </div>
-                <div onClick={this.handleReadyClick}>READY TO SLEEP</div>
-            </div>
-        );
+            );
+        }
+        return element;
     }
 }
 

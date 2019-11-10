@@ -70,7 +70,7 @@ function socketBindings(serverSocket, clientSocket) {
         serverSocket.emit('ready for night', JSON.stringify(u));
         if (g.everyUserStateIs(User.STATES.WAITS_FOR_NIGHT)) {
             let hostSocket = userSockets.get(g.host.id);
-            hostSocket.emit('everybody ready for night');
+            hostSocket.emit('everybody ready for night', JSON.stringify(g));
         };
     });
 }
@@ -118,6 +118,7 @@ class Game {
         this.host = host;
         this.id = Game.nextId++;
         this.members = [];
+        this.state = Game.STATES.DAY;
 
         let socket = io.of(`/${this.id}-game`);
         socket.on('connection', (sock) => socketBindings(socket, sock));
@@ -149,8 +150,19 @@ class Game {
     toString () {
         return `${this.id} ${this.title}`
     }
+
+    toJSON() {
+        let newobj = {};
+        newobj = Object.assign(newobj, this);
+        newobj.STATES = Game.STATES;
+        return newobj;
+    }
 }
 Game.nextId = 0;
+Game.STATES = {
+    DAY: 'day',
+    NIGHT: 'night'
+}
 
 app.route('/')
     .get((req, res) => res.render('index'))
