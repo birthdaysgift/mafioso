@@ -61,7 +61,14 @@ function socketBindings(serverSocket, clientSocket) {
         let n = Math.floor(Math.random() * Math.floor(max));
         g.members[n].role = User.ROLES.MAFIA;
         g.state = Game.STATES.DAY;
-        serverSocket.emit('start game', JSON.stringify(g));
+        g.members.forEach((m) => {
+            let s = userSockets.get(m.id);
+            s.emit(
+                'start game',
+                JSON.stringify(m),
+                JSON.stringify(g)
+            );
+        });
     });
     clientSocket.on('ready for night', () => {
         u.state = User.STATES.WAITS_FOR_NIGHT;

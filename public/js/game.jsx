@@ -29,8 +29,12 @@ class Window extends React.Component {
             game: this.props.game
         };
 
-        socket.on('start game', (gameJSON) => {
-            this.setState({game: JSON.parse(gameJSON)});
+        socket.on('start game', (userJSON, gameJSON) => {
+            console.log('start game on window');
+            this.setState({
+                user: JSON.parse(userJSON),
+                game: JSON.parse(gameJSON)
+            });
         });
     }
 
@@ -38,7 +42,9 @@ class Window extends React.Component {
         if (this.state.game.state === STATES.GAME.NOT_STARTED) {
             return <Lobby game={this.state.game}/>;
         } else {
-            return <Game game={this.state.game}/>;
+            return <Game
+                        user={this.state.user}
+                        game={this.state.game}/>;
         }
     }
 }
@@ -172,6 +178,7 @@ class Game extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            user: this.props.user,
             game: this.props.game,
             showRole: false
         };
@@ -198,14 +205,10 @@ class Game extends React.Component {
     }
 
     render() {
-        let g = this.props.game;
-        let u = g.members.filter((m) => {
-            return m.id === clientData.userId;
-        })[0];
         let role;
-        if (u.role === ROLES.MAFIA) {
+        if (this.state.user.role === ROLES.MAFIA) {
             role = 'MAFIA';
-        } else if (u.role === ROLES.INNOCENT) {
+        } else if (this.state.user.role === ROLES.INNOCENT) {
             role = 'INNOCENT';
         }
         let element;
@@ -243,7 +246,7 @@ function socketLogging(socket) {
     socket.on('everybody ready', () => {
         console.log('everybody ready');
     });
-    socket.on('start game', (gameJSON) => {
+    socket.on('start game', (userJSON, gameJSON) => {
         console.log(`${JSON.parse(gameJSON).title} started`);
     });
     socket.on('ready for night', (userJSON) => {
