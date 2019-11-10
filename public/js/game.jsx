@@ -68,13 +68,13 @@ class StartButton extends React.Component {
         
         this.handleClick = this.handleClick.bind(this);
 
-        socket.on('new member', (userJSON) => {
+        socket.on('new member', (userJSON, gameJSON) => {
             this.setState({show: false});
         })
         socket.on('everybody ready', () => {
             this.setState({show: true});
         });
-        socket.on('user not ready', (userJSON) => {
+        socket.on('user not ready', (userJSON, gameJSON) => {
             this.setState({show: false});
         });
     }
@@ -119,13 +119,13 @@ class UsersList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {members: props.members}
-        socket.on('new member', (userJSON) => {
+        socket.on('new member', (userJSON, gameJSON) => {
             this.setState((state) => {
                 state.members.push(JSON.parse(userJSON));
                 return {members: state.members};
             });
         });
-        socket.on('user ready', (userJSON) => {
+        socket.on('user ready', (userJSON, gameJSON) => {
             let u = JSON.parse(userJSON);
             this.setState((state) => {
                 let members = state.members.map((m) => {
@@ -137,7 +137,7 @@ class UsersList extends React.Component {
                 return {members: members};
             });
         });
-        socket.on('user not ready', (userJSON) => {
+        socket.on('user not ready', (userJSON, gameJSON) => {
             let u = JSON.parse(userJSON);
             this.setState((state) => {
                 let members = state.members.map((m) => {
@@ -149,7 +149,7 @@ class UsersList extends React.Component {
                 return {members: members};
             });
         });
-        socket.on('user disconnected', (userJSON) => {
+        socket.on('user disconnected', (userJSON, gameJSON) => {
             let u = JSON.parse(userJSON);
             this.setState((state) => {
                 let members = state.members.filter((m) => {
@@ -231,16 +231,16 @@ class Game extends React.Component {
 }
 
 function socketLogging(socket) {
-    socket.on('new member', (userJSON) => {
+    socket.on('new member', (userJSON, gameJSON) => {
         console.log(`${JSON.parse(userJSON).name} connected`);
     });
-    socket.on('user disconnected', (userJSON) => {
+    socket.on('user disconnected', (userJSON, gameJSON) => {
         console.log(`${JSON.parse(userJSON).name} disconnected`);
     });
-    socket.on('user ready', (userJSON) => {
+    socket.on('user ready', (userJSON, gameJSON) => {
         console.log(`${JSON.parse(userJSON).name} ready`);
     });
-    socket.on('user not ready', (userJSON) => {
+    socket.on('user not ready', (userJSON, gameJSON) => {
         console.log(`${JSON.parse(userJSON).name} not ready`);
     });
     socket.on('everybody ready', () => {
@@ -249,7 +249,7 @@ function socketLogging(socket) {
     socket.on('start game', (userJSON, gameJSON) => {
         console.log(`${JSON.parse(gameJSON).title} started`);
     });
-    socket.on('ready for night', (userJSON) => {
+    socket.on('ready for night', (userJSON, gameJSON) => {
         console.log(`${JSON.parse(userJSON).name} ready for night`);
     });
     socket.on('everybody ready for night', (gameJSON) => {

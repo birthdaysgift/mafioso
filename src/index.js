@@ -30,15 +30,21 @@ function socketBindings(serverSocket, clientSocket) {
         g = games.get(gameId);
         g.members.push(u);
         userSockets.set(u.id, clientSocket);
-        serverSocket.emit('new member', JSON.stringify(u));
+        serverSocket.emit(
+            'new member',
+            JSON.stringify(u),
+            JSON.stringify(g)
+        );
     });
     clientSocket.on('disconnect', () => {
-        clientSocket.broadcast.emit(
-            'user disconnected', JSON.stringify(u)
-        );
         g.removeMember(u);
         users.delete(u.id);
         userSockets.delete(u.id);
+        clientSocket.broadcast.emit(
+            'user disconnected',
+            JSON.stringify(u),
+            JSON.stringify(g)
+        );
         if (g.everyUserStateIs(User.STATES.READY)) {
             let hostSocket = userSockets.get(g.host.id);
             hostSocket.emit('everybody ready');
@@ -46,7 +52,11 @@ function socketBindings(serverSocket, clientSocket) {
     });
     clientSocket.on('user ready', () => {
         u.state = User.STATES.READY;
-        serverSocket.emit('user ready', JSON.stringify(u));
+        serverSocket.emit(
+            'user ready',
+            JSON.stringify(u),
+            JSON.stringify(g)
+        );
         if (g.everyUserStateIs(User.STATES.READY)) {
             let hostSocket = userSockets.get(g.host.id);
             hostSocket.emit('everybody ready');
@@ -54,7 +64,11 @@ function socketBindings(serverSocket, clientSocket) {
     });
     clientSocket.on('user not ready', () => {
         u.state = User.STATES.NOT_READY;
-        serverSocket.emit('user not ready', JSON.stringify(u));
+        serverSocket.emit(
+            'user not ready', 
+            JSON.stringify(u),
+            JSON.stringify(g)
+        );
     });
     clientSocket.on('start game', () => {
         let max = g.members.length - 1;
@@ -72,10 +86,17 @@ function socketBindings(serverSocket, clientSocket) {
     });
     clientSocket.on('ready for night', () => {
         u.state = User.STATES.WAITS_FOR_NIGHT;
-        serverSocket.emit('ready for night', JSON.stringify(u));
+        serverSocket.emit(
+            'ready for night',
+            JSON.stringify(u),
+            JSON.stringify(g)
+        );
         if (g.everyUserStateIs(User.STATES.WAITS_FOR_NIGHT)) {
             let hostSocket = userSockets.get(g.host.id);
-            hostSocket.emit('everybody ready for night', JSON.stringify(g));
+            hostSocket.emit(
+                'everybody ready for night',
+                JSON.stringify(g)
+            );
         };
     });
 }
