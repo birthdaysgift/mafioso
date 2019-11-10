@@ -38,9 +38,17 @@ class Window extends React.Component {
         });
         socket.on('user ready', (userJSON, gameJSON) => {
             this.setState({game: JSON.parse(gameJSON)});
+            let u = JSON.parse(userJSON);
+            if (this.state.user.id === u.id) {
+                this.setState({user: u});
+            }
         });
         socket.on('user not ready', (userJSON, gameJSON) => {
             this.setState({game: JSON.parse(gameJSON)});
+            let u = JSON.parse(userJSON);
+            if (this.state.user.id === u.id) {
+                this.setState({user: u});
+            }
         });
 
         socket.on('start game', (userJSON, gameJSON) => {
@@ -53,7 +61,9 @@ class Window extends React.Component {
 
     render() {
         if (this.state.game.state === STATES.GAME.NOT_STARTED) {
-            return <Lobby game={this.state.game}/>;
+            return <Lobby
+                        user={this.state.user}
+                        game={this.state.game}/>;
         } else {
             return <Game
                         user={this.state.user}
@@ -67,7 +77,7 @@ function Lobby(props) {
         <div>
             <h1>{props.game.title}</h1>
             <StartButton/>
-            <ReadyButton/>
+            <ReadyButton showReady={!(props.user.state === STATES.USER.READY)}/>
             <div>Host: {props.game.host.name}</div>
             <UsersList members={props.game.members}/>
         </div>
@@ -105,24 +115,22 @@ class StartButton extends React.Component {
 class ReadyButton extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {showReady: true};
 
         this.handleClick = this.handleClick.bind(this);
     }
 
     handleClick(e) {
-        if (this.state.showReady) {
+        if (this.props.showReady) {
             socket.emit('user ready');
         } else {
             socket.emit('user not ready');
         }
-        this.setState((state) => ({showReady: !state.showReady}));
     }
 
     render() {
         return (
             <div onClick={this.handleClick}>
-                {this.state.showReady ? "READY" : "NOT READY"}
+                {this.props.showReady ? "READY" : "NOT READY"}
             </div>
         )
     }
