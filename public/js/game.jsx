@@ -128,25 +128,17 @@ class ReadyButton extends React.Component {
     }
 }
 
-class UsersList extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {members: this.props.members};
-
-    }
-
-    render() {
-        let listItems = this.props.members.map((m) => {
-            let state;
-            if (m.state === STATES.USER.READY) {
-                state = 'READY';
-            } else if (m.state === STATES.USER.NOT_READY) {
-                state = 'NOT READY';
-            }
-            return <li key={m.id}>{m.name} {state}</li>;
-        });
-        return <ul>{listItems}</ul>;
-    }
+function UsersList(props) {
+    let listItems = props.members.map((m) => {
+        let state;
+        if (m.state === STATES.USER.READY) {
+            state = 'READY';
+        } else if (m.state === STATES.USER.NOT_READY) {
+            state = 'NOT READY';
+        }
+        return <li key={m.id}>{m.name} {state}</li>;
+    });
+    return <ul>{listItems}</ul>;
 }
 
 class Game extends React.Component {
