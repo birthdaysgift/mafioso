@@ -28,7 +28,7 @@ function socketBindings(serverSocket, clientSocket) {
     clientSocket.on('new member', (userId, gameId) => {
         u = users.get(userId);
         g = games.get(gameId);
-        g.addMember(u);
+        g.members.push(u);
         userSockets.set(u.id, clientSocket);
         serverSocket.emit('new member', JSON.stringify(u));
     });
@@ -88,10 +88,6 @@ class User {
         this.role = User.ROLES.INNOCENT;
     }
 
-    isReady() {
-        return this.state === User.STATES.READY;
-    }
-
     toString() {
         return `${this.id} ${this.name}`
     }
@@ -131,17 +127,9 @@ class Game {
         return false;
     }
 
-    addMember(user) {
-        this.members.push(user);
-    }
-    
     removeMember(user) {
         let i = this.members.indexOf(user);
         this.members.splice(i, 1);
-    }
-
-    getMember(userId) {
-        return this.members.filter((m) => m.id === userId)[0];
     }
 
     toString () {
