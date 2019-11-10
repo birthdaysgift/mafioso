@@ -45,48 +45,33 @@ function Lobby(props) {
     return (
         <div>
             <h1>{props.game.title}</h1>
-            <Buttons />
+            <StartButton/>
+            <ReadyButton/>
             <div>Host: {props.game.host.name}</div>
             <UsersList members={props.game.members}/>
         </div>
     );
 }
 
-class Buttons extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {showStart: false, showReady: true};
-
-        socket.on('new member', (userJSON) => {
-            let u = JSON.parse(userJSON);
-            this.setState({showStart: false});
-            console.log(`${u.name} connected`);
-        })
-        socket.on('everybody ready', () => {
-            this.setState({showStart: true});
-            console.log('everybody ready');
-        });
-        socket.on('user not ready', (userJSON) => {
-            this.setState({showStart: false});
-        });
-    }
-
-    render() {
-        return (
-            <div>
-                <StartButton 
-                    showStart={this.state.showStart} />
-                <ReadyButton />
-            </div>
-        );
-    }
-}
-
 class StartButton extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {show: false};
         
         this.handleClick = this.handleClick.bind(this);
+
+        socket.on('new member', (userJSON) => {
+            let u = JSON.parse(userJSON);
+            this.setState({show: false});
+            console.log(`${u.name} connected`);
+        })
+        socket.on('everybody ready', () => {
+            this.setState({show: true});
+            console.log('everybody ready');
+        });
+        socket.on('user not ready', (userJSON) => {
+            this.setState({show: false});
+        });
     }
 
     handleClick() {
@@ -95,7 +80,7 @@ class StartButton extends React.Component {
 
     render() {
         let element = <div onClick={this.handleClick}>START</div>;
-        return this.props.showStart ? element : null
+        return this.state.show ? element : null
     }
 }
 
