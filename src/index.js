@@ -157,6 +157,7 @@ class Game {
 }
 Game.nextId = 0;
 Game.STATES = {
+    NOT_STARTED: 'not started',
     DAY: 'day',
     NIGHT: 'night'
 }
