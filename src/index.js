@@ -203,7 +203,8 @@ app.get('/whatishappening/', (req, res) => {
         STATES: {
             USER: User.STATES,
             GAME: Game.STATES
-        }
+        },
+        ROLES: User.ROLES
     });
 })
 

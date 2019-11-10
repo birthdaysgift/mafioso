@@ -1,6 +1,6 @@
 var d = document;
 var clientData = {userId: undefined, gameId: undefined}
-var STATES = {}
+var STATES, ROLES;
 var socket;
 
 axios.get('/whatishappening/')
@@ -8,6 +8,7 @@ axios.get('/whatishappening/')
         clientData.userId = response.data.user.id;
         clientData.gameId = response.data.game.id;
         STATES = response.data.STATES;
+        ROLES = response.data.ROLES;
         
         socket = io(`/${clientData.gameId}-game`);
         socketLogging(socket);
