@@ -45,7 +45,7 @@ class Game extends React.Component {
     }
 
     handleReadyClick() {
-        socket.emit('ready for night', clientData);
+        socket.emit('ready for night');
     }
 
     render() {
@@ -129,7 +129,7 @@ class StartButton extends React.Component {
     }
 
     handleClick() {
-        socket.emit('start game', clientData);
+        socket.emit('start game');
     }
 
     render() {
@@ -148,9 +148,9 @@ class ReadyButton extends React.Component {
 
     handleClick(e) {
         if (this.state.showReady) {
-            socket.emit('user ready', clientData);
+            socket.emit('user ready');
         } else {
-            socket.emit('user not ready', clientData);
+            socket.emit('user not ready');
         }
         this.setState((state) => ({showReady: !state.showReady}));
     }

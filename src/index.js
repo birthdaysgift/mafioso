@@ -44,7 +44,7 @@ function socketBindings(serverSocket, clientSocket) {
             hostSocket.emit('everybody ready');
         }
     });
-    clientSocket.on('user ready', (data) => {
+    clientSocket.on('user ready', () => {
         u.state = User.STATES.READY;
         serverSocket.emit('user ready', JSON.stringify(u));
         if (g.everyUserStateIs(User.STATES.READY)) {
@@ -52,20 +52,17 @@ function socketBindings(serverSocket, clientSocket) {
             hostSocket.emit('everybody ready');
         }
     });
-    clientSocket.on('user not ready', (data) => {
+    clientSocket.on('user not ready', () => {
         u.state = User.STATES.NOT_READY;
         serverSocket.emit('user not ready', JSON.stringify(u));
     });
-    clientSocket.on('start game', (data) => {
-        let g = games.get(data.gameId);
+    clientSocket.on('start game', () => {
         let max = g.members.length - 1;
         let n = Math.floor(Math.random() * Math.floor(max));
         g.members[n].role = User.ROLES.MAFIA;
         serverSocket.emit('start game', JSON.stringify(g));
     });
-    clientSocket.on('ready for night', (data) => {
-        let u = users.get(data.userId);
-        let g = games.get(data.gameId);
+    clientSocket.on('ready for night', () => {
         u.state = User.STATES.WAITS_FOR_NIGHT;
         serverSocket.emit('ready for night', JSON.stringify(u));
         if (g.everyUserStateIs(User.STATES.WAITS_FOR_NIGHT)) {
