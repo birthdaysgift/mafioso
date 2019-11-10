@@ -39,7 +39,7 @@ function socketBindings(serverSocket, clientSocket) {
         g.removeMember(u);
         users.delete(u.id);
         userSockets.delete(u.id);
-        if (g.isEverybodyReady()) {
+        if (g.everyUserStateIs(User.STATES.READY)) {
             let hostSocket = userSockets.get(g.host.id);
             hostSocket.emit('everybody ready');
         }
@@ -47,7 +47,7 @@ function socketBindings(serverSocket, clientSocket) {
     clientSocket.on('user ready', (data) => {
         u.state = User.STATES.READY;
         serverSocket.emit('user ready', JSON.stringify(u));
-        if (g.isEverybodyReady()) {
+        if (g.everyUserStateIs(User.STATES.READY)) {
             let hostSocket = userSockets.get(g.host.id);
             hostSocket.emit('everybody ready');
         }
@@ -122,15 +122,6 @@ class Game {
         let socket = io.of(`/${this.id}-game`);
         socket.on('connection', (sock) => socketBindings(socket, sock));
         gameSockets.set(this.id, socket);
-    }
-
-    isEverybodyReady() {
-        if (this.members.length) {
-            return this.members.every(
-                (m) => m.isReady()
-            );
-        }
-        return false;
     }
 
     everyUserStateIs(state) {
