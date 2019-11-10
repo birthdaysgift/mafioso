@@ -196,9 +196,12 @@ app.get('/game/', (req, res) => {
 });
 app.get('/whatishappening/', (req, res) => {
     res.send({
-        userId: req.session.user.id,
-        gameId: req.session.game.id,
-        game: games.get(req.session.game.id)
+        user: users.get(req.session.user.id),
+        game: games.get(req.session.game.id),
+        STATES: {
+            USER: User.STATES,
+            GAME: Game.STATES
+        }
     });
 })
 

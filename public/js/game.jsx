@@ -1,12 +1,14 @@
 var d = document;
 var clientData = {userId: undefined, gameId: undefined}
+var STATES = {}
 var socket;
 
 axios.get('/whatishappening/')
     .then((response) => {
-        clientData.userId = response.data.userId;
-        clientData.gameId = response.data.gameId;
-
+        clientData.userId = response.data.user.id;
+        clientData.gameId = response.data.game.id;
+        STATES = response.data.STATES;
+        
         socket = io(`/${clientData.gameId}-game`);
         socket.emit('new member', clientData);
         ReactDOM.render(
