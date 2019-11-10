@@ -10,6 +10,7 @@ axios.get('/whatishappening/')
         STATES = response.data.STATES;
         
         socket = io(`/${clientData.gameId}-game`);
+        socketLogging(socket);
         socket.emit('new member', clientData);
         ReactDOM.render(
             <Window
@@ -61,13 +62,10 @@ class StartButton extends React.Component {
         this.handleClick = this.handleClick.bind(this);
 
         socket.on('new member', (userJSON) => {
-            let u = JSON.parse(userJSON);
             this.setState({show: false});
-            console.log(`${u.name} connected`);
         })
         socket.on('everybody ready', () => {
             this.setState({show: true});
-            console.log('everybody ready');
         });
         socket.on('user not ready', (userJSON) => {
             this.setState({show: false});
@@ -180,16 +178,11 @@ class Game extends React.Component {
         this.handleRoleClick = this.handleRoleClick.bind(this);
         this.handleReadyClick = this.handleReadyClick.bind(this);
 
-        socket.on('ready for night', (userJSON) => {
-            let u = JSON.parse(userJSON);
-            console.log(`${u.name} ready for night`);
-        });
         socket.on('everybody ready for night', (gameJSON) => {
             this.setState({
                 showStart: true,
                 game: JSON.parse(gameJSON)
             });
-            console.log('everybody ready for night');
         });
     }
 
@@ -231,4 +224,31 @@ class Game extends React.Component {
         }
         return element;
     }
+}
+
+function socketLogging(socket) {
+    socket.on('new member', (userJSON) => {
+        console.log(`${JSON.parse(userJSON).name} connected`);
+    });
+    socket.on('user disconnected', (userJSON) => {
+        console.log(`${JSON.parse(userJSON).name} disconnected`);
+    });
+    socket.on('user ready', (userJSON) => {
+        console.log(`${JSON.parse(userJSON).name} ready`);
+    });
+    socket.on('user not ready', (userJSON) => {
+        console.log(`${JSON.parse(userJSON).name} not ready`);
+    });
+    socket.on('everybody ready', () => {
+        console.log('everybody ready');
+    });
+    socket.on('start game', (gameJSON) => {
+        console.log(`${JSON.parse(gameJSON).title} started`);
+    });
+    socket.on('ready for night', (userJSON) => {
+        console.log(`${JSON.parse(userJSON).name} ready for night`);
+    });
+    socket.on('everybody ready for night', (gameJSON) => {
+        console.log('everybody ready for night');
+    });
 }
