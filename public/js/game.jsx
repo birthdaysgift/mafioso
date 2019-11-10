@@ -73,10 +73,14 @@ class Window extends React.Component {
 }
 
 function Lobby(props) {
+    let everybodyReady = props.game.members.every(
+        (m) => m.state === STATES.USER.READY
+    );
     return (
         <div>
             <h1>{props.game.title}</h1>
-            <StartButton/>
+            <StartButton
+                show={everybodyReady && props.game.host.id === props.user.id}/>
             <ReadyButton showReady={!(props.user.state === STATES.USER.READY)}/>
             <div>Host: {props.game.host.name}</div>
             <UsersList members={props.game.members}/>
@@ -87,19 +91,8 @@ function Lobby(props) {
 class StartButton extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {show: false};
         
         this.handleClick = this.handleClick.bind(this);
-
-        socket.on('new member', (userJSON, gameJSON) => {
-            this.setState({show: false});
-        })
-        socket.on('everybody ready', () => {
-            this.setState({show: true});
-        });
-        socket.on('user not ready', (userJSON, gameJSON) => {
-            this.setState({show: false});
-        });
     }
 
     handleClick() {
@@ -108,7 +101,7 @@ class StartButton extends React.Component {
 
     render() {
         let element = <div onClick={this.handleClick}>START</div>;
-        return this.state.show ? element : null
+        return this.props.show ? element : null
     }
 }
 
