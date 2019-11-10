@@ -63,6 +63,16 @@ function socketBindings(serverSocket, clientSocket) {
         g.members[n].role = User.ROLES.MAFIA;
         serverSocket.emit('start game', JSON.stringify(g));
     });
+    clientSocket.on('ready for night', (data) => {
+        let u = users.get(data.userId);
+        let g = games.get(data.gameId);
+        u.state = User.STATES.WAITS_FOR_NIGHT;
+        serverSocket.emit('ready for night', JSON.stringify(u));
+        if (g.everyUserStateIs(User.STATES.WAITS_FOR_NIGHT)) {
+            let hostSocket = userSockets.get(g.host.id);
+            hostSocket.emit('everybody ready for night');
+        };
+    });
 }
 
 class User {
@@ -92,7 +102,8 @@ class User {
 User.nextId = 0;
 User.STATES = {
     NOT_READY: 'not ready',
-    READY: 'ready'
+    READY: 'ready',
+    WAITS_FOR_NIGHT: 'waits for night'
 }
 User.ROLES = {
     INNOCENT: 'innocent',
@@ -117,6 +128,15 @@ class Game {
         if (this.members.length) {
             return this.members.every(
                 (m) => m.isReady()
+            );
+        }
+        return false;
+    }
+
+    everyUserStateIs(state) {
+        if (this.members.length) {
+            return this.members.every(
+                (m) => (m.state === state)
             );
         }
         return false;

@@ -19,13 +19,27 @@ class Game extends React.Component {
         super(props);
         this.state = {showRole: false};
 
-        this.handleClick = this.handleClick.bind(this);
+        this.handleRoleClick = this.handleRoleClick.bind(this);
+        this.handleReadyClick = this.handleReadyClick.bind(this);
+
+        socket.on('ready for night', (userJSON) => {
+            let u = JSON.parse(userJSON);
+            console.log(`${u.name} ready for night`);
+        });
+        socket.on('everybody ready for night', () => {
+            this.setState({showStart: true});
+            console.log('everybody ready for night');
+        });
     }
 
-    handleClick() {
+    handleRoleClick() {
         this.setState((state) => ({
             showRole: !state.showRole
         }));
+    }
+
+    handleReadyClick() {
+        socket.emit('ready for night', clientData);
     }
 
     render() {
@@ -42,9 +56,11 @@ class Game extends React.Component {
         return (
             <div>
                 <h1>{this.state.showRole ? role : null}</h1>
-                <div onClick={this.handleClick}>
+                {this.state.showStart ? <div>START NIGHT</div> : null}
+                <div onClick={this.handleRoleClick}>
                     {!this.state.showRole ? 'SHOW' : 'HIDE'} ROLE
                 </div>
+                <div onClick={this.handleReadyClick}>READY TO SLEEP</div>
             </div>
         );
     }
