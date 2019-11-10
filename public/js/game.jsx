@@ -31,7 +31,6 @@ class Window extends React.Component {
         };
 
         socket.on('start game', (userJSON, gameJSON) => {
-            console.log('start game on window');
             this.setState({
                 user: JSON.parse(userJSON),
                 game: JSON.parse(gameJSON)
