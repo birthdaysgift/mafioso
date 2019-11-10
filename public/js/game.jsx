@@ -41,21 +41,15 @@ class Window extends React.Component {
     }
 }
 
-class Lobby extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
-    render() {
-        return (
-            <div>
-                <h1>{this.props.game.title}</h1>
-                <Buttons />
-                <div>Host: {this.props.game.host.name}</div>
-                <UsersList members={this.props.game.members}/>
-            </div>
-        );
-    }
+function Lobby(props) {
+    return (
+        <div>
+            <h1>{props.game.title}</h1>
+            <Buttons />
+            <div>Host: {props.game.host.name}</div>
+            <UsersList members={props.game.members}/>
+        </div>
+    );
 }
 
 class Buttons extends React.Component {
