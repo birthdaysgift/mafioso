@@ -30,6 +30,10 @@ class Window extends React.Component {
             game: this.props.game
         };
 
+        socket.on('new member', (userJSON, gameJSON) => {
+            this.setState({game: JSON.parse(gameJSON)});
+        });
+
         socket.on('start game', (userJSON, gameJSON) => {
             this.setState({
                 user: JSON.parse(userJSON),
@@ -118,13 +122,8 @@ class ReadyButton extends React.Component {
 class UsersList extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {members: props.members}
-        socket.on('new member', (userJSON, gameJSON) => {
-            this.setState((state) => {
-                state.members.push(JSON.parse(userJSON));
-                return {members: state.members};
-            });
-        });
+        this.state = {members: this.props.members};
+
         socket.on('user ready', (userJSON, gameJSON) => {
             let u = JSON.parse(userJSON);
             this.setState((state) => {
@@ -161,7 +160,7 @@ class UsersList extends React.Component {
     }
 
     render() {
-        let listItems = this.state.members.map((m) => {
+        let listItems = this.props.members.map((m) => {
             let state;
             if (m.state === STATES.USER.READY) {
                 state = 'READY';

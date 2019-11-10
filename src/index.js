@@ -30,6 +30,7 @@ function socketBindings(serverSocket, clientSocket) {
         g = games.get(gameId);
         g.members.push(u);
         userSockets.set(u.id, clientSocket);
+        console.log(g.members);
         serverSocket.emit(
             'new member',
             JSON.stringify(u),
