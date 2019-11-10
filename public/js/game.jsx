@@ -9,10 +9,11 @@ axios.get('/whatishappening/')
         
         socket = io(`/${response.data.game.id}-game`);
         socketLogging(socket);
-        socket.emit('new member', {
-            userId: response.data.user.id,
-            gameId: response.data.game.id
-        });
+        socket.emit(
+            'new member',
+            response.data.user.id,
+            response.data.game.id
+        );
         ReactDOM.render(
             <Window
                 game={response.data.game}

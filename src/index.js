@@ -25,9 +25,9 @@ var userSockets = new Map();
 
 function socketBindings(serverSocket, clientSocket) {
     let u, g;
-    clientSocket.on('new member', (data) => {
-        u = users.get(data.userId);
-        g = games.get(data.gameId);
+    clientSocket.on('new member', (userId, gameId) => {
+        u = users.get(userId);
+        g = games.get(gameId);
         g.addMember(u);
         userSockets.set(u.id, clientSocket);
         serverSocket.emit('new member', JSON.stringify(u));
