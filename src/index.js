@@ -88,14 +88,6 @@ class User {
     toString() {
         return `${this.id} ${this.name}`
     }
-
-    toJSON() {
-        let newobj = {};
-        newobj = Object.assign(newobj, this);
-        newobj.STATES = User.STATES;
-        newobj.ROLES = User.ROLES;
-        return newobj;
-    }
 }
 User.nextId = 0;
 User.STATES = {
@@ -147,13 +139,6 @@ class Game {
 
     toString () {
         return `${this.id} ${this.title}`
-    }
-
-    toJSON() {
-        let newobj = {};
-        newobj = Object.assign(newobj, this);
-        newobj.STATES = Game.STATES;
-        return newobj;
     }
 }
 Game.nextId = 0;

@@ -124,7 +124,7 @@ class UsersList extends React.Component {
             this.setState((state) => {
                 let members = state.members.map((m) => {
                     if (m.id === u.id) {
-                        m.state = m.STATES.READY;
+                        m.state = STATES.USER.READY;
                     }
                     return m
                 });
@@ -136,7 +136,7 @@ class UsersList extends React.Component {
             this.setState((state) => {
                 let members = state.members.map((m) => {
                     if (m.id === u.id) {
-                        m.state = m.STATES.NOT_READY;
+                        m.state = STATES.USER.NOT_READY;
                     }
                     return m
                 });
@@ -157,9 +157,9 @@ class UsersList extends React.Component {
     render() {
         let listItems = this.state.members.map((m) => {
             let state;
-            if (m.state === m.STATES.READY) {
+            if (m.state === STATES.USER.READY) {
                 state = 'READY';
-            } else if (m.state === m.STATES.NOT_READY) {
+            } else if (m.state === STATES.USER.NOT_READY) {
                 state = 'NOT READY';
             }
             return <li key={m.id}>{m.name} {state}</li>;
@@ -203,13 +203,13 @@ class Game extends React.Component {
             return m.id === clientData.userId;
         })[0];
         let role;
-        if (u.role === u.ROLES.MAFIA) {
+        if (u.role === ROLES.MAFIA) {
             role = 'MAFIA';
-        } else if (u.role === u.ROLES.INNOCENT) {
+        } else if (u.role === ROLES.INNOCENT) {
             role = 'INNOCENT';
         }
         let element;
-        if (this.state.game.state === this.state.game.STATES.NIGHT) {
+        if (this.state.game.state === STATES.GAME.NIGHT) {
             element = <h1>night</h1>;
         } else {
             element = (
