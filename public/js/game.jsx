@@ -76,11 +76,12 @@ function Lobby(props) {
     let everybodyReady = props.game.members.every(
         (m) => m.state === STATES.USER.READY
     );
+    let userIsHost = props.game.host.id === props.user.id;
     return (
         <div>
             <h1>{props.game.title}</h1>
             <StartButton
-                show={everybodyReady && props.game.host.id === props.user.id}/>
+                show={everybodyReady && userIsHost}/>
             <ReadyButton showReady={!(props.user.state === STATES.USER.READY)}/>
             <div>Host: {props.game.host.name}</div>
             <UsersList members={props.game.members}/>
