@@ -148,10 +148,8 @@ class Game extends React.Component {
         this.state = {
             user: this.props.user,
             game: this.props.game,
-            showRole: false
         };
 
-        this.handleRoleClick = this.handleRoleClick.bind(this);
         this.handleReadyClick = this.handleReadyClick.bind(this);
 
         socket.on('everybody ready for night', (gameJSON) => {
@@ -162,39 +160,54 @@ class Game extends React.Component {
         });
     }
 
-    handleRoleClick() {
-        this.setState((state) => ({
-            showRole: !state.showRole
-        }));
-    }
-
     handleReadyClick() {
         socket.emit('ready for night');
     }
 
     render() {
-        let role;
-        if (this.state.user.role === ROLES.MAFIA) {
-            role = 'MAFIA';
-        } else if (this.state.user.role === ROLES.INNOCENT) {
-            role = 'INNOCENT';
-        }
         let element;
         if (this.state.game.state === STATES.GAME.NIGHT) {
             element = <h1>night</h1>;
         } else {
             element = (
                 <div>
-                    <h1>{this.state.showRole ? role : null}</h1>
+                    <Role role={this.props.user.role}/>
                     {this.state.showStart ? <div>START NIGHT</div> : null}
-                    <div onClick={this.handleRoleClick}>
-                        {!this.state.showRole ? 'SHOW' : 'HIDE'} ROLE
-                    </div>
                     <div onClick={this.handleReadyClick}>READY TO SLEEP</div>
                 </div>
             );
         }
         return element;
+    }
+}
+
+class Role extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {show: false};
+
+        this.handleClick = this.handleClick.bind(this);
+    }
+
+    handleClick() {
+        this.setState((state) => ({show: !state.show}));
+    }
+
+    render() {
+        let role;
+        if (this.props.role === ROLES.MAFIA) {
+            role = 'MAFIA';
+        } else if (this.props.role === ROLES.INNOCENT) {
+            role = 'INNOCENT';
+        }
+        return (
+            <div>
+                <h1>{this.state.show ? role : null}</h1>
+                <div onClick={this.handleClick}>
+                    {this.state.show ? 'HIDE' : 'SHOW'} ROLE
+                </div>
+            </div>
+        )
     }
 }
 
