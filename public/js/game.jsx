@@ -1,12 +1,62 @@
+const {connect, Provider} = ReactRedux;
+const {createStore, bindActionCreators} = Redux;
+
 var d = document;
 var STATES, ROLES;
 var socket;
+
+
+const ACTION_UPDATE_USER = 'ACTION_UPDATE_USER';
+const ACTION_UPDATE_GAME = 'ACTION_UPDATE_GAME';
+
+const updateUser = (newUser) => {
+    return {
+        type: ACTION_UPDATE_USER,
+        payload: newUser
+    }
+};
+
+const updateGame = (newGame) => {
+    return {
+        type: ACTION_UPDATE_GAME,
+        payload: newGame
+    }
+};
+
+const rootReducer = (state = initialState, action) => {
+    switch (action.type) {
+        case ACTION_UPDATE_USER:
+            return { ...state, user: action.payload };
+        case ACTION_UPDATE_GAME:
+            return { ...state, game: action.payload };
+    }
+    return state;
+};
+
+const mapStateToProps = (state) => {
+    return {
+        user: state.user,
+        game: state.game
+    }
+}
+
+const mapActionsToProps = (dispatch) => {
+    return {
+        updateUser: bindActionCreators(updateUser, dispatch),
+        updateGame: bindActionCreators(updateGame, dispatch)
+    }
+}
 
 axios.get('/whatishappening/')
     .then((response) => {
         STATES = response.data.STATES;
         ROLES = response.data.ROLES;
         
+        const store = createStore(rootReducer, {
+            user: response.data.user,
+            game: response.data.game
+        });
+
         socket = io(`/${response.data.game.id}-game`);
         socketLogging(socket);
         socket.emit(
@@ -14,10 +64,12 @@ axios.get('/whatishappening/')
             response.data.user.id,
             response.data.game.id
         );
+
+        const WrappedWindow = connect(mapStateToProps, mapActionsToProps)(Window);
         ReactDOM.render(
-            <Window
-                game={response.data.game}
-                user={response.data.user}/>,
+            <Provider store={store}>
+                <WrappedWindow/>
+            </Provider>,
             d.querySelector('.game')
         );
     });
@@ -25,49 +77,43 @@ axios.get('/whatishappening/')
 class Window extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            user: this.props.user,
-            game: this.props.game
-        };
 
         socket.on('new member', (userJSON, gameJSON) => {
-            this.setState({game: JSON.parse(gameJSON)});
+            this.props.updateGame(JSON.parse(gameJSON));
         });
         socket.on('user disconnected', (userJSON, gameJSON) => {
-            this.setState({game: JSON.parse(gameJSON)});
+            this.props.updateGame(JSON.parse(gameJSON));
         });
         socket.on('user ready', (userJSON, gameJSON) => {
-            this.setState({game: JSON.parse(gameJSON)});
+            this.props.updateGame(JSON.parse(gameJSON));
             let u = JSON.parse(userJSON);
-            if (this.state.user.id === u.id) {
-                this.setState({user: u});
+            if (this.props.user.id === u.id) {
+                this.props.updateUser(u);
             }
         });
         socket.on('user not ready', (userJSON, gameJSON) => {
-            this.setState({game: JSON.parse(gameJSON)});
+            this.props.updateGame(JSON.parse(gameJSON));
             let u = JSON.parse(userJSON);
-            if (this.state.user.id === u.id) {
-                this.setState({user: u});
+            if (this.props.user.id === u.id) {
+                this.props.updateUser(u);
             }
         });
 
         socket.on('start game', (userJSON, gameJSON) => {
-            this.setState({
-                user: JSON.parse(userJSON),
-                game: JSON.parse(gameJSON)
-            });
+            this.props.updateUser(JSON.parse(userJSON));
+            this.props.updateGame(JSON.parse(gameJSON));
         });
     }
 
     render() {
-        if (this.state.game.state === STATES.GAME.NOT_STARTED) {
+        if (this.props.game.state === STATES.GAME.NOT_STARTED) {
             return <Lobby
-                        user={this.state.user}
-                        game={this.state.game}/>;
+                        user={this.props.user}
+                        game={this.props.game}/>;
         } else {
             return <Game
-                        user={this.state.user}
-                        game={this.state.game}/>;
+                        user={this.props.user}
+                        game={this.props.game}/>;
         }
     }
 }
@@ -146,17 +192,13 @@ function UsersList(props) {
 class Game extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            user: this.props.user,
-            game: this.props.game,
-        };
+        this.state = {showStart: false};
 
         this.handleReadyClick = this.handleReadyClick.bind(this);
 
         socket.on('everybody ready for night', (gameJSON) => {
             this.setState({
                 showStart: true,
-                game: JSON.parse(gameJSON)
             });
         });
     }
@@ -167,7 +209,7 @@ class Game extends React.Component {
 
     render() {
         let element;
-        if (this.state.game.state === STATES.GAME.NIGHT) {
+        if (this.props.game.state === STATES.GAME.NIGHT) {
             element = <h1>night</h1>;
         } else {
             element = (
