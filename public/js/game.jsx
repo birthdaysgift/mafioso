@@ -26,9 +26,15 @@ const updateGame = (newGame) => {
 const rootReducer = (state = initialState, action) => {
     switch (action.type) {
         case ACTION_UPDATE_USER:
-            return { ...state, user: action.payload };
+            return { 
+                ...state, 
+                user: {...state.user, ...action.payload} 
+            };
         case ACTION_UPDATE_GAME:
-            return { ...state, game: action.payload };
+            return {
+                ...state, 
+                game: {...state.game, ...action.payload }
+            };
     }
     return state;
 };
@@ -53,8 +59,15 @@ axios.get('/whatishappening/')
         ROLES = response.data.ROLES;
         
         const store = createStore(rootReducer, {
-            user: response.data.user,
-            game: response.data.game
+            user: {
+                ...response.data.user,
+                isHost: response.data.user.id === response.data.game.host.id
+            },
+            game: {
+                ...response.data.game,
+                everybodyReady: false,
+                everybodyReadyForNight: false
+            }
         });
 
         socket = io(`/${response.data.game.id}-game`);
@@ -80,6 +93,7 @@ class Window extends React.Component {
 
         socket.on('new member', (userJSON, gameJSON) => {
             this.props.updateGame(JSON.parse(gameJSON));
+            this.props.updateGame({everybodyReady: false});
         });
         socket.on('user disconnected', (userJSON, gameJSON) => {
             this.props.updateGame(JSON.parse(gameJSON));
@@ -93,15 +107,38 @@ class Window extends React.Component {
         });
         socket.on('user not ready', (userJSON, gameJSON) => {
             this.props.updateGame(JSON.parse(gameJSON));
+            this.props.updateGame({everybodyReady: false});
             let u = JSON.parse(userJSON);
             if (this.props.user.id === u.id) {
                 this.props.updateUser(u);
             }
         });
+        socket.on('everybody ready', (userJSON, gameJSON) => {
+            this.props.updateGame({everybodyReady: true});
+        });
 
         socket.on('start game', (userJSON, gameJSON) => {
             this.props.updateUser(JSON.parse(userJSON));
             this.props.updateGame(JSON.parse(gameJSON));
+        });
+        socket.on('ready for night', (userJSON, gameJSON) => {
+            this.props.updateGame(JSON.parse(gameJSON));
+            let u = JSON.parse(userJSON);
+            if (this.props.user.id === u.id) {
+                this.props.updateUser(u);
+            }
+        });
+        socket.on('not ready for night', (userJSON, gameJSON) => {
+            this.props.updateGame(JSON.parse(gameJSON));
+            this.props.updateGame({everybodyReadyForNight: false});
+            let u = JSON.parse(userJSON);
+            if (this.props.user.id === u.id) {
+                this.props.updateUser(u);
+            }
+        });
+        socket.on('everybody ready for night', (gameJSON) => {
+            this.props.updateGame(JSON.parse(gameJSON));
+            this.props.updateGame({everybodyReadyForNight: true});
         });
     }
 
@@ -119,15 +156,11 @@ class Window extends React.Component {
 }
 
 function Lobby(props) {
-    let everybodyReady = props.game.members.every(
-        (m) => m.state === STATES.USER.READY
-    );
-    let userIsHost = props.game.host.id === props.user.id;
     return (
         <div>
             <h1>{props.game.title}</h1>
             <StartButton
-                show={everybodyReady && userIsHost}/>
+                show={props.user.isHost && props.game.everybodyReady}/>
             <ReadyButton showReady={!(props.user.state === STATES.USER.READY)}/>
             <div>Host: {props.game.host.name}</div>
             <UsersList members={props.game.members}/>
@@ -192,19 +225,16 @@ function UsersList(props) {
 class Game extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {showStart: false};
 
         this.handleReadyClick = this.handleReadyClick.bind(this);
-
-        socket.on('everybody ready for night', (gameJSON) => {
-            this.setState({
-                showStart: true,
-            });
-        });
     }
 
     handleReadyClick() {
-        socket.emit('ready for night');
+        if (this.props.user.state === STATES.USER.NOT_READY_FOR_NIGHT) {
+            socket.emit('ready for night');
+        } else {
+            socket.emit('not ready for night');
+        }
     }
 
     render() {
@@ -215,8 +245,11 @@ class Game extends React.Component {
             element = (
                 <div>
                     <Role role={this.props.user.role}/>
-                    {this.state.showStart ? <div>START NIGHT</div> : null}
-                    <div onClick={this.handleReadyClick}>READY TO SLEEP</div>
+                    {this.props.game.everybodyReadyForNight ? <div>START NIGHT</div> : null}
+                    <div onClick={this.handleReadyClick}>
+                        {this.props.user.state === STATES.USER.NOT_READY_FOR_NIGHT 
+                            ? 'READY' : 'NOT READY'} TO SLEEP
+                    </div>
                 </div>
             );
         }
