@@ -150,6 +150,9 @@ class Window extends React.Component {
     }
 
     render() {
+        if (this.props.user.state === STATES.USER.DEAD) {
+            return <Dead/>
+        }
         switch (this.props.game.state) {
             case STATES.GAME.LOBBY:
                 return <Lobby
@@ -347,6 +350,10 @@ class Day extends React.Component {
     render() {
         return <div>Day</div>;
     };
+}
+
+function Dead(props) {
+    return <div>You're dead :(</div>
 }
 
 function socketLogging(socket) {
