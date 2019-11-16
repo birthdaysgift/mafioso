@@ -307,7 +307,11 @@ class Night extends React.Component {
                     {
                         this.props.game.members.map(m => {
                             if (m.role !== ROLES.MAFIA) {
-                                return <li key={m.id} userid={m.id}>{m.name}</li>
+                                return (
+                                    <li key={m.id} userid={m.id}>
+                                        {m.name} [{m.votes.map(v => v.name)}]
+                                    </li>
+                                )
                             }
                         })
                     }
