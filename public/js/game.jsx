@@ -297,6 +297,29 @@ class Role extends React.Component {
 class Night extends React.Component {
     constructor(props) {
         super(props);
+    }
+
+    render() {
+        if (this.props.user.role === ROLES.INNOCENT) {
+            return <div>Close your eyes!</div>
+        }
+        if (this.props.user.role === ROLES.MAFIA) {
+            return (
+                <VotingWidget
+                    user={this.props.user}
+                    game={this.props.game}
+                    voteFunc={votedId =>
+                        socket.emit('mafia votes', votedId)}
+                    unvoteFunc={votedId =>
+                        socket.emit('mafia unvotes', votedId)}/>
+            )
+        }
+    }
+}
+
+class VotingWidget extends React.Component {
+    constructor(props) {
+        super(props);
         this.state = {votedUserId: undefined};
 
         this.handleClick = this.handleClick.bind(this);
@@ -305,42 +328,37 @@ class Night extends React.Component {
     handleClick(e) {
         let votedId = e.target.getAttribute('userid');
         if (this.state.votedUserId === votedId) {
-            socket.emit('mafia unvotes', votedId);
+            this.props.unvoteFunc(votedId);
             this.setState({votedUserId: undefined});
             return ;
         }
         if (this.state.votedUserId === undefined
                 && parseInt(votedId) >= 0) {
-            socket.emit('mafia votes', votedId);
+            this.props.voteFunc(votedId);
             this.setState({votedUserId: votedId});
             return ;
         }
 
     };
-
+    
     render() {
-        if (this.props.user.role === ROLES.INNOCENT) {
-            return <div>Close your eyes!</div>
-        }
-        if (this.props.user.role === ROLES.MAFIA) {
-            return (
-                <ul onClick={this.handleClick}>
-                    {
-                        this.props.game.members.map(m => {
-                            if (m.role !== ROLES.MAFIA) {
-                                return (
-                                    <li key={m.id} userid={m.id}>
-                                        {m.name} [{m.votes.map(v => v.name)}]
-                                    </li>
-                                )
-                            }
-                        })
-                    }
-                </ul>
-            )
-        }
+        return (
+            <ul onClick={this.handleClick}>
+                {
+                    this.props.game.members.map(m => {
+                        if (m.role !== ROLES.MAFIA) {
+                            return (
+                                <li key={m.id} userid={m.id}>
+                                    {m.name} [{m.votes.map(v => v.name)}]
+                                </li>
+                            )
+                        }
+                    })
+                }
+            </ul>
+        )
     }
- }
+}
 
 class Day extends React.Component {
     constructor(props) {

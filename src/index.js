@@ -103,6 +103,10 @@ function socketBindings(serverSocket, clientSocket) {
             );
             g.setNextState();
             g.members.forEach(m => {
+                m.votes = [];
+                if (m.state !== User.STATES.DEAD) {
+                    m.state = User.STATES.NOT_READY;
+                }
                 let s = userSockets.get(m.id);
                 s.emit(
                     'next game state',
