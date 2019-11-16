@@ -91,6 +91,17 @@ function socketBindings(serverSocket, clientSocket) {
                 JSON.stringify(g)
             );
         });
+        let mafs = g.members.filter(
+            m => m.role === User.ROLES.MAFIA
+        );
+        if (inno.votes.length === mafs.length) {
+            inno.state = User.STATES.DEAD;
+            serverSocket.emit(
+                'mafia kills',
+                JSON.stringify(inno), 
+                JSON.stringify(g)
+            );
+        }
     });
     clientSocket.on('mafia unvotes', (innocentId) => {
         let inno = users.get(parseInt(innocentId));
@@ -153,7 +164,8 @@ class User {
 User.nextId = 0;
 User.STATES = {
     NOT_READY: 'not ready',
-    READY: 'ready'
+    READY: 'ready',
+    DEAD: 'dead'
 }
 User.ROLES = {
     INNOCENT: 'innocent',
