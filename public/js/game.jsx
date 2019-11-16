@@ -114,6 +114,11 @@ class Window extends React.Component {
         socket.on('everybody ready', (userJSON, gameJSON) => {
             this.props.updateGame({everybodyReady: true});
         });
+        socket.on('mafia votes', (mafJSON, innoJSON) => {
+            let m = JSON.parse(mafJSON);
+            let i = JSON.parse(innoJSON);
+            console.log(`maf ${m.name} votes for ${i.name}`);
+        });
 
         socket.on('next game state', (userJSON, gameJSON) => {
             this.props.updateUser(JSON.parse(userJSON));
@@ -263,7 +268,13 @@ class Role extends React.Component {
 class Night extends React.Component {
     constructor(props) {
         super(props);
+
+        this.handleClick = this.handleClick.bind(this);
     }
+
+    handleClick(e) {
+        socket.emit('mafia votes', e.target.getAttribute('userid'));
+    };
 
     render() {
         if (this.props.user.role === ROLES.INNOCENT) {
@@ -271,11 +282,11 @@ class Night extends React.Component {
         }
         if (this.props.user.role === ROLES.MAFIA) {
             return (
-                <ul>
+                <ul onClick={this.handleClick}>
                     {
                         this.props.game.members.map(m => {
                             if (m.role !== ROLES.MAFIA) {
-                                return <li key={m.id} userId={m.id}>{m.name}</li>
+                                return <li key={m.id} userid={m.id}>{m.name}</li>
                             }
                         })
                     }

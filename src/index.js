@@ -79,6 +79,17 @@ function socketBindings(serverSocket, clientSocket) {
             JSON.stringify(g)
         );
     });
+    clientSocket.on('mafia votes', (innocentId) => {
+        let inno = users.get(parseInt(innocentId));
+        g.members.forEach(m => {
+            let s = userSockets.get(m.id);
+            s.emit(
+                'mafia votes', 
+                JSON.stringify(u), 
+                JSON.stringify(inno)
+            );
+        });
+    });
     clientSocket.on('next game state', () => {
         g.setNextState();
         switch (g.state) {
