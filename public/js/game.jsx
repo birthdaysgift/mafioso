@@ -119,6 +119,11 @@ class Window extends React.Component {
             let i = JSON.parse(innoJSON);
             console.log(`maf ${m.name} votes for ${i.name}`);
         });
+        socket.on('mafia unvotes', (mafJSON, innoJSON) => {
+            let m = JSON.parse(mafJSON);
+            let i = JSON.parse(innoJSON);
+            console.log(`maf ${m.name} unvotes for ${i.name}`);
+        });
 
         socket.on('next game state', (userJSON, gameJSON) => {
             this.props.updateUser(JSON.parse(userJSON));
@@ -268,12 +273,18 @@ class Role extends React.Component {
 class Night extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {voted: false};
 
         this.handleClick = this.handleClick.bind(this);
     }
 
     handleClick(e) {
-        socket.emit('mafia votes', e.target.getAttribute('userid'));
+        if (this.state.voted) {
+            socket.emit('mafia unvotes', e.target.getAttribute('userid'));
+        } else {
+            socket.emit('mafia votes', e.target.getAttribute('userid'));
+        }
+        this.setState(state => ({voted: !state.voted}));
     };
 
     render() {

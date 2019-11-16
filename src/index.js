@@ -91,6 +91,19 @@ function socketBindings(serverSocket, clientSocket) {
             );
         });
     });
+    clientSocket.on('mafia unvotes', (innocentId) => {
+        let inno = users.get(parseInt(innocentId));
+        let i = inno.votes.indexOf(u);
+        inno.votes.splice(i, 1);
+        g.members.forEach(m => {
+            let s = userSockets.get(m.id);
+            s.emit(
+                'mafia unvotes', 
+                JSON.stringify(u), 
+                JSON.stringify(inno)
+            );
+        });
+    });
     clientSocket.on('next game state', () => {
         g.setNextState();
         switch (g.state) {
