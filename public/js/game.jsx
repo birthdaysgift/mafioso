@@ -283,18 +283,25 @@ class Role extends React.Component {
 class Night extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {voted: false};
+        this.state = {votedUserId: undefined};
 
         this.handleClick = this.handleClick.bind(this);
     }
 
     handleClick(e) {
-        if (this.state.voted) {
-            socket.emit('mafia unvotes', e.target.getAttribute('userid'));
-        } else {
-            socket.emit('mafia votes', e.target.getAttribute('userid'));
+        let votedId = e.target.getAttribute('userid');
+        if (this.state.votedUserId === votedId) {
+            socket.emit('mafia unvotes', votedId);
+            this.setState({votedUserId: undefined});
+            return ;
         }
-        this.setState(state => ({voted: !state.voted}));
+        if (this.state.votedUserId === undefined
+                && parseInt(votedId) >= 0) {
+            socket.emit('mafia votes', votedId);
+            this.setState({votedUserId: votedId});
+            return ;
+        }
+
     };
 
     render() {
