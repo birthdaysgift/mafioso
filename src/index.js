@@ -23,6 +23,15 @@ var games = new Map();
 var gameSockets = new Map();
 var userSockets = new Map();
 
+var gameStatesGenerator = function* () {
+    yield Game.STATES.LOBBY;
+    yield Game.STATES.MEETING;
+    while (true) {
+        yield Game.STATES.NIGHT;
+        yield Game.STATES.DAY;
+    }
+};
+
 function socketBindings(serverSocket, clientSocket) {
     let u, g;
     clientSocket.on('new member', (userId, gameId) => {
@@ -70,20 +79,24 @@ function socketBindings(serverSocket, clientSocket) {
             JSON.stringify(g)
         );
     });
-    clientSocket.on('start game', () => {
-        let max = g.members.length - 1;
-        let n = Math.floor(Math.random() * Math.floor(max));
-        g.members[n].role = User.ROLES.MAFIA;
-        g.state = Game.STATES.MEETING;
-        g.members.forEach((m) => {
-            m.state = User.STATES.NOT_READY;
-            let s = userSockets.get(m.id);
-            s.emit(
-                'start game',
-                JSON.stringify(m),
-                JSON.stringify(g)
-            );
-        });
+    clientSocket.on('next game state', () => {
+        g.setNextState();
+        switch (g.state) {
+            case Game.STATES.MEETING: {
+                let max = g.members.length - 1;
+                let n = Math.floor(Math.random() * Math.floor(max));
+                g.members[n].role = User.ROLES.MAFIA;
+                g.members.forEach((m) => {
+                    m.state = User.STATES.NOT_READY;
+                    let s = userSockets.get(m.id);
+                    s.emit(
+                        'next game state',
+                        JSON.stringify(m),
+                        JSON.stringify(g)
+                    );
+                });
+            }
+        }
     });
 }
 
@@ -117,11 +130,16 @@ class Game {
         this.host = host;
         this.id = Game.nextId++;
         this.members = [];
-        this.state = Game.STATES.LOBBY;
+        this._statesGenerator = gameStatesGenerator();
+        this.state = this._statesGenerator.next().value;
 
         let socket = io.of(`/${this.id}-game`);
         socket.on('connection', (sock) => socketBindings(socket, sock));
         gameSockets.set(this.id, socket);
+    }
+
+    setNextState() {
+        this.state = this._statesGenerator.next().value;
     }
 
     everyUserStateIs(state) {

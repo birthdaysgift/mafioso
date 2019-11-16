@@ -116,7 +116,7 @@ class Window extends React.Component {
             this.props.updateGame({everybodyReady: true});
         });
 
-        socket.on('start game', (userJSON, gameJSON) => {
+        socket.on('next game state', (userJSON, gameJSON) => {
             this.props.updateUser(JSON.parse(userJSON));
             this.props.updateGame(JSON.parse(gameJSON));
             this.props.updateGame({everybodyReady: false});
@@ -159,7 +159,7 @@ class StartButton extends React.Component {
     }
 
     handleClick() {
-        socket.emit('start game');
+        socket.emit('next game state');
     }
 
     render() {
