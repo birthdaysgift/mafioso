@@ -118,12 +118,20 @@ class Window extends React.Component {
             let m = JSON.parse(mafJSON);
             let i = JSON.parse(innoJSON);
             let g = JSON.parse(gameJSON);
+            if (i.id === this.props.user.id) {
+                this.props.updateUser(i);
+            }
+            this.props.updateGame(g);
             console.log(`maf ${m.name} votes for ${i.name}`);
         });
         socket.on('mafia unvotes', (mafJSON, innoJSON, gameJSON) => {
             let m = JSON.parse(mafJSON);
             let i = JSON.parse(innoJSON);
             let g = JSON.parse(gameJSON);
+            if (i.id === this.props.user.id) {
+                this.props.updateUser(i);
+            }
+            this.props.updateGame(g);
             console.log(`maf ${m.name} unvotes for ${i.name}`);
         });
 
