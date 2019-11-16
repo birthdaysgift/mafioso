@@ -65,8 +65,7 @@ axios.get('/whatishappening/')
             },
             game: {
                 ...response.data.game,
-                everybodyReady: false,
-                everybodyReadyForNight: false
+                everybodyReady: false
             }
         });
 
@@ -120,25 +119,7 @@ class Window extends React.Component {
         socket.on('start game', (userJSON, gameJSON) => {
             this.props.updateUser(JSON.parse(userJSON));
             this.props.updateGame(JSON.parse(gameJSON));
-        });
-        socket.on('ready for night', (userJSON, gameJSON) => {
-            this.props.updateGame(JSON.parse(gameJSON));
-            let u = JSON.parse(userJSON);
-            if (this.props.user.id === u.id) {
-                this.props.updateUser(u);
-            }
-        });
-        socket.on('not ready for night', (userJSON, gameJSON) => {
-            this.props.updateGame(JSON.parse(gameJSON));
-            this.props.updateGame({everybodyReadyForNight: false});
-            let u = JSON.parse(userJSON);
-            if (this.props.user.id === u.id) {
-                this.props.updateUser(u);
-            }
-        });
-        socket.on('everybody ready for night', (gameJSON) => {
-            this.props.updateGame(JSON.parse(gameJSON));
-            this.props.updateGame({everybodyReadyForNight: true});
+            this.props.updateGame({everybodyReady: false});
         });
     }
 
@@ -225,16 +206,6 @@ function UsersList(props) {
 class Game extends React.Component {
     constructor(props) {
         super(props);
-
-        this.handleReadyClick = this.handleReadyClick.bind(this);
-    }
-
-    handleReadyClick() {
-        if (this.props.user.state === STATES.USER.NOT_READY_FOR_NIGHT) {
-            socket.emit('ready for night');
-        } else {
-            socket.emit('not ready for night');
-        }
     }
 
     render() {
@@ -245,11 +216,8 @@ class Game extends React.Component {
             element = (
                 <div>
                     <Role role={this.props.user.role}/>
-                    {this.props.game.everybodyReadyForNight ? <div>START NIGHT</div> : null}
-                    <div onClick={this.handleReadyClick}>
-                        {this.props.user.state === STATES.USER.NOT_READY_FOR_NIGHT 
-                            ? 'READY' : 'NOT READY'} TO SLEEP
-                    </div>
+                    {this.props.game.everybodyReady ? <div>START NIGHT</div> : null}
+                    <ReadyButton showReady={!(this.props.user.state === STATES.USER.READY)}/>
                 </div>
             );
         }

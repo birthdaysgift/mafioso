@@ -76,7 +76,7 @@ function socketBindings(serverSocket, clientSocket) {
         g.members[n].role = User.ROLES.MAFIA;
         g.state = Game.STATES.DAY;
         g.members.forEach((m) => {
-            m.state = User.STATES.NOT_READY_FOR_NIGHT;
+            m.state = User.STATES.NOT_READY;
             let s = userSockets.get(m.id);
             s.emit(
                 'start game',
@@ -84,29 +84,6 @@ function socketBindings(serverSocket, clientSocket) {
                 JSON.stringify(g)
             );
         });
-    });
-    clientSocket.on('ready for night', () => {
-        u.state = User.STATES.READY_FOR_NIGHT;
-        serverSocket.emit(
-            'ready for night',
-            JSON.stringify(u),
-            JSON.stringify(g)
-        );
-        if (g.everyUserStateIs(User.STATES.READY_FOR_NIGHT)) {
-            let hostSocket = userSockets.get(g.host.id);
-            hostSocket.emit(
-                'everybody ready for night',
-                JSON.stringify(g)
-            );
-        };
-    });
-    clientSocket.on('not ready for night', () => {
-        u.state = User.STATES.NOT_READY_FOR_NIGHT;
-        serverSocket.emit(
-            'not ready for night',
-            JSON.stringify(u),
-            JSON.stringify(g)
-        );
     });
 }
 
@@ -125,9 +102,7 @@ class User {
 User.nextId = 0;
 User.STATES = {
     NOT_READY: 'not ready',
-    READY: 'ready',
-    READY_FOR_NIGHT: 'ready for night',
-    NOT_READY_FOR_NIGHT: 'not ready for night'
+    READY: 'ready'
 }
 User.ROLES = {
     INNOCENT: 'innocent',
