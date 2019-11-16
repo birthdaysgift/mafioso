@@ -217,7 +217,7 @@ class Meeting extends React.Component {
             element = (
                 <div>
                     <Role role={this.props.user.role}/>
-                    {this.props.game.everybodyReady ? <div>START NIGHT</div> : null}
+                    <StartButton show={this.props.game.everybodyReady}/>
                     <ReadyButton showReady={!(this.props.user.state === STATES.USER.READY)}/>
                 </div>
             );
