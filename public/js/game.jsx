@@ -60,8 +60,7 @@ axios.get('/whatishappening/')
         
         const store = createStore(rootReducer, {
             user: {
-                ...response.data.user,
-                isHost: response.data.user.id === response.data.game.host.id
+                ...response.data.user
             },
             game: {
                 ...response.data.game,
@@ -143,7 +142,7 @@ function Lobby(props) {
         <div>
             <h1>{props.game.title}</h1>
             <StartButton
-                show={props.user.isHost && props.game.everybodyReady}/>
+                show={props.game.everybodyReady}/>
             <ReadyButton showReady={!(props.user.state === STATES.USER.READY)}/>
             <div>Host: {props.game.host.name}</div>
             <UsersList members={props.game.members}/>
