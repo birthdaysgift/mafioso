@@ -124,14 +124,16 @@ class Window extends React.Component {
     }
 
     render() {
-        if (this.props.game.state === STATES.GAME.NOT_STARTED) {
-            return <Lobby
-                        user={this.props.user}
-                        game={this.props.game}/>;
-        } else {
-            return <Game
-                        user={this.props.user}
-                        game={this.props.game}/>;
+        switch (this.props.game.state) {
+            case STATES.GAME.LOBBY:
+                return <Lobby
+                            user={this.props.user}
+                            game={this.props.game}/>;
+
+            case STATES.GAME.MEETING:
+                return <Game
+                            user={this.props.user}
+                            game={this.props.game}/>;
         }
     }
 }
