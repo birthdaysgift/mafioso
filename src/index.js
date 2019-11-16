@@ -96,6 +96,16 @@ function socketBindings(serverSocket, clientSocket) {
                     );
                 });
             }
+            case Game.STATES.NIGHT: {
+                g.members.forEach(m => {
+                    let s = userSockets.get(m.id);
+                    s.emit(
+                        'next game state',
+                        JSON.stringify(m),
+                        JSON.stringify(g)
+                    );
+                });
+            }
         }
     });
 }

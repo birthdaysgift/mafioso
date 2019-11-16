@@ -133,6 +133,10 @@ class Window extends React.Component {
                 return <Meeting
                             user={this.props.user}
                             game={this.props.game}/>;
+            case STATES.GAME.NIGHT:
+                return <Night
+                            user={this.props.user}
+                            game={this.props.game}/>;
         }
     }
 }
@@ -255,6 +259,16 @@ class Role extends React.Component {
         )
     }
 }
+
+class Night extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        return <div>Night</div>
+    }
+ }
 
 function socketLogging(socket) {
     socket.on('new member', (userJSON, gameJSON) => {
