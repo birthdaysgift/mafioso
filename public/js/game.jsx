@@ -266,7 +266,22 @@ class Night extends React.Component {
     }
 
     render() {
-        return <div>Night</div>
+        if (this.props.user.role === ROLES.INNOCENT) {
+            return <div>Close your eyes!</div>
+        }
+        if (this.props.user.role === ROLES.MAFIA) {
+            return (
+                <ul>
+                    {
+                        this.props.game.members.map(m => {
+                            if (m.role !== ROLES.MAFIA) {
+                                return <li key={m.id} userId={m.id}>{m.name}</li>
+                            }
+                        })
+                    }
+                </ul>
+            )
+        }
     }
  }
 
