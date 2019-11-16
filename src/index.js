@@ -101,6 +101,15 @@ function socketBindings(serverSocket, clientSocket) {
                 JSON.stringify(inno), 
                 JSON.stringify(g)
             );
+            g.setNextState();
+            g.members.forEach(m => {
+                let s = userSockets.get(m.id);
+                s.emit(
+                    'next game state',
+                    JSON.stringify(m),
+                    JSON.stringify(g)
+                );
+            });
         }
     });
     clientSocket.on('mafia unvotes', (innocentId) => {

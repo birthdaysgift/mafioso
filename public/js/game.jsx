@@ -164,6 +164,10 @@ class Window extends React.Component {
                 return <Night
                             user={this.props.user}
                             game={this.props.game}/>;
+            case STATES.GAME.DAY:
+                return <Day
+                            user={this.props.user}
+                            game={this.props.game}/>
         }
     }
 }
@@ -334,6 +338,16 @@ class Night extends React.Component {
         }
     }
  }
+
+class Day extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        return <div>Day</div>;
+    };
+}
 
 function socketLogging(socket) {
     socket.on('new member', (userJSON, gameJSON) => {
