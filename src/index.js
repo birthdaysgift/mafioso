@@ -81,6 +81,7 @@ function socketBindings(serverSocket, clientSocket) {
     });
     clientSocket.on('mafia votes', (innocentId) => {
         let inno = users.get(parseInt(innocentId));
+        inno.votes.push(u);
         g.members.forEach(m => {
             let s = userSockets.get(m.id);
             s.emit(
@@ -127,6 +128,7 @@ class User {
         this.id = User.nextId++;
         this.state = User.STATES.NOT_READY;
         this.role = User.ROLES.INNOCENT;
+        this.votes = [];
     }
 
     toString() {
