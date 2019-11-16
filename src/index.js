@@ -87,7 +87,8 @@ function socketBindings(serverSocket, clientSocket) {
             s.emit(
                 'mafia votes', 
                 JSON.stringify(u), 
-                JSON.stringify(inno)
+                JSON.stringify(inno),
+                JSON.stringify(g)
             );
         });
     });
@@ -100,7 +101,8 @@ function socketBindings(serverSocket, clientSocket) {
             s.emit(
                 'mafia unvotes', 
                 JSON.stringify(u), 
-                JSON.stringify(inno)
+                JSON.stringify(inno),
+                JSON.stringify(g)
             );
         });
     });
