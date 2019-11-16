@@ -131,7 +131,7 @@ class Window extends React.Component {
                             game={this.props.game}/>;
 
             case STATES.GAME.MEETING:
-                return <Game
+                return <Meeting
                             user={this.props.user}
                             game={this.props.game}/>;
         }
@@ -205,7 +205,7 @@ function UsersList(props) {
     return <ul>{listItems}</ul>;
 }
 
-class Game extends React.Component {
+class Meeting extends React.Component {
     constructor(props) {
         super(props);
     }
