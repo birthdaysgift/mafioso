@@ -172,6 +172,18 @@ function socketBindings(serverSocket, clientSocket) {
     });
     clientSocket.on('next game state', () => {
         g.setNextState();
+        if (g.state !== Game.STATES.LOBBY 
+                && g.state !== Game.STATES.MEETING) {
+            let mafs = g.members.filter(m => 
+                m.role === User.ROLES.MAFIA);
+            let innos = g.members.filter(m => 
+                m.role === User.ROLES.INNOCENT);
+            if (mafs.every(m => m.state === User.STATES.DEAD)) {
+                g.state = Game.STATES.INNOCENT_WIN;
+            } else if (innos.every(i => i.state === User.STATES.DEAD)) {
+                g.state = Game.STATES.MAFIA_WIN;
+            }
+        }
         switch (g.state) {
             case Game.STATES.MEETING: {
                 let max = g.members.length - 1;
@@ -206,6 +218,28 @@ function socketBindings(serverSocket, clientSocket) {
                     if (m.state !== User.STATES.DEAD) {
                         m.state = User.STATES.NOT_READY;
                     }
+                    let s = userSockets.get(m.id);
+                    s.emit(
+                        'next game state',
+                        JSON.stringify(m),
+                        JSON.stringify(g)
+                    );
+                });
+                break;
+            }
+            case Game.STATES.INNOCENT_WIN: {
+                g.members.forEach(m => {
+                    let s = userSockets.get(m.id);
+                    s.emit(
+                        'next game state',
+                        JSON.stringify(m),
+                        JSON.stringify(g)
+                    );
+                });
+                break;
+            }
+            case Game.STATES.MAFIA_WIN: {
+                g.members.forEach(m => {
                     let s = userSockets.get(m.id);
                     s.emit(
                         'next game state',
@@ -287,7 +321,9 @@ Game.STATES = {
     LOBBY: 'lobby',
     MEETING: 'meeting',
     DAY: 'day',
-    NIGHT: 'night'
+    NIGHT: 'night',
+    INNOCENT_WIN: 'innocent win',
+    MAFIA_WIN: 'mafia win'
 }
 
 app.route('/')

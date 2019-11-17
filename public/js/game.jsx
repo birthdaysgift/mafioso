@@ -203,7 +203,11 @@ class Window extends React.Component {
             case STATES.GAME.DAY:
                 return <Day
                             user={this.props.user}
-                            game={this.props.game}/>
+                            game={this.props.game}/>;
+            case STATES.GAME.INNOCENT_WIN:
+                return <InnocentWin/>;
+            case STATES.GAME.MAFIA_WIN:
+                return <MafiaWin/>;
         }
     }
 }
@@ -423,6 +427,14 @@ class Day extends React.Component {
             </div>
         )
     };
+}
+
+function InnocentWin(props) {
+    return <h1>Innocent Win!</h1>
+}
+
+function MafiaWin(props) {
+    return <h1>Mafia Win!</h1>
 }
 
 function Dead(props) {
