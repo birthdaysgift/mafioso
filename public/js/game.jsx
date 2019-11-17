@@ -369,7 +369,18 @@ class Day extends React.Component {
     }
 
     render() {
-        return <div>Day</div>;
+        return (
+            <div>
+                <div>Vote, please!</div>
+                <VotingWidget 
+                    user={this.props.user}
+                    game={this.props.game}
+                    voteFunc={votedId => 
+                        socket.emit('innocent votes', votedId)}
+                    unvoteFunc={votedId =>
+                        socket.emit('innocent votes', votedId)}/>
+            </div>
+        )
     };
 }
 
