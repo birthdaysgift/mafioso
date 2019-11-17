@@ -144,6 +144,36 @@ class Window extends React.Component {
                 socket.emit('next game state');
             }
         });
+        socket.on('innocent votes', (innoJSON, susJSON, gameJSON) => {
+            let i = JSON.parse(innoJSON);
+            let s = JSON.parse(susJSON);
+            let g = JSON.parse(gameJSON);
+            if (s.id === this.props.user.id) {
+                this.props.updateUser(s);
+            }
+            this.props.updateGame(g);
+            console.log(`inno ${i.name} votes for ${s.name}`);
+        });
+        socket.on('innocent unvotes', (innoJSON, susJSON, gameJSON) => {
+            let i = JSON.parse(innoJSON);
+            let s = JSON.parse(susJSON);
+            let g = JSON.parse(gameJSON);
+            if (s.id === this.props.user.id) {
+                this.props.updateUser(s);
+            }
+            this.props.updateGame(g);
+            console.log(`inno ${i.name} unvotes for ${s.name}`);
+        })
+        socket.on('innocent kills', (susJSON, gameJSON) => {
+            let s = JSON.parse(susJSON);
+            if (s.id === this.props.user.id) {
+                this.props.updateUser(s);
+            }
+            this.props.updateGame(JSON.parse(gameJSON));
+            if (this.props.user.id === this.props.game.host.id) {
+                socket.emit('next game state');
+            }
+        });
 
         socket.on('next game state', (userJSON, gameJSON) => {
             this.props.updateUser(JSON.parse(userJSON));
@@ -349,7 +379,17 @@ class VotingWidget extends React.Component {
             <ul onClick={this.handleClick}>
                 {
                     this.props.game.members.map(m => {
-                        if (m.role !== ROLES.MAFIA) {
+                        if (this.props.game.state === STATES.GAME.NIGHT 
+                                && m.role !== ROLES.MAFIA) {
+                            return (
+                                <li key={m.id} userid={m.id}>
+                                    {m.name} [{m.votes.map(v => v.name)}]
+                                </li>
+                            )
+                        }
+                        if (this.props.game.state === STATES.GAME.DAY
+                                && m.state !== STATES.USER.DEAD
+                                && m.id !== this.props.user.id) {
                             return (
                                 <li key={m.id} userid={m.id}>
                                     {m.name} [{m.votes.map(v => v.name)}]

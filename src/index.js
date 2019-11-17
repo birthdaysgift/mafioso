@@ -117,6 +117,59 @@ function socketBindings(serverSocket, clientSocket) {
             );
         });
     });
+    clientSocket.on('innocent votes', (suspectId) => {
+        u.voted = true;
+        let sus = users.get(parseInt(suspectId));
+        sus.votes.push({
+            id: u.id,
+            name: u.name
+        });
+        g.members.forEach(m => {
+            let s = userSockets.get(m.id);
+            s.emit(
+                'innocent votes',
+                JSON.stringify(u),
+                JSON.stringify(sus),
+                JSON.stringify(g)
+            )
+        });
+        let notDead = g.members.filter(m =>
+            m.state !== User.STATES.DEAD);
+        if(notDead.every(m => m.voted)) {
+            console.log('everybody voted');
+            let maxVoted = g.members.sort((m1, m2) => {
+                if (m1.votes.length < m2.votes.length)
+                    return 1;
+                if (m1.votes.length === m2.votes.length)
+                    return 0;
+                return -1;
+            })[0];
+            maxVoted.state = User.STATES.DEAD;
+            serverSocket.emit(
+                'innocent kills',
+                JSON.stringify(maxVoted), 
+                JSON.stringify(g)
+            );
+        }
+    });
+    clientSocket.on('innocent unvotes', (suspectId) => {
+        u.voted = true;
+        let sus = users.get(parseInt(suspectId));
+        let i = sus.votes.indexOf({
+            id: u.id,
+            name: u.name
+        });
+        sus.votes.splice(i, 1);
+        g.members.forEach(m => {
+            let s = userSockets.get(m.id);
+            s.emit(
+                'innocent unvotes',
+                JSON.stringify(u),
+                JSON.stringify(sus),
+                JSON.stringify(g)
+            )
+        });
+    });
     clientSocket.on('next game state', () => {
         g.setNextState();
         switch (g.state) {
@@ -172,6 +225,7 @@ class User {
         this.state = User.STATES.NOT_READY;
         this.role = User.ROLES.INNOCENT;
         this.votes = [];
+        this.voted = false;
     }
 
     toString() {
