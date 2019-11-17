@@ -190,6 +190,7 @@ function socketBindings(serverSocket, clientSocket) {
             }
             case Game.STATES.NIGHT: {
                 g.members.forEach(m => {
+                    m.votes = [];
                     let s = userSockets.get(m.id);
                     s.emit(
                         'next game state',

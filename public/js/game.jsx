@@ -380,7 +380,8 @@ class VotingWidget extends React.Component {
                 {
                     this.props.game.members.map(m => {
                         if (this.props.game.state === STATES.GAME.NIGHT 
-                                && m.role !== ROLES.MAFIA) {
+                                && m.role !== ROLES.MAFIA
+                                && m.state !== STATES.USER.DEAD) {
                             return (
                                 <li key={m.id} userid={m.id}>
                                     {m.name} [{m.votes.map(v => v.name)}]
