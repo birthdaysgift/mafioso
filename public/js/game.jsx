@@ -140,6 +140,9 @@ class Window extends React.Component {
                 this.props.updateUser(i);
             }
             this.props.updateGame(JSON.parse(gameJSON));
+            if (this.props.user.id === this.props.game.host.id) {
+                socket.emit('next game state');
+            }
         });
 
         socket.on('next game state', (userJSON, gameJSON) => {

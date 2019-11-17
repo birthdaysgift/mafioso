@@ -101,19 +101,6 @@ function socketBindings(serverSocket, clientSocket) {
                 JSON.stringify(inno), 
                 JSON.stringify(g)
             );
-            g.setNextState();
-            g.members.forEach(m => {
-                m.votes = [];
-                if (m.state !== User.STATES.DEAD) {
-                    m.state = User.STATES.NOT_READY;
-                }
-                let s = userSockets.get(m.id);
-                s.emit(
-                    'next game state',
-                    JSON.stringify(m),
-                    JSON.stringify(g)
-                );
-            });
         }
     });
     clientSocket.on('mafia unvotes', (innocentId) => {
@@ -146,6 +133,7 @@ function socketBindings(serverSocket, clientSocket) {
                         JSON.stringify(g)
                     );
                 });
+                break;
             }
             case Game.STATES.NIGHT: {
                 g.members.forEach(m => {
@@ -156,6 +144,22 @@ function socketBindings(serverSocket, clientSocket) {
                         JSON.stringify(g)
                     );
                 });
+                break;
+            }
+            case Game.STATES.DAY: {
+                g.members.forEach(m => {
+                    m.votes = [];
+                    if (m.state !== User.STATES.DEAD) {
+                        m.state = User.STATES.NOT_READY;
+                    }
+                    let s = userSockets.get(m.id);
+                    s.emit(
+                        'next game state',
+                        JSON.stringify(m),
+                        JSON.stringify(g)
+                    );
+                });
+                break;
             }
         }
     });
