@@ -423,7 +423,7 @@ class Day extends React.Component {
                     voteFunc={votedId => 
                         socket.emit('innocent votes', votedId)}
                     unvoteFunc={votedId =>
-                        socket.emit('innocent votes', votedId)}/>
+                        socket.emit('innocent unvotes', votedId)}/>
             </div>
         )
     };
