@@ -1,0 +1,8 @@
+# Common file. Required for any build.
+
+version: '3.9'
+services:
+    web: 
+        build: .
+        ports:
+            - 3000:3000

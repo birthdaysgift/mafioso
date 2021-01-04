@@ -1,0 +1,10 @@
+# Dev file. Required for the development build.
+
+version: '3.9'
+services: 
+    web:
+        volumes:
+            - .:/mafia-moderator
+            - node_modules:/mafia-moderator/node_modules
+volumes:
+    node_modules:

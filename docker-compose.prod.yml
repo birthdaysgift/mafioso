@@ -1,0 +1,3 @@
+# Prod file. Required for the production build.
+
+version: '3.9'
