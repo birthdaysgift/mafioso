@@ -1,12 +1,24 @@
 const express = require('express');
 const http = require('http');
 const path = require('path');
+const redis = require('redis');
 const session = require('express-session');
 const socketio = require('socket.io');
 
 const app = express();
 const server = http.createServer(app);
 const io = socketio(server);
+
+const redisClient = redis.createClient({
+    host: process.env.REDIS_HOST,
+    port: 6379,
+});
+redisClient.on('error', (err) => console.log(
+    `Connection to Redis: ERROR\n${err}`
+));
+redisClient.on('ready', () => console.log(
+    `Connection to Redis: SUCCESS`
+));
 
 const PORT = 3000;
 const STATIC_DIR = path.join(__dirname, '..', '/public');
