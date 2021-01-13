@@ -1,0 +1,21 @@
+
+FROM node:12-alpine AS webpack-build
+WORKDIR /mafioso/client
+
+ENV STATIC_HOST=195.133.1.11
+ENV STATIC_PORT=3000
+ENV SOCKET_HOST=195.133.1.11
+ENV SOCKET_PORT=4000
+
+
+ENV NODE_ENV=development
+COPY package.json package-lock.json ./
+RUN npm install
+
+COPY . .
+
+ENV NODE_ENV=production
+RUN npm run build
+
+FROM nginx:latest as client-prod
+COPY --from=webpack-build /mafioso/client/dist /usr/share/nginx/html

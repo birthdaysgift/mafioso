@@ -1,0 +1,7 @@
+version: '3.9'
+services:
+    test:
+        build:
+            context: .
+            dockerfile: Dockerfile.dev
+        network_mode: host

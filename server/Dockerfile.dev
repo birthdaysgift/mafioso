@@ -1,0 +1,17 @@
+
+FROM node:12-alpine AS server-dev
+
+ENV STATIC_HOST=localhost
+ENV STATIC_PORT=3000
+ENV SOCKET_HOST=localhost
+ENV SOCKET_PORT=4000
+
+WORKDIR /mafioso/server
+
+ENV NODE_ENV=development
+COPY package.json package-lock.json ./
+RUN npm install
+
+COPY . . 
+
+CMD ["npm", "run", "watch"]
