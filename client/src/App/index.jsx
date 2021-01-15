@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 
 import PageContext from '../context';
 import AboutPage from '../AboutPage';
+import NewGamePage from '../NewGamePage';
 import WelcomePage from '../WelcomePage';
 
 import './style.less';
@@ -15,6 +16,7 @@ class App extends Component {
     getPage = (route) => {
         switch(route) {
             case '/welcome': return <WelcomePage/>;
+            case '/newgame': return <NewGamePage/>;
             case '/about': return <AboutPage/>; 
         }
     }

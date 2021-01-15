@@ -5,17 +5,29 @@ import './style.less';
 export default class Input extends Component {
     constructor(props) {
         super(props);
-        this.state = {value: '', showPlaceholder: true}
+        this.state = {showPlaceholder: true};
+    }
+    handleChange = (e) => {
+        e.preventDefault();
+        if (typeof this.props.onChange !== 'undefined') this.props.onChange(e);
+    }
+    handleFocus = (e) => {
+        e.preventDefault();
+        this.setState({showPlaceholder: false});
+        if (typeof this.props.onFocus !== 'undefined') this.props.onFocus(e);
+    }
+    handleBlur = (e) => {
+        e.preventDefault();
+        this.setState({showPlaceholder: true});
+        if (typeof this.props.onBlur !== 'undefined') this.props.onBlur(e);
     }
     render () {
-        let s = this.state;
-        let p = this.props;
         return <input 
                     type='input' 
-                    value={s.value}
-                    placeholder={s.showPlaceholder ? p.placeholder : ''}
-                    onChange={(e) => this.setState({value: e.target.value})}
-                    onFocus={() => this.setState({showPlaceholder: false})}
-                    onBlur={() => this.setState({showPlaceholder: true})}/>
+                    value={this.props.value}
+                    placeholder={this.state.showPlaceholder ? this.props.placeholder : ''}
+                    onChange={this.handleChange}
+                    onFocus={this.handleFocus}
+                    onBlur={this.handleBlur}/>
     }
 }
