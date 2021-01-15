@@ -5,6 +5,7 @@ import AboutPage from '../AboutPage';
 import NewGamePage from '../NewGamePage';
 import WelcomePage from '../WelcomePage';
 import CreateGamePage from '../CreateGamePage';
+import JoinGamePage from '../JoinGamePage';
 
 import './style.less';
 
@@ -20,6 +21,7 @@ class App extends Component {
             case '/newgame': return <NewGamePage/>;
             case '/about': return <AboutPage/>; 
             case '/creategame': return <CreateGamePage/>
+            case '/joingame': return <JoinGamePage/>
         }
     }
     render() { 

@@ -14,9 +14,9 @@ export default class NewGamePage extends Component {
                 <Title />
                 <div className='greeting'>Welcome, {sessionStorage.getItem('name')}!</div>
                 <div className='text'>You can create a new game</div>
-                <Button text='Create' onClick={() => {this.context.setRoute('/creategame')}}/>
+                <Button text='Create' onClick={() => this.context.setRoute('/creategame')}/>
                 <div className='text'>or join to an existing one</div>
-                <Button text='Join'/>
+                <Button text='Join' onClick={() => this.context.setRoute('/joingame')}/>
             </div>
         )
     }
