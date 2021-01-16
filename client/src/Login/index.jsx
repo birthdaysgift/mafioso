@@ -15,6 +15,9 @@ export default class Login extends Component {
     }
 
     handleLogin = (e) => {
+        // Here is input validation: if there is no input - just do nothing
+        if (!this.state.value) return;
+
         sessionStorage.setItem('name', this.state.value);
         this.context.setRoute('/newgame');
     };
