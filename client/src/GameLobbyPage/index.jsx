@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 
 import PageContext from '../context';
+import game_proxy from '../game';
+import user_proxy from '../user';
 
 import './style.less';
 
@@ -10,9 +12,9 @@ export default class GameLobbyPage extends Component {
     render () {
         return (
             <div>
-                name: {sessionStorage.getItem('name')} <br/>
-                game_title: {sessionStorage.getItem('game_title')} <br/>
-                game_id: {sessionStorage.getItem('game_id')} <br/>
+                name: {user_proxy.object.name} <br/>
+                title: {game_proxy.object.title ?? ''} <br/>
+                id: {game_proxy.object.id ?? ''} <br/>
             </div>
         )
     }

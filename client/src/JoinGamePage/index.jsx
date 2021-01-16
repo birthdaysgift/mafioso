@@ -4,6 +4,7 @@ import Button from '../Button';
 import Title from '../Title';
 import InputForm from '../InputForm';
 import PageContext from '../context';
+import game_proxy from '../game';
 
 import './style.less';
 
@@ -11,19 +12,20 @@ export default class JoinGamePage extends Component {
     static contextType = PageContext;
 
     handleChange = (e) => {
-        sessionStorage.setItem('game_id', e.input.value);
+        let game = game_proxy.object;
+        game.id = e.input.value; 
+        game_proxy.object = game;
     }
 
-    handleSubmit = (e) => {
-        this.context.setRoute('/gamelobby');
-    }
+    handleSubmit = (e) => this.context.setRoute('/gamelobby');
+
     render() {
         return (
             <div id='join_game_page'>
                 <Title/>
                 <InputForm
                     text='Join'
-                    value={sessionStorage.getItem('game_id') || ''}
+                    value={game_proxy.object.id || ''}
                     placeholder='Enter game ID'
                     onChange={this.handleChange}
                     onSubmit={this.handleSubmit}/>

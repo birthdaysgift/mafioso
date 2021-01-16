@@ -4,17 +4,21 @@ import Button from '../Button';
 import PageContext from '../context';
 import InputForm from '../InputForm';
 import Title from '../Title';
+import user_proxy from '../user';
 
 import './style.less';
 
 export default class WelcomePage extends Component {
     static contextType = PageContext;
-    handleSubmit = () => {
-        this.context.setRoute('/newgame');
-    }
+
+    handleSubmit = () => this.context.setRoute('/newgame');
+
     handleChange = (e) => {
-        sessionStorage.setItem('name', e.input.value);
-    }
+        let user = user_proxy.object;
+        user.name = e.input.value;
+        user_proxy.object = user;
+    };
+
     render () {
         return (
             <div id='welcome_page'>
@@ -22,7 +26,7 @@ export default class WelcomePage extends Component {
 
                 <InputForm 
                     text='Start'
-                    value={sessionStorage.getItem('name') ?? ''}
+                    value={user_proxy.object ? user_proxy.object.name : ''}
                     placeholder='Enter your name'
                     onSubmit={this.handleSubmit}
                     onChange={this.handleChange}/>
