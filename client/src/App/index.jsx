@@ -8,6 +8,7 @@ import CreateGamePage from '../CreateGamePage';
 import JoinGamePage from '../JoinGamePage';
 
 import './style.less';
+import GameLobbyPage from '../GameLobbyPage';
 
 class App extends Component { 
     constructor(props) {
@@ -22,6 +23,7 @@ class App extends Component {
             case '/about': return <AboutPage/>; 
             case '/creategame': return <CreateGamePage/>
             case '/joingame': return <JoinGamePage/>
+            case '/gamelobby': return <GameLobbyPage/>;
         }
     }
     render() { 
