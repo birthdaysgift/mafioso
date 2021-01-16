@@ -9,17 +9,17 @@ export default class Input extends Component {
     }
     handleChange = (e) => {
         e.preventDefault();
-        if (typeof this.props.onChange !== 'undefined') this.props.onChange(e);
+        this.props.onChange?.(e);
     }
     handleFocus = (e) => {
         e.preventDefault();
         this.setState({showPlaceholder: false});
-        if (typeof this.props.onFocus !== 'undefined') this.props.onFocus(e);
+        this.props.onFocus?.(e)
     }
     handleBlur = (e) => {
         e.preventDefault();
         this.setState({showPlaceholder: true});
-        if (typeof this.props.onBlur !== 'undefined') this.props.onBlur(e);
+        this.props.onBlur?.(e);
     }
     render () {
         return <input 

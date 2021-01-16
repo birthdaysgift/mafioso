@@ -11,8 +11,7 @@ export default class Login extends Component {
 
     constructor(props) {
         super(props);
-        let name = sessionStorage.getItem('name');
-        this.state = { value: name !== undefined ? name : '' };
+        this.state = { value: sessionStorage.getItem('name') ?? '' };
     }
 
     handleLogin = (e) => {
