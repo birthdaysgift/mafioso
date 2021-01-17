@@ -5,6 +5,8 @@ import InputForm from '../InputForm';
 import Title from '../Title';
 import PageContext from '../context';
 import game_proxy from '../game';
+import user_proxy from '../user';
+import socket from '../sockets';
 
 import './style.less';
 
@@ -17,7 +19,22 @@ export default class CreateGamePage extends Component {
         game_proxy.object = game;
     }
 
-    handleSubmit = (e) => this.context.setRoute('/gamelobby');
+    handleSubmit = (e) => {
+        socket.emit('create request');
+        socket.once('create response', (userID, gameID) => {
+            let user = user_proxy.object;
+            user.id = userID;
+            user_proxy.object = user;
+
+            let game = game_proxy.object;
+            game.id = gameID;
+            game.host = user;
+            game.members = [user];
+            game_proxy.object = game;
+
+            this.context.setRoute('/gamelobby');
+        });
+    }
 
     render() {
         return (

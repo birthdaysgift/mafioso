@@ -12,9 +12,10 @@ export default class GameLobbyPage extends Component {
     render () {
         return (
             <div>
-                name: {user_proxy.object.name} <br/>
-                title: {game_proxy.object.title ?? ''} <br/>
-                id: {game_proxy.object.id ?? ''} <br/>
+                title: {game_proxy.object.title} <br/>
+                host: {game_proxy.object.host.name} <br/>
+                id: {game_proxy.object.id} <br/>
+                members: {JSON.stringify(game_proxy.object.members, null, 4)}
             </div>
         )
     }

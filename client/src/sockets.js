@@ -1,11 +1,10 @@
 import { io } from 'socket.io-client';
 
-function initSockets() {
-    const url = `http://${SOCKET_HOST}:${SOCKET_PORT}`
-    const socket = io(url);
+const url = `http://${SOCKET_HOST}:${SOCKET_PORT}`;
 
-    socket.on('connect', () => console.log(`Socket connected to ${url}`));
-    socket.on('disconnect', () => console.log(`Socket disconnected from ${url}`));
-};
+const socket = io(url);
 
-export default {init: initSockets};
+socket.on('connect', () => console.log(`Socket connected to ${url}`));
+socket.on('disconnect', () => console.log(`Socket disconnected from ${url}`));
+
+export default socket;
