@@ -20,12 +20,9 @@ export default class CreateGamePage extends Component {
     }
 
     handleSubmit = (e) => {
-        socket.emit('create request');
+        socket.emit('create request', user_proxy.object.id);
         socket.once('create response', (userID, gameID) => {
             let user = user_proxy.object;
-            user.id = userID;
-            user_proxy.object = user;
-
             let game = game_proxy.object;
             game.id = gameID;
             game.host = user;

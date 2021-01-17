@@ -16,9 +16,6 @@ export default class JoinGamePage extends Component {
         super(props);
 
         socket.on('join response', (userID, gameID) => {
-            let user = user_proxy.object;
-            user.id = userID;
-            user_proxy.object = user;
             socket.emit('update request', userID, gameID);
         });
         socket.on('update response', (userID, gameJSON) => {
@@ -41,7 +38,7 @@ export default class JoinGamePage extends Component {
     }
 
     handleSubmit = (e) => {
-        socket.emit('join request', game_proxy.object.id);
+        socket.emit('join request', user_proxy.object.id, game_proxy.object.id);
     };
 
     render() {

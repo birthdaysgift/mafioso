@@ -11,17 +11,17 @@ var uid = 0; // user id
 
 io.on('connect', socket => {
     console.log(`${socket.id} connected`);
+    socket.emit('userID', (uid++).toString());
 
     socket.on('disconnect', () => console.log(`${socket.id} disconnected`));
 
-    socket.on('create request', () => {
-        let [gameID, userID] = [(gid++).toString(), (uid++).toString()];
+    socket.on('create request', (userID) => {
+        let gameID = (gid++).toString();
         socket.join([gameID, `${gameID}:${userID}`, `${gameID}:host`]);
         socket.emit('create response', userID, gameID);
     })
 
-    socket.on('join request', (gameID) => {
-        let userID = (uid++).toString();
+    socket.on('join request', (userID, gameID) => {
         socket.join([gameID, `${gameID}:${userID}`]);
         socket.emit('join response', userID, gameID);
     })

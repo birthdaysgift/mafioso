@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import Button from '../Button';
 import PageContext from '../context';
 import InputForm from '../InputForm';
+import socket from '../sockets';
 import Title from '../Title';
 import user_proxy from '../user';
 
@@ -10,6 +11,15 @@ import './style.less';
 
 export default class WelcomePage extends Component {
     static contextType = PageContext;
+    constructor(props) {
+        super(props);
+
+        socket.on('userID', (userID) => {
+            let user = user_proxy.object;
+            user.id = userID;
+            user_proxy.object = user;
+        });
+    }
 
     handleSubmit = () => this.context.setRoute('/newgame');
 
