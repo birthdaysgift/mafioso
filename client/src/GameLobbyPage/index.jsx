@@ -7,6 +7,7 @@ import socket from '../sockets';
 import user_proxy from '../user';
 
 import img from './close50x50.png';
+import audio from './waltz.mp3';
 import './style.less';
 
 export default class GameLobbyPage extends Component {
@@ -14,7 +15,10 @@ export default class GameLobbyPage extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {game: game_proxy.object};
+        this.audio = new Audio(audio);
+        this.audio.addEventListener('ended', this.handleAudioEnded);
+
+        this.state = {game: game_proxy.object, audioPlaying: false};
 
         socket.on('update request', (userID, gameID) => {
             socket.emit('update response', userID, game_proxy.json);
@@ -39,6 +43,22 @@ export default class GameLobbyPage extends Component {
         });
     }
 
+    componentWillUnmount = () => {
+        this.audio.removeEventListener('ended', this.handleAudioEnded);
+    }
+
+    handleAudioClick = () => {
+        if ( this.state.audioPlaying ) {
+            this.audio.pause();
+            this.setState({audioPlaying: false})
+        } else {
+            this.audio.play();
+            this.setState({audioPlaying: true});
+        }
+    }
+
+    handleAudioEnded = () => {this.setState({audioPlaying: false})};
+
     render () {
         let userID = user_proxy.object.id;
         let hostID = this.state.game.host.id;
@@ -59,6 +79,9 @@ export default class GameLobbyPage extends Component {
                 <div className="id">Game ID: {this.state.game.id}</div>
                 <div className="members">{members_elements}</div>
                 {button}
+                <div className="audio" onClick={this.handleAudioClick}>
+                    {this.state.audioPlaying ? 'Stop sound' : 'Sound test'}
+                </div>
             </div>
         )
     }
