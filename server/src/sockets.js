@@ -13,7 +13,17 @@ io.on('connect', socket => {
     console.log(`${socket.id} connected`);
     socket.emit('userID', (uid++).toString());
 
-    socket.on('disconnect', () => console.log(`${socket.id} disconnected`));
+        
+    socket.on('disconnecting', () => {
+        for (const room of socket.rooms) {
+            let matches = room.match(/(?<gameID>\d+):(?<userID>\d+)/);
+            if ( matches ) {
+                let gameID = matches[1];
+                let userID = matches[2];
+                socket.to(gameID).emit('user disconnected', userID, gameID);
+            }
+        }
+    });
 
     socket.on('create request', (userID) => {
         let gameID = (gid++).toString();

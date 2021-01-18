@@ -21,6 +21,20 @@ export default class GameLobbyPage extends Component {
             game_proxy.json = gameJSON;
             this.setState({game: game_proxy.object});
         });
+
+        socket.on('user disconnected', (userID, gameID) => {
+            if( userID === game_proxy.object.host.id ) {
+                game_proxy.object = {};
+                user_proxy.object = {};
+                location.reload();
+            } else {
+                let game = game_proxy.object;
+                let index = game.members.findIndex((m) => m.id === userID);
+                game.members.splice(index, 1)
+                game_proxy.object = game;
+                this.setState({game: game});
+            }
+        });
     }
 
     render () {
