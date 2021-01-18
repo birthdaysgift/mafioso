@@ -1,0 +1,76 @@
+#lobby {
+    min-width: 200px;
+    max-width: 300px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    font-size: 20px;
+
+    user-select: none;
+    
+    .title {
+        font-size: 30px;
+        font-weight: bold;
+    }
+
+    .id {
+        width: 100%;
+
+        text-align: right;
+        font-size: 12px;
+        color: rgb(130, 130, 130);
+
+        user-select: text; 
+        &::selection {
+            background: gray;
+            color: black;
+        }
+    }
+    
+    .members {
+        max-height: 400px;
+
+        margin-top: 10px;
+        margin-bottom: 20px;
+
+        overflow-y: scroll;
+
+        /* Hide scrollbar for IE, Edge and Firefox */
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
+
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        &::-webkit-scrollbar { display: none; }
+
+        .entry {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+
+            padding-left:  7px;
+
+            border-top: 1px solid rgb(50,0,0);
+            &:last-child { border-bottom: 1px solid rgb(50, 0,0); }
+
+            cursor: pointer;
+
+            .img {
+                width: 14px;
+                height: 14px;
+
+                margin-right: 7px;
+            }
+
+            .text {
+                width: 100%;
+
+                text-align: right;
+
+                padding: 7px 0px;
+                margin-right: 10px;
+            }
+        }
+    }
+}

@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 
+import Button from '../Button';
 import PageContext from '../context';
 import game_proxy from '../game';
 import socket from '../sockets';
 import user_proxy from '../user';
 
+import img from './close50x50.png';
 import './style.less';
 
 export default class GameLobbyPage extends Component {
@@ -38,12 +40,25 @@ export default class GameLobbyPage extends Component {
     }
 
     render () {
+        let userID = user_proxy.object.id;
+        let hostID = this.state.game.host.id;
+
+        let closeIcon = (userID === hostID) 
+                    ? <img className="img" src={img}/> : null
+        let button = (userID === hostID)
+                    ? <Button text='Start'/> : <Button text='Exit'/>
+
+        let members_elements = this.state.game.members.map((m) => {
+            let text = <div className="text">{m.name}</div>;
+            return <div className="entry" key={m.id}> {text} {closeIcon} </div>;
+        });
+
         return (
-            <div>
-                title: {this.state.game.title} <br/>
-                host: {this.state.game.host.name} <br/>
-                id: {this.state.game.id} <br/>
-                members: {JSON.stringify(this.state.game.members, null, 4)}
+            <div id='lobby'>
+                <div className='title'>{this.state.game.title}</div>
+                <div className="id">Game ID: {this.state.game.id}</div>
+                <div className="members">{members_elements}</div>
+                {button}
             </div>
         )
     }
