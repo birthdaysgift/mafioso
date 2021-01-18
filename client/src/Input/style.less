@@ -10,6 +10,13 @@ input {
     border-width: 0px;
     border-bottom: 2px solid white;
 
+    // Disable orange outline highlight on focus (for mobile devices)
+    outline: none !important;
+    -webkit-focus-ring-color: rgba(255, 255, 255, 0) !important; 
+    -webkit-tap-highlight-color: rgba(255, 255, 255, 0) !important;
+    -webkit-tap-highlight-color: transparent !important; // i.e. Nexus5/Chrome and Kindle Fire HD 7''
+    
+
     &::selection {
         background: gray;
     }
