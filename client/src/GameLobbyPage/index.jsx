@@ -51,6 +51,9 @@ export default class GameLobbyPage extends Component {
 
     componentWillUnmount = () => {
         this.audio.removeEventListener('ended', this.handleAudioEnded);
+        socket.removeAllListeners('user disconnected');
+        socket.removeAllListeners('update request');
+        socket.removeAllListeners('update');
     }
 
     disconnectUser = (userID, gameID) => {

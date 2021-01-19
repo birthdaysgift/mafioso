@@ -13,15 +13,10 @@ import './style.less';
 export default class CreateGamePage extends Component {
     static contextType = PageContext;
 
-    handleChange = (e) => {
-        let game = game_proxy.object;
-        game.title = e.input.value;
-        game_proxy.object = game;
-    }
+    constructor(props) {
+        super(props);
 
-    handleSubmit = (e) => {
-        socket.emit('create request', user_proxy.object.id);
-        socket.once('create response', (userID, gameID) => {
+        socket.on('create response', (userID, gameID) => {
             let user = user_proxy.object;
             let game = game_proxy.object;
             game.id = gameID;
@@ -32,6 +27,16 @@ export default class CreateGamePage extends Component {
             this.context.setRoute('/gamelobby');
         });
     }
+
+    componentWillUnmount = () => socket.removeAllListeners('create response');
+
+    handleChange = (e) => {
+        let game = game_proxy.object;
+        game.title = e.input.value;
+        game_proxy.object = game;
+    }
+
+    handleSubmit = () => socket.emit('create request', user_proxy.object.id);
 
     render() {
         return (

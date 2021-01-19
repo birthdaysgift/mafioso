@@ -21,6 +21,10 @@ export default class WelcomePage extends Component {
         });
     }
 
+    componentWillUnmount = () => {
+        socket.removeAllListeners('userID');
+    }
+
     handleSubmit = () => this.context.setRoute('/newgame');
 
     handleChange = (e) => {

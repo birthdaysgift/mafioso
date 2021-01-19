@@ -31,6 +31,11 @@ export default class JoinGamePage extends Component {
         });
     }
 
+    componentWillUnmount = () => {
+        socket.removeAllListeners('join response');
+        socket.removeAllListeners('update response');
+    }
+
     handleChange = (e) => {
         let game = game_proxy.object;
         game.id = e.input.value; 
