@@ -26,6 +26,11 @@ export default class GameLobbyPage extends Component {
         socket.on('update', (gameJSON) => {
             game_proxy.json = gameJSON;
             this.setState({game: game_proxy.object});
+            let index = game_proxy.object.members.findIndex(m => {
+                let userID = user_proxy.object.id;
+                return m.id === userID;
+            });
+            if ( index === -1 ) location.reload();
         });
 
         socket.on('user disconnected', (userID, gameID) => {
@@ -36,6 +41,7 @@ export default class GameLobbyPage extends Component {
             } else {
                 let game = game_proxy.object;
                 let index = game.members.findIndex((m) => m.id === userID);
+                if ( index === -1) return; 
                 game.members.splice(index, 1)
                 game_proxy.object = game;
                 this.setState({game: game});
@@ -45,6 +51,22 @@ export default class GameLobbyPage extends Component {
 
     componentWillUnmount = () => {
         this.audio.removeEventListener('ended', this.handleAudioEnded);
+    }
+
+    disconnectUser = (userID, gameID) => {
+        let game = game_proxy.object;
+        let index = game.members.findIndex(m => m.id === userID);
+        if ( index === -1) return;
+        game.members.splice(index, 1);
+        game_proxy.object = game;
+
+        this.setState({game: game});
+        socket.emit('update', game_proxy.json);
+    }
+    
+    handleExitClick = () => {
+        this.disconnectUser(user_proxy.object.id, game_proxy.object.id);
+        location.reload();
     }
 
     handleAudioClick = () => {
@@ -62,15 +84,27 @@ export default class GameLobbyPage extends Component {
     render () {
         let userID = user_proxy.object.id;
         let hostID = this.state.game.host.id;
+        let gameID = this.state.game.id;
 
         let closeIcon = (userID === hostID) 
                     ? <img className="img" src={img}/> : null
         let button = (userID === hostID)
-                    ? <Button text='Start'/> : <Button text='Exit'/>
+                    ? <Button text='Start'/> 
+                    : <Button text='Exit' onClick={this.handleExitClick}/>
 
         let members_elements = this.state.game.members.map((m) => {
             let text = <div className="text">{m.name}</div>;
-            return <div className="entry" key={m.id}> {text} {closeIcon} </div>;
+            return (
+                <div className="entry" 
+                    key={m.id} 
+                    onClick={e => {
+                        if ( userID !== hostID) return;
+                        if ( m.id === userID ) return;
+                        this.disconnectUser(m.id, gameID);
+                    }}> 
+                    {text} {closeIcon} 
+                </div>
+            )
         });
 
         return (
