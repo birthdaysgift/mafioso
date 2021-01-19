@@ -25,6 +25,10 @@ io.on('connect', socket => {
         }
     });
 
+    socket.on('user disconnected', (userID, gameID) => {
+        io.to(gameID).emit('user disconnected', userID, gameID);
+    });
+
     socket.on('create request', (userID) => {
         let gameID = (gid++).toString();
         socket.join([gameID, `${gameID}:${userID}`, `${gameID}:host`]);

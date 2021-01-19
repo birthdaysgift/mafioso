@@ -26,14 +26,12 @@ export default class GameLobbyPage extends Component {
         socket.on('update', (gameJSON) => {
             game_proxy.json = gameJSON;
             this.setState({game: game_proxy.object});
-            let index = game_proxy.object.members.findIndex(m => {
-                let userID = user_proxy.object.id;
-                return m.id === userID;
-            });
-            if ( index === -1 ) location.reload();
         });
 
         socket.on('user disconnected', (userID, gameID) => {
+            if (userID === user_proxy.object.id) {
+                location.reload();
+            }
             if( userID === game_proxy.object.host.id ) {
                 game_proxy.object = {};
                 user_proxy.object = {};
@@ -64,7 +62,7 @@ export default class GameLobbyPage extends Component {
         game_proxy.object = game;
 
         this.setState({game: game});
-        socket.emit('update', game_proxy.json);
+        socket.emit('user disconnected', userID, gameID);
     }
     
     handleExitClick = () => {
