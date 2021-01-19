@@ -29,13 +29,10 @@ export default class GameLobbyPage extends Component {
         });
 
         socket.on('user disconnected', (userID, gameID) => {
-            if (userID === user_proxy.object.id) {
-                location.reload();
-            }
-            if( userID === game_proxy.object.host.id ) {
+            if (userID === user_proxy.object.id 
+                    || userID === game_proxy.object.host.id) {
                 game_proxy.object = {};
-                user_proxy.object = {};
-                location.reload();
+                this.context.setRoute('/newgame');
             } else {
                 let game = game_proxy.object;
                 let index = game.members.findIndex((m) => m.id === userID);
@@ -67,7 +64,8 @@ export default class GameLobbyPage extends Component {
     
     handleExitClick = () => {
         this.disconnectUser(user_proxy.object.id, game_proxy.object.id);
-        location.reload();
+        game_proxy.object = {};
+        this.context.setRoute('/newgame');
     }
 
     handleAudioClick = () => {
