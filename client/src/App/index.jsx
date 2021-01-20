@@ -1,14 +1,14 @@
 import React, {Component} from 'react';
 
 import PageContext from '../context';
-import AboutPage from '../AboutPage';
-import NewGamePage from '../NewGamePage';
-import WelcomePage from '../WelcomePage';
-import CreateGamePage from '../CreateGamePage';
-import JoinGamePage from '../JoinGamePage';
+import About from '../About';
+import New from '../New';
+import Welcome from '../Welcome';
+import Create from '../Create';
+import Join from '../Join';
+import Lobby from '../Lobby';
 
 import './style.less';
-import GameLobbyPage from '../GameLobbyPage';
 
 class App extends Component { 
     constructor(props) {
@@ -18,12 +18,12 @@ class App extends Component {
     setRoute = (route) => this.setState({route: route});
     getPage = (route) => {
         switch(route) {
-            case '/welcome': return <WelcomePage/>;
-            case '/newgame': return <NewGamePage/>;
-            case '/about': return <AboutPage/>; 
-            case '/creategame': return <CreateGamePage/>
-            case '/joingame': return <JoinGamePage/>
-            case '/gamelobby': return <GameLobbyPage/>;
+            case '/welcome': return <Welcome/>;
+            case '/new': return <New/>;
+            case '/about': return <About/>; 
+            case '/create': return <Create/>
+            case '/join': return <Join/>
+            case '/lobby': return <Lobby/>;
         }
     }
     render() { 

@@ -6,12 +6,12 @@ import Button from '../Button';
 
 import './style.less';
 
-export default class AboutPage extends Component{
+export default class About extends Component{
     static contextType = PageContext;
     
     render() {
         return (
-            <div id='about_page'>
+            <div id='about'>
                 <Title/>
                 <p>
                     Mafioso is an online helper for 

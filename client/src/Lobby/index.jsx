@@ -10,7 +10,7 @@ import img from './close50x50.png';
 import audio from './waltz.mp3';
 import './style.less';
 
-export default class GameLobbyPage extends Component {
+export default class Lobby extends Component {
     static contextType = PageContext;
     constructor(props) {
         super(props);
@@ -32,7 +32,7 @@ export default class GameLobbyPage extends Component {
             if (userID === user_proxy.object.id 
                     || userID === game_proxy.object.host.id) {
                 game_proxy.object = {};
-                this.context.setRoute('/newgame');
+                this.context.setRoute('/new');
             } else {
                 let game = game_proxy.object;
                 let index = game.members.findIndex((m) => m.id === userID);
@@ -65,7 +65,7 @@ export default class GameLobbyPage extends Component {
     handleExitClick = () => {
         this.disconnectUser(user_proxy.object.id, game_proxy.object.id);
         game_proxy.object = {};
-        this.context.setRoute('/newgame');
+        this.context.setRoute('/new');
     }
 
     handleAudioClick = () => {

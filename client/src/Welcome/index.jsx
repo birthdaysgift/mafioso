@@ -9,7 +9,7 @@ import user_proxy from '../user';
 
 import './style.less';
 
-export default class WelcomePage extends Component {
+export default class Welcome extends Component {
     static contextType = PageContext;
     constructor(props) {
         super(props);
@@ -25,7 +25,7 @@ export default class WelcomePage extends Component {
         socket.removeAllListeners('userID');
     }
 
-    handleSubmit = () => this.context.setRoute('/newgame');
+    handleSubmit = () => this.context.setRoute('/new');
 
     handleChange = (e) => {
         let user = user_proxy.object;
@@ -35,7 +35,7 @@ export default class WelcomePage extends Component {
 
     render () {
         return (
-            <div id='welcome_page'>
+            <div id='welcome'>
                 <Title/>
 
                 <InputForm 

@@ -10,7 +10,7 @@ import socket from '../sockets';
 
 import './style.less';
 
-export default class JoinGamePage extends Component {
+export default class Join extends Component {
     static contextType = PageContext;
     constructor(props) {
         super(props);
@@ -27,7 +27,7 @@ export default class JoinGamePage extends Component {
             
             socket.emit('update', game_proxy.json);
 
-            this.context.setRoute('/gamelobby');
+            this.context.setRoute('/lobby');
         });
     }
 
@@ -48,7 +48,7 @@ export default class JoinGamePage extends Component {
 
     render() {
         return (
-            <div id='join_game_page'>
+            <div id='join'>
                 <Title/>
                 <InputForm
                     text='Join'
@@ -56,7 +56,7 @@ export default class JoinGamePage extends Component {
                     placeholder='Enter game ID'
                     onChange={this.handleChange}
                     onSubmit={this.handleSubmit}/>
-                <Button text='Back' onClick={() => this.context.setRoute('/newgame')}/>
+                <Button text='Back' onClick={() => this.context.setRoute('/new')}/>
             </div>
         )
     }

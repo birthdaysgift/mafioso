@@ -10,7 +10,7 @@ import socket from '../sockets';
 
 import './style.less';
 
-export default class CreateGamePage extends Component {
+export default class Create extends Component {
     static contextType = PageContext;
 
     constructor(props) {
@@ -24,7 +24,7 @@ export default class CreateGamePage extends Component {
             game.members = [user];
             game_proxy.object = game;
 
-            this.context.setRoute('/gamelobby');
+            this.context.setRoute('/lobby');
         });
     }
 
@@ -40,7 +40,7 @@ export default class CreateGamePage extends Component {
 
     render() {
         return (
-            <div id='create_game_page'>
+            <div id='create'>
                 <Title/>
                 <InputForm
                     text='Create'
@@ -48,7 +48,7 @@ export default class CreateGamePage extends Component {
                     placeholder='Enter game title'
                     onChange={this.handleChange}
                     onSubmit={this.handleSubmit}/>
-                <Button text='Back' onClick={() => this.context.setRoute('/newgame')}/>
+                <Button text='Back' onClick={() => this.context.setRoute('/new')}/>
             </div>
         )
     }
