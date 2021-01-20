@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
 
-import PageContext from '../context';
-import About from '../About';
-import New from '../New';
-import Welcome from '../Welcome';
-import Create from '../Create';
-import Join from '../Join';
-import Lobby from '../Lobby';
+import PageContext from './common/context';
+import About from './Menu/About';
+import New from './Menu/New';
+import Welcome from './Menu/Welcome';
+import Create from './Menu/Create';
+import Join from './Menu/Join';
+import Lobby from './Game/Lobby';
 
 import './style.less';
 

@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 
-import PageContext from '../context';
+import PageContext from '../../common/context';
 import Title from '../Title';
-import Button from '../Button';
+import Button from '../../common/Button';
 
 import './style.less';
 

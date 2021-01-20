@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 
-import PageContext from '../context';
+import PageContext from '../../common/context';
 
-import logo from '../logo/logo.png';
+import logo from '../../common/logo/logo.png';
 import './style.less';
 
 export default class Title extends Component {

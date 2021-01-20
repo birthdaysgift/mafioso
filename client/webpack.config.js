@@ -4,7 +4,7 @@ const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-    entry: './src/main/index.jsx',
+    entry: './src/index.jsx',
     mode: 'development',
     devtool: 'inline-source-map',
     resolve: { extensions: ['*', '.js', '.jsx'] },
@@ -71,12 +71,12 @@ module.exports = {
         new webpack.HotModuleReplacementPlugin(),
         new HtmlWebpackPlugin({
             filename: 'index.html',
-            template: './src/main/index.html'
+            template: './src/index.html'
         }),
         new webpack.DefinePlugin({
             SOCKET_HOST: JSON.stringify(process.env.SOCKET_HOST),
             SOCKET_PORT: JSON.stringify(process.env.SOCKET_PORT)
         }),
-        new FaviconsWebpackPlugin('./src/logo/logo.png')
+        new FaviconsWebpackPlugin('./src/App/common/logo/logo.png')
     ]
 };

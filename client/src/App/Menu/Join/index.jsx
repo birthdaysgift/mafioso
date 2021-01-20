@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 
-import Button from '../Button';
+import Button from '../../common/Button';
 import Title from '../Title';
-import InputForm from '../InputForm';
-import PageContext from '../context';
-import game_proxy from '../game';
-import user_proxy from '../user';
-import socket from '../sockets';
+import InputForm from '../../common/InputForm';
+import PageContext from '../../common/context';
+import game_proxy from '../../common/game';
+import user_proxy from '../../common/user';
+import socket from '../../common/sockets';
 
 import './style.less';
 

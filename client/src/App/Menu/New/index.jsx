@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 
-import Button from '../Button';
-import PageContext from '../context';
+import Button from '../../common/Button';
+import PageContext from '../../common/context';
 import Title from '../Title';
-import user_proxy from '../user';
+import user_proxy from '../../common/user';
 
 import './style.less';
 

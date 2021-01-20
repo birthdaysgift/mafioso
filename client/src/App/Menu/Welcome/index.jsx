@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 
-import Button from '../Button';
-import PageContext from '../context';
-import InputForm from '../InputForm';
-import socket from '../sockets';
+import Button from '../../common/Button';
+import PageContext from '../../common/context';
+import InputForm from '../../common/InputForm';
+import socket from '../../common/sockets';
 import Title from '../Title';
-import user_proxy from '../user';
+import user_proxy from '../../common/user';
 
 import './style.less';
 
