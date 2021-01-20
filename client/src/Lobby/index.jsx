@@ -106,15 +106,19 @@ export default class Lobby extends Component {
             )
         });
 
+        let audio = (userID === hostID) 
+                ? (<div className="audio" onClick={this.handleAudioClick}>
+                    {this.state.audioPlaying ? 'Stop sound' : 'Sound test'}
+                   </div>)
+                : null
+
         return (
             <div id='lobby'>
                 <div className='title'>{this.state.game.title}</div>
                 <div className="id">Game ID: {this.state.game.id}</div>
                 <div className="members">{members_elements}</div>
                 {button}
-                <div className="audio" onClick={this.handleAudioClick}>
-                    {this.state.audioPlaying ? 'Stop sound' : 'Sound test'}
-                </div>
+                {audio}
             </div>
         )
     }
