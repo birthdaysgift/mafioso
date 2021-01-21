@@ -12,6 +12,7 @@ import './style.less';
 
 export default class Lobby extends Component {
     static contextType = RoutingContext;
+    static getDerivedStateFromProps = props => ({game: props.game});
 
     constructor(props) {
         super(props);
@@ -19,14 +20,10 @@ export default class Lobby extends Component {
         this.audio = new Audio(audio);
         this.audio.addEventListener('ended', this.handleAudioEnded);
 
-        this.state = {game: game_proxy.object, audioPlaying: false};
+        this.state = {audioPlaying: false};
 
         socket.on('game request', (userID, gameID) => {
             socket.emit('game response', userID, game_proxy.json);
-        });
-        socket.on('update', (gameJSON) => {
-            game_proxy.json = gameJSON;
-            this.setState({game: game_proxy.object});
         });
 
         socket.on('user disconnected', (userID, gameID) => {
@@ -45,11 +42,11 @@ export default class Lobby extends Component {
         });
     }
 
+
     componentWillUnmount = () => {
         this.audio.removeEventListener('ended', this.handleAudioEnded);
         socket.removeAllListeners('user disconnected');
-        socket.removeAllListeners('update request');
-        socket.removeAllListeners('update');
+        socket.removeAllListeners('game request');
     }
 
     disconnectUser = (userID, gameID) => {
@@ -86,8 +83,8 @@ export default class Lobby extends Component {
         let hostID = this.state.game.host.id;
         let gameID = this.state.game.id;
 
-        let closeIcon = (userID === hostID) 
-                    ? <img className="img" src={img}/> : null
+        let closeIcon = (userID === hostID)
+                    ? <img className="img" src={img}/> : null;
         let button = (userID === hostID)
                     ? <Button text='Start'/> 
                     : <Button text='Exit' onClick={this.handleExitClick}/>
