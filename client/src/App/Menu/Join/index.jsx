@@ -28,7 +28,7 @@ export default class Join extends Component {
             
             socket.emit('update', game_proxy.json);
 
-            this.context.setRoute(['game', 'lobby']);
+            this.context.setRoute(['game']);
         });
     }
 

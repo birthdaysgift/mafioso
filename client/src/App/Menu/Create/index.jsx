@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import Button from '../../common/Button';
 import InputForm from '../../common/InputForm';
 import Title from '../Title';
+import { STATE as GAME_STATE } from '../../Game';
 import { RoutingContext } from '../../common/Router';
 import game_proxy from '../../common/game';
 import user_proxy from '../../common/user';
@@ -22,9 +23,10 @@ export default class Create extends Component {
             game.id = gameID;
             game.host = user;
             game.members = [user];
+            game.state = GAME_STATE.LOBBY;
             game_proxy.object = game;
 
-            this.context.setRoute(['game', 'lobby']);
+            this.context.setRoute(['game']);
         });
     }
 
