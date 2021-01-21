@@ -25,27 +25,10 @@ export default class Lobby extends Component {
         socket.on('game request', (userID, gameID) => {
             socket.emit('game response', userID, game_proxy.json);
         });
-
-        socket.on('user disconnected', (userID, gameID) => {
-            if (userID === user_proxy.object.id 
-                    || userID === game_proxy.object.host.id) {
-                game_proxy.object = {};
-                this.context.setRoute(['menu', 'new']);
-            } else {
-                let game = game_proxy.object;
-                let index = game.members.findIndex((m) => m.id === userID);
-                if ( index === -1) return; 
-                game.members.splice(index, 1)
-                game_proxy.object = game;
-                this.setState({game: game});
-            }
-        });
     }
-
 
     componentWillUnmount = () => {
         this.audio.removeEventListener('ended', this.handleAudioEnded);
-        socket.removeAllListeners('user disconnected');
         socket.removeAllListeners('game request');
     }
 
@@ -53,10 +36,6 @@ export default class Lobby extends Component {
         let game = game_proxy.object;
         let index = game.members.findIndex(m => m.id === userID);
         if ( index === -1) return;
-        game.members.splice(index, 1);
-        game_proxy.object = game;
-
-        this.setState({game: game});
         socket.emit('user disconnected', userID, gameID);
     }
     

@@ -47,7 +47,7 @@ io.on('connect', socket => {
 
     socket.on('update', (gameJSON) => {
         let gameID = JSON.parse(gameJSON).id;
-        socket.to(`${gameID}`).emit('update', gameJSON);
+        io.to(`${gameID}`).emit('update', gameJSON);
     });
 
 });
