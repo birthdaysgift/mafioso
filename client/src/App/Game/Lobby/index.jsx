@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import Button from '../../common/Button';
-import PageContext from '../../common/context';
+import { RoutingContext } from '../../common/Router';
 import game_proxy from '../../common/game';
 import socket from '../../common/sockets';
 import user_proxy from '../../common/user';
@@ -11,7 +11,8 @@ import audio from './waltz.mp3';
 import './style.less';
 
 export default class Lobby extends Component {
-    static contextType = PageContext;
+    static contextType = RoutingContext;
+
     constructor(props) {
         super(props);
 
@@ -32,7 +33,7 @@ export default class Lobby extends Component {
             if (userID === user_proxy.object.id 
                     || userID === game_proxy.object.host.id) {
                 game_proxy.object = {};
-                this.context.setRoute('/new');
+                this.context.setRoute(['menu', 'new']);
             } else {
                 let game = game_proxy.object;
                 let index = game.members.findIndex((m) => m.id === userID);
@@ -65,7 +66,7 @@ export default class Lobby extends Component {
     handleExitClick = () => {
         this.disconnectUser(user_proxy.object.id, game_proxy.object.id);
         game_proxy.object = {};
-        this.context.setRoute('/new');
+        this.context.setRoute(['menu', 'new']);
     }
 
     handleAudioClick = () => {

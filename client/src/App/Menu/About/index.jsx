@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
 
-import PageContext from '../../common/context';
 import Title from '../Title';
 import Button from '../../common/Button';
+import { RoutingContext } from '../../common/Router';
 
 import './style.less';
 
 export default class About extends Component{
-    static contextType = PageContext;
-    
+    static contextType = RoutingContext;
     render() {
         return (
             <div id='about'>
@@ -26,7 +25,7 @@ export default class About extends Component{
                     and looks after overall game state (who is alive and what is the
                     current turn).
                 </p>
-                <Button onClick={() => this.context.setRoute('/welcome')} text='Back'/>
+                <Button text='Back' onClick={()=>this.context.setRoute(['menu'])}/>
             </div>
         )
     }

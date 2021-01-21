@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import Button from '../../common/Button';
 import InputForm from '../../common/InputForm';
 import Title from '../Title';
-import PageContext from '../../common/context';
+import { RoutingContext } from '../../common/Router';
 import game_proxy from '../../common/game';
 import user_proxy from '../../common/user';
 import socket from '../../common/sockets';
@@ -11,7 +11,7 @@ import socket from '../../common/sockets';
 import './style.less';
 
 export default class Create extends Component {
-    static contextType = PageContext;
+    static contextType = RoutingContext;
 
     constructor(props) {
         super(props);
@@ -24,7 +24,7 @@ export default class Create extends Component {
             game.members = [user];
             game_proxy.object = game;
 
-            this.context.setRoute('/lobby');
+            this.context.setRoute(['game', 'lobby']);
         });
     }
 
@@ -48,7 +48,7 @@ export default class Create extends Component {
                     placeholder='Enter game title'
                     onChange={this.handleChange}
                     onSubmit={this.handleSubmit}/>
-                <Button text='Back' onClick={() => this.context.setRoute('/new')}/>
+                <Button text='Back' onClick={() => this.context.setRoute(['menu', 'new'])}/>
             </div>
         )
     }

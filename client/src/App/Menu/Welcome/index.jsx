@@ -1,16 +1,17 @@
 import React, { Component } from 'react';
 
 import Button from '../../common/Button';
-import PageContext from '../../common/context';
 import InputForm from '../../common/InputForm';
 import socket from '../../common/sockets';
 import Title from '../Title';
 import user_proxy from '../../common/user';
 
 import './style.less';
+import { RoutingContext } from '../../common/Router';
 
 export default class Welcome extends Component {
-    static contextType = PageContext;
+    static contextType = RoutingContext;
+
     constructor(props) {
         super(props);
 
@@ -25,7 +26,7 @@ export default class Welcome extends Component {
         socket.removeAllListeners('userID');
     }
 
-    handleSubmit = () => this.context.setRoute('/new');
+    handleSubmit = () => this.context.setRoute(['menu', 'new']);
 
     handleChange = (e) => {
         let user = user_proxy.object;
@@ -45,7 +46,7 @@ export default class Welcome extends Component {
                     onSubmit={this.handleSubmit}
                     onChange={this.handleChange}/>
                 
-                <Button text='About' onClick={() => this.context.setRoute('/about')}/>
+                <Button text='About' onClick={() => this.context.setRoute(['menu', 'about'])}/>
             </div>
         )
     }
