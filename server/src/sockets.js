@@ -37,16 +37,12 @@ io.on('connect', socket => {
 
     socket.on('join request', (userID, gameID) => {
         socket.join([gameID, `${gameID}:${userID}`]);
-        socket.emit('join response', userID, gameID);
+        socket.to(`${gameID}:host`).emit('game request', userID, gameID);
     })
 
-    socket.on('update request', (userID, gameID) => {
-        io.to(`${gameID}:host`).emit('update request', userID, gameID);
-    });
-
-    socket.on('update response', (userID, gameJSON) => {
+    socket.on('game response', (userID, gameJSON) => {
         let gameID = JSON.parse(gameJSON).id;
-        io.to(`${gameID}:${userID}`).emit('update response', userID, gameJSON);
+        io.to(`${gameID}:${userID}`).emit('join response', userID, gameJSON);
     });
 
     socket.on('update', (gameJSON) => {

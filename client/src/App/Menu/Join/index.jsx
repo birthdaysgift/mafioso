@@ -16,10 +16,8 @@ export default class Join extends Component {
     constructor(props) {
         super(props);
 
-        socket.on('join response', (userID, gameID) => {
-            socket.emit('update request', userID, gameID);
-        });
-        socket.on('update response', (userID, gameJSON) => {
+        socket.on('join response', (userID, gameJSON) => {
+            console.log('join response');
             game_proxy.json = gameJSON;
 
             let game = game_proxy.object;
@@ -34,7 +32,6 @@ export default class Join extends Component {
 
     componentWillUnmount = () => {
         socket.removeAllListeners('join response');
-        socket.removeAllListeners('update response');
     }
 
     handleChange = (e) => {
@@ -44,6 +41,7 @@ export default class Join extends Component {
     }
 
     handleSubmit = (e) => {
+        console.log('join request');
         socket.emit('join request', user_proxy.object.id, game_proxy.object.id);
     };
 

@@ -21,8 +21,8 @@ export default class Lobby extends Component {
 
         this.state = {game: game_proxy.object, audioPlaying: false};
 
-        socket.on('update request', (userID, gameID) => {
-            socket.emit('update response', userID, game_proxy.json);
+        socket.on('game request', (userID, gameID) => {
+            socket.emit('game response', userID, game_proxy.json);
         });
         socket.on('update', (gameJSON) => {
             game_proxy.json = gameJSON;
