@@ -9,8 +9,10 @@ export default class MembersList extends Component {
                             ? <img className="img" src={img}/> : null;
         let members_elements = this.props.members.map((m) => {
             let text = <div className="text">{m.name}</div>;
+            let entryClass = this.props.highlightCondition?.(m)
+                                ? 'entry active' : 'entry';
             return (
-                <div className="entry" key={m.id} onClick={e => this.props.onMemberClick?.(e,m)}> 
+                <div className={entryClass} key={m.id} onClick={e => this.props.onMemberClick?.(e,m)}> 
                     {text} {closeIcon} 
                 </div>
             )

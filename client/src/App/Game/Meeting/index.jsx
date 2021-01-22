@@ -60,7 +60,9 @@ export default class Meeting extends Component {
         return (
             <div id='meeting'>
                 <div className='title'>{this.state.game.title}</div>
-                <MembersList members={this.state.game.members}/>
+                <MembersList 
+                    members={this.state.game.members}
+                    highlightCondition={m => m.state === USER_STATE.READY}/>
                 <Button text={readyButtonText} onClick={this.handleReadyClick}/>
                 <Button text={roleButtonText} onClick={this.handleRoleButtonClick}/>
                 <div className='role'>
