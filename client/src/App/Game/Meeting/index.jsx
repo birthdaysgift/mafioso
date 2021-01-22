@@ -4,8 +4,8 @@ import game_proxy from '../../common/game';
 import user_proxy, { STATE as USER_STATE } from '../../common/user';
 import socket from '../../common/sockets';
 
-import img from '../common/close50x50.png';
 import './style.less';
+import MembersList from '../common/MembersList';
 
 export default class Meeting extends Component {
     static getDerivedStateFromProps = props => ({
@@ -43,35 +43,27 @@ export default class Meeting extends Component {
         this.setState(state => ({showRole: !this.state.showRole}));
     }
 
-    render() {
-        let userID = this.state.user.id;
-        let hostID = this.state.game.host.id;
-        let closeIcon = (userID === hostID) 
-                    ? <img className='img' src={img}/> : null;
-        let members_elements = this.state.game.members.map(m => {
-            let text = <div className='text'>{m.name}</div>
-            let entryClass = (m.state === USER_STATE.READY) 
-                                ? 'entry ready' : 'entry';
-            return (
-                <div className={entryClass}
-                    key={m.id}
-                    onClick={e => {
-                        if ( userID !== hostID) return;
-                        if ( m.id === userID ) return;
-                        this.disconnectUser(m.id, this.state.game.id);
-                    }}>
-                        {text} {closeIcon}
-                </div>
-            )
-        });
+    handleMemberClick = (e, member) => {
+        let user = user_proxy.object;
+        let game = game_proxy.object;
+        if ( user.id !== game.host.id ) return;
+        if ( member.id === game.host.id ) return;
+        this.disconnectUser(member.id, game.id);
+    }
 
+    render() {
+        let user = this.state.user;
+        let game = this.state.game;
         let readyButtonText = (this.state.user.state === USER_STATE.READY) 
                                 ? 'Not Ready' : 'Ready';
         let roleButtonText = this.state.showRole ? 'Hide Role' : 'Show Role';
         return (
             <div id='meeting'>
                 <div className='title'>{this.state.game.title}</div>
-                <div className="members">{members_elements}</div>
+                <MembersList 
+                    members={this.state.game.members}
+                    showCloseIcon={user.id === game.host.id}
+                    onMemberClick={this.handleMemberClick}/>
                 <Button text={readyButtonText} onClick={this.handleReadyClick}/>
                 <Button text={roleButtonText} onClick={this.handleRoleButtonClick}/>
                 <div className='role'>

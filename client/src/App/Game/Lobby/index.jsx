@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import Button from '../../common/Button';
+import MembersList from '../common/MembersList';
 import { RoutingContext } from '../../common/Router';
 import { ROLE } from '../../common/user';
 import { STATE as GAME_STATE } from '../.';
@@ -8,7 +9,6 @@ import game_proxy from '../../common/game';
 import socket from '../../common/sockets';
 import user_proxy, { STATE as USER_STATE } from '../../common/user';
 
-import img from '../common/close50x50.png';
 import audio from './waltz.mp3';
 import './style.less';
 
@@ -74,33 +74,22 @@ export default class Lobby extends Component {
         }
     }
 
+    handleMemberClick = (e, member) => {
+        let user = user_proxy.object;
+        let game = game_proxy.object;
+        if ( user.id !== game.host.id ) return;
+        if ( member.id === game.host.id ) return;
+        this.disconnectUser(member.id, game.id);
+    }
+
     handleAudioEnded = () => {this.setState({audioPlaying: false})};
 
     render () {
         let userID = user_proxy.object.id;
         let hostID = this.state.game.host.id;
-        let gameID = this.state.game.id;
-
-        let closeIcon = (userID === hostID)
-                    ? <img className="img" src={img}/> : null;
         let button = (userID === hostID)
                     ? <Button text='Start' onClick={this.handleStartClick}/> 
                     : <Button text='Exit' onClick={this.handleExitClick}/>
-
-        let members_elements = this.state.game.members.map((m) => {
-            let text = <div className="text">{m.name}</div>;
-            return (
-                <div className="entry" 
-                    key={m.id} 
-                    onClick={e => {
-                        if ( userID !== hostID) return;
-                        if ( m.id === userID ) return;
-                        this.disconnectUser(m.id, gameID);
-                    }}> 
-                    {text} {closeIcon} 
-                </div>
-            )
-        });
 
         let audio = (userID === hostID) 
                 ? (<div className="audio" onClick={this.handleAudioClick}>
@@ -112,7 +101,10 @@ export default class Lobby extends Component {
             <div id='lobby'>
                 <div className='title'>{this.state.game.title}</div>
                 <div className="id">Game ID: {this.state.game.id}</div>
-                <div className="members">{members_elements}</div>
+                <MembersList 
+                    members={this.state.game.members}
+                    showCloseIcon={userID === hostID}
+                    onMemberClick={this.handleMemberClick}/>
                 {button}
                 {audio}
             </div>
