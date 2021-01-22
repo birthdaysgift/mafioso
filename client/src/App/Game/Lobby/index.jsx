@@ -3,10 +3,10 @@ import React, { Component } from 'react';
 import Button from '../../common/Button';
 import { RoutingContext } from '../../common/Router';
 import { ROLE } from '../../common/user';
-import { STATE } from '../.';
+import { STATE as GAME_STATE } from '../.';
 import game_proxy from '../../common/game';
 import socket from '../../common/sockets';
-import user_proxy from '../../common/user';
+import user_proxy, { STATE as USER_STATE } from '../../common/user';
 
 import img from '../common/close50x50.png';
 import audio from './waltz.mp3';
@@ -50,9 +50,10 @@ export default class Lobby extends Component {
             } else {
                 m.role = ROLE.INNOCENT;
             }
+            m.state = USER_STATE.NOT_READY;
             return m;
         });
-        game.state = STATE.MEETING;
+        game.state = GAME_STATE.MEETING;
         game_proxy.object = game;
         socket.emit('update', game_proxy.json);
     };

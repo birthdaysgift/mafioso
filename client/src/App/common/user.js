@@ -13,5 +13,10 @@ const ROLE = {
     INNOCENT: 'innocent'
 }
 
+const STATE = {
+    READY: 'ready',
+    NOT_READY: 'not ready'
+}
+
 export default user_proxy;
-export { ROLE }
+export { ROLE, STATE }

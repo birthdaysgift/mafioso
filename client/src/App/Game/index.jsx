@@ -12,14 +12,14 @@ export default class Game extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {game: game_proxy.object};
+        this.state = {game: game_proxy.object, user: user_proxy.object};
 
         socket.on('update', (gameJSON) => {
             game_proxy.json = gameJSON;
             user_proxy.object = game_proxy.object.members.find(
                 m => m.id === user_proxy.object.id
             );
-            this.setState({game: game_proxy.object});
+            this.setState({game: game_proxy.object, user: user_proxy.object});
         });
 
         socket.on('user disconnected', (userID, gameID) => {
@@ -46,7 +46,7 @@ export default class Game extends Component {
     render() {
         switch(this.state.game.state) {
             case STATE.LOBBY: return <Lobby game={this.state.game}/>;
-            case STATE.MEETING: return <Meeting game={this.state.game}/>
+            case STATE.MEETING: return <Meeting game={this.state.game} user={this.state.user}/>
         }
     }
 }
