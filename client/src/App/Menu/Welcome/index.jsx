@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import Button from '../../common/Button';
 import InputForm from '../../common/InputForm';
-import socket from '../../common/sockets';
+import socket from '../../common/socket';
 import Title from '../Title';
 import user_proxy from '../../common/user';
 

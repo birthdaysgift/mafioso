@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Button from '../../common/Button';
 import game_proxy from '../../common/game';
 import user_proxy, { STATE as USER_STATE } from '../../common/user';
-import socket from '../../common/sockets';
+import socket from '../../common/socket';
 
 import './style.less';
 import MembersList from '../common/MembersList';

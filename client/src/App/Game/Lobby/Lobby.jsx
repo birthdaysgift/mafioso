@@ -5,7 +5,7 @@ import Button from '../../common/Button';
 import MembersList from '../common/MembersList';
 import { RoutingContext } from '../../common/Router';
 import game_proxy from '../../common/game';
-import socket from '../../common/sockets';
+import socket from '../../common/socket';
 import user_proxy from '../../common/user';
 
 import './style.less';

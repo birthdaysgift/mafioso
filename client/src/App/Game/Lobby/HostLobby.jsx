@@ -7,7 +7,7 @@ import { RoutingContext } from '../../common/Router';
 import { ROLE } from '../../common/user';
 import { STATE as GAME_STATE } from '../.';
 import game_proxy from '../../common/game';
-import socket from '../../common/sockets';
+import socket from '../../common/socket';
 import user_proxy, { STATE as USER_STATE } from '../../common/user';
 
 import audio from './waltz.mp3';

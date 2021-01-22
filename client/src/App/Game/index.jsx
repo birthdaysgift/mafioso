@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { RoutingContext } from '../common/Router';
 import game_proxy from '../common/game';
 import user_proxy from '../common/user';
-import socket from '../common/sockets';
+import socket from '../common/socket';
 
 import { HostLobby, Lobby } from './Lobby';
 import Meeting from './Meeting';
