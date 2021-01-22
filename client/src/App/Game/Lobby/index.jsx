@@ -8,7 +8,7 @@ import game_proxy from '../../common/game';
 import socket from '../../common/sockets';
 import user_proxy from '../../common/user';
 
-import img from './close50x50.png';
+import img from '../common/close50x50.png';
 import audio from './waltz.mp3';
 import './style.less';
 
