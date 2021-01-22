@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Button from '../../common/Button';
 import game_proxy from '../../common/game';
+import { STATE as GAME_STATE } from '../.';
 import user_proxy, { STATE as USER_STATE } from '../../common/user';
 import socket from '../../common/socket';
 
@@ -16,6 +17,20 @@ export default class Meeting extends Component {
         super(props);
         
         this.state = {showRole: false};
+    }
+
+    componentDidUpdate = (prevProps) => {
+        if ( this.state.user.id === this.state.game.host.id ) {
+            let everybodyReady = this.state.game.members.every(
+                m => m.state === USER_STATE.READY
+            );
+            if ( everybodyReady ) {
+                let game = this.state.game;
+                game.state = GAME_STATE.NIGHT;
+                game_proxy.object = game;
+                socket.emit('update', game_proxy.json);
+            }
+        }
     }
 
     handleReadyClick = () => {
