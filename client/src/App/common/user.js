@@ -8,4 +8,10 @@ const user_proxy = {
     set object(user) { storage.setItem('user', JSON.stringify(user)) },
 }
 
+const ROLE = {
+    MAFIA: 'mafia',
+    INNOCENT: 'innocent'
+}
+
 export default user_proxy;
+export { ROLE }

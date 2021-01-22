@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 
 import Button from '../../common/Button';
 import { RoutingContext } from '../../common/Router';
+import { ROLE } from '../../common/user';
+import { STATE } from '../.';
 import game_proxy from '../../common/game';
 import socket from '../../common/sockets';
 import user_proxy from '../../common/user';
@@ -38,6 +40,22 @@ export default class Lobby extends Component {
         if ( index === -1) return;
         socket.emit('user disconnected', userID, gameID);
     }
+
+    handleStartClick = () => {
+        let mafiaIndex = Math.floor(Math.random()*this.state.game.members.length);
+        let game = game_proxy.object;
+        game.members = game.members.map((m, i) => {
+            if ( i === mafiaIndex) {
+                m.role = ROLE.MAFIA;
+            } else {
+                m.role = ROLE.INNOCENT;
+            }
+            return m;
+        });
+        game.state = STATE.MEETING;
+        game_proxy.object = game;
+        socket.emit('update', game_proxy.json);
+    };
     
     handleExitClick = () => {
         this.disconnectUser(user_proxy.object.id, game_proxy.object.id);
@@ -65,7 +83,7 @@ export default class Lobby extends Component {
         let closeIcon = (userID === hostID)
                     ? <img className="img" src={img}/> : null;
         let button = (userID === hostID)
-                    ? <Button text='Start'/> 
+                    ? <Button text='Start' onClick={this.handleStartClick}/> 
                     : <Button text='Exit' onClick={this.handleExitClick}/>
 
         let members_elements = this.state.game.members.map((m) => {

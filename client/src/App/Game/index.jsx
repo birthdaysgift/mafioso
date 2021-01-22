@@ -5,6 +5,7 @@ import user_proxy from '../common/user';
 import socket from '../common/sockets';
 
 import Lobby from './Lobby';
+import Meeting from './Meeting';
 
 export default class Game extends Component {
     static contextType = RoutingContext;
@@ -15,6 +16,9 @@ export default class Game extends Component {
 
         socket.on('update', (gameJSON) => {
             game_proxy.json = gameJSON;
+            user_proxy.object = game_proxy.object.members.find(
+                m => m.id === user_proxy.object.id
+            );
             this.setState({game: game_proxy.object});
         });
 
@@ -42,12 +46,14 @@ export default class Game extends Component {
     render() {
         switch(this.state.game.state) {
             case STATE.LOBBY: return <Lobby game={this.state.game}/>;
+            case STATE.MEETING: return <Meeting game={this.state.game}/>
         }
     }
 }
 
 const STATE = {
     LOBBY: 'lobby',
+    MEETING: 'meeting'
 }
 
 export { STATE };
