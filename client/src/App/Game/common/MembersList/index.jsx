@@ -10,7 +10,7 @@ export default class MembersList extends Component {
         let members_elements = this.props.members.map((m) => {
             let text = <div className="text">{m.name}</div>;
             return (
-                <div className="entry" key={m.id} onClick={e => this.props?.onMemberClick(e,m)}> 
+                <div className="entry" key={m.id} onClick={e => this.props.onMemberClick?.(e,m)}> 
                     {text} {closeIcon} 
                 </div>
             )

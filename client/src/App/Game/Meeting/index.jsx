@@ -18,13 +18,6 @@ export default class Meeting extends Component {
         this.state = {showRole: false};
     }
 
-    disconnectUser = (userID, gameID) => {
-        let game = game_proxy.object;
-        let index = game.members.findIndex(m => m.id === userID);
-        if ( index === -1) return;
-        socket.emit('user disconnected', userID, gameID);
-    }
-
     handleReadyClick = () => {
         let game = game_proxy.object;
         let user = user_proxy.object;
@@ -43,14 +36,6 @@ export default class Meeting extends Component {
         this.setState(state => ({showRole: !this.state.showRole}));
     }
 
-    handleMemberClick = (e, member) => {
-        let user = user_proxy.object;
-        let game = game_proxy.object;
-        if ( user.id !== game.host.id ) return;
-        if ( member.id === game.host.id ) return;
-        this.disconnectUser(member.id, game.id);
-    }
-
     render() {
         let user = this.state.user;
         let game = this.state.game;
@@ -60,10 +45,7 @@ export default class Meeting extends Component {
         return (
             <div id='meeting'>
                 <div className='title'>{this.state.game.title}</div>
-                <MembersList 
-                    members={this.state.game.members}
-                    showCloseIcon={user.id === game.host.id}
-                    onMemberClick={this.handleMemberClick}/>
+                <MembersList members={this.state.game.members}/>
                 <Button text={readyButtonText} onClick={this.handleReadyClick}/>
                 <Button text={roleButtonText} onClick={this.handleRoleButtonClick}/>
                 <div className='role'>
