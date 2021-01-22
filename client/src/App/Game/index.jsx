@@ -4,7 +4,7 @@ import game_proxy from '../common/game';
 import user_proxy from '../common/user';
 import socket from '../common/sockets';
 
-import Lobby from './Lobby';
+import { HostLobby, Lobby } from './Lobby';
 import Meeting from './Meeting';
 
 export default class Game extends Component {
@@ -45,7 +45,12 @@ export default class Game extends Component {
 
     render() {
         switch(this.state.game.state) {
-            case STATE.LOBBY: return <Lobby game={this.state.game}/>;
+            case STATE.LOBBY: 
+                if (this.state.user.id === this.state.game.host.id) {
+                    return <HostLobby game={this.state.game}/>;
+                } else {
+                    return <Lobby game={this.state.game}/>
+                }
             case STATE.MEETING: return <Meeting game={this.state.game} user={this.state.user}/>
         }
     }
