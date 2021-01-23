@@ -52,6 +52,8 @@ export default class HostLobby extends Component {
                 member.role = ROLE.INNOCENT;
             }
             member.state = USER_STATE.NOT_READY;
+            member.receivedVotes = new Set();
+            member.vote = undefined;
             index++;
         });
         game.state = GAME_STATE.MEETING;
