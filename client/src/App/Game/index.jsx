@@ -7,6 +7,7 @@ import socket from '../common/socket';
 import { HostLobby, Lobby } from './Lobby';
 import Meeting from './Meeting';
 import Night from './Night';
+import Mafia from './Mafia';
 
 export default class Game extends Component {
     static contextType = RoutingContext;
@@ -54,6 +55,7 @@ export default class Game extends Component {
                 }
             case STATE.MEETING: return <Meeting game={this.state.game} user={this.state.user}/>
             case STATE.NIGHT: return <Night game={this.state.game} user={this.state.user}/>
+            case STATE.MAFIA: return <Mafia game={this.state.game} user={this.state.user}/>
         }
     }
 }
@@ -61,7 +63,8 @@ export default class Game extends Component {
 const STATE = {
     LOBBY: 'lobby',
     MEETING: 'meeting',
-    NIGHT: 'night'
+    NIGHT: 'night',
+    MAFIA: 'mafia'
 }
 
 export { STATE };
