@@ -38,7 +38,8 @@ const ROLE = {
 
 const STATE = {
     READY: 'ready',
-    NOT_READY: 'not ready'
+    NOT_READY: 'not ready',
+    DEAD: 'dead'
 }
 
 export default user_proxy;

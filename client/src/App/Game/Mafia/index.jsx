@@ -4,7 +4,8 @@ import { ROLE as USER_ROLE } from '../../common/user';
 import Button from '../../common/Button';
 import MembersList from '../common/MembersList';
 import NightCover from '../common/NightCover';
-import game_proxy from '../../common/game';
+import game_proxy, { STATE as GAME_STATE } from '../../common/game';
+import { STATE as USER_STATE } from '../../common/user';
 import socket from '../../common/socket';
 
 import audio from './mafia_awake.ogg';
@@ -48,6 +49,18 @@ export default class Mafia extends Component {
         socket.emit('update', game_proxy.json);
     }
 
+    handleConfirmClick = () => {
+        let user = this.state.user;
+        let game = this.state.game;
+        if (user.vote) {
+            game.members.get(user.vote).state = USER_STATE.DEAD;
+            game.members.get(user.id).vote = undefined;
+            game.state = GAME_STATE.DAY;
+            game_proxy.object = game;
+            socket.emit('update', game_proxy.json);
+        }
+    };
+
     render() {
         if (this.props.user.role === USER_ROLE.MAFIA) {
             return (
@@ -58,7 +71,7 @@ export default class Mafia extends Component {
                         members={this.props.game.members}
                         onMemberClick={this.handleMemberClick}
                         highlightCondition={this.highlightCondition}/>
-                    <Button text='Accept' />
+                    <Button text='Confirm' onClick={this.handleConfirmClick}/>
                 </div>
             )
         } else {
