@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { RoutingContext } from '../common/Router';
-import game_proxy from '../common/game';
+import game_proxy, { STATE } from '../common/game';
 import user_proxy from '../common/user';
 import socket from '../common/socket';
 
@@ -59,12 +59,3 @@ export default class Game extends Component {
         }
     }
 }
-
-const STATE = {
-    LOBBY: 'lobby',
-    MEETING: 'meeting',
-    NIGHT: 'night',
-    MAFIA: 'mafia'
-}
-
-export { STATE };

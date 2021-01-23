@@ -8,4 +8,12 @@ const game_proxy = {
     set object(game) { storage.setItem('game', JSON.stringify(game)); },
 }
 
+const STATE = {
+    LOBBY: 'lobby',
+    MEETING: 'meeting',
+    NIGHT: 'night',
+    MAFIA: 'mafia'
+}
+
 export default game_proxy;
+export { STATE };

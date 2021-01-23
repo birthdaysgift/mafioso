@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import NightCover from '../common/NightCover';
-import { STATE as GAME_STATE } from '../.';
+import { STATE as GAME_STATE } from '../../common/game';
 import game_proxy from '../../common/game';
 import socket from '../../common/socket';
 

@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import Button from '../../common/Button';
 import InputForm from '../../common/InputForm';
 import Title from '../Title';
-import { STATE as GAME_STATE } from '../../Game';
+import { STATE as GAME_STATE } from '../../common/game';
 import { RoutingContext } from '../../common/Router';
 import game_proxy from '../../common/game';
 import user_proxy from '../../common/user';

@@ -5,7 +5,7 @@ import Button from '../../common/Button';
 import MembersList from '../common/MembersList';
 import { RoutingContext } from '../../common/Router';
 import { ROLE } from '../../common/user';
-import { STATE as GAME_STATE } from '../.';
+import { STATE as GAME_STATE } from '../../common/game';
 import game_proxy from '../../common/game';
 import socket from '../../common/socket';
 import user_proxy, { STATE as USER_STATE } from '../../common/user';
