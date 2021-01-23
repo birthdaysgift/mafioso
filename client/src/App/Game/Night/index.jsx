@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 
 import audio from './city_asleep.ogg';
+import './style.less';
+
 export default class Night extends Component {
     constructor(props) {
         super(props);
@@ -28,7 +30,10 @@ export default class Night extends Component {
     }
     render() {
         return (
-            <h1>{this.state.counter > 0 ? this.state.counter : 'Night'}</h1>
+            <div id='night'>
+                <h1>{this.state.counter > 0 ? this.state.counter : 'Night'}</h1>
+                <h3>Close Your Eyes!</h3>
+            </div>
         )
     }
 }
