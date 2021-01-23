@@ -53,7 +53,7 @@ export default class Game extends Component {
                     return <Lobby game={this.state.game}/>
                 }
             case STATE.MEETING: return <Meeting game={this.state.game} user={this.state.user}/>
-            case STATE.NIGHT: return <Night/>
+            case STATE.NIGHT: return <Night game={this.state.game} user={this.state.user}/>
         }
     }
 }

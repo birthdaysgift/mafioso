@@ -1,12 +1,18 @@
 import React, { Component } from 'react';
 
+import audio from './city_asleep.ogg';
 export default class Night extends Component {
     constructor(props) {
         super(props);
 
+        this.decrCounter = this.decrCounter.bind(this);
+
         this.state = {counter: 3};
         this.intervalID = setInterval(this.decrCounter, 1000);
-        this.decrCounter = this.decrCounter.bind(this);
+
+        if (this.props.user.id === this.props.game.host.id) {
+            (new Audio(audio)).play();
+        }
     }
 
     componentWillUnmount = () => clearInterval(this.intervalID);
