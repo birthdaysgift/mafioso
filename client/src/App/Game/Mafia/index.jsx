@@ -5,9 +5,17 @@ import Button from '../../common/Button';
 import MembersList from '../common/MembersList';
 import NightCover from '../common/NightCover';
 
+import audio from './mafia_awake.ogg';
 import './style.less';
 
 export default class Mafia extends Component {
+    constructor(props) {
+        super(props);
+
+        if ( this.props.user.id === this.props.game.host.id ){
+            (new Audio(audio)).play();
+        }
+    }
 
     render() {
         if (this.props.user.role === USER_ROLE.MAFIA) {
