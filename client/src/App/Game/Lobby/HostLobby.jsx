@@ -36,23 +36,23 @@ export default class HostLobby extends Component {
     }
 
     disconnectUser = (userID, gameID) => {
-        let game = game_proxy.object;
-        let index = game.members.findIndex(m => m.id === userID);
-        if ( index === -1) return;
-        socket.emit('user disconnected', userID, gameID);
+        if (game_proxy.object.members.has(userID)) {
+            socket.emit('user disconnected', userID, gameID);
+        }
     }
 
     handleStartClick = () => {
-        let mafiaIndex = Math.floor(Math.random()*this.state.game.members.length);
+        let mafiaIndex = Math.floor(Math.random()*this.state.game.members.size);
+        let index = 0;
         let game = game_proxy.object;
-        game.members = game.members.map((m, i) => {
-            if ( i === mafiaIndex) {
-                m.role = ROLE.MAFIA;
+        game.members.forEach((member, id) => {
+            if ( index === mafiaIndex) {
+                member.role = ROLE.MAFIA;
             } else {
-                m.role = ROLE.INNOCENT;
+                member.role = ROLE.INNOCENT;
             }
-            m.state = USER_STATE.NOT_READY;
-            return m;
+            member.state = USER_STATE.NOT_READY;
+            index++;
         });
         game.state = GAME_STATE.MEETING;
         game_proxy.object = game;
@@ -80,9 +80,6 @@ export default class HostLobby extends Component {
     handleAudioEnded = () => {this.setState({audioPlaying: false})};
 
     render () {
-        let userID = user_proxy.object.id;
-        let hostID = this.state.game.host.id;
-
         let audio = (
             <div className="audio" onClick={this.handleAudioClick}>
                 {this.state.audioPlaying ? 'Stop sound' : 'Sound test'}

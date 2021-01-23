@@ -7,16 +7,20 @@ export default class MembersList extends Component {
     render() {
         let closeIcon = (this.props.showCloseIcon)
                             ? <img className="img" src={img}/> : null;
-        let members_elements = this.props.members.map((m) => {
-            let text = <div className="text">{m.name}</div>;
-            let entryClass = this.props.highlightCondition?.(m)
+
+        let members_elements = [];
+        this.props.members.forEach((member, id) => {
+            let text = <div className="text">{member.name}</div>;
+            let entryClass = this.props.highlightCondition?.(member)
                                 ? 'entry active' : 'entry';
-            return (
-                <div className={entryClass} key={m.id} onClick={e => this.props.onMemberClick?.(e,m)}> 
+            members_elements.push(
+                <div className={entryClass} key={id} 
+                    onClick={e => this.props.onMemberClick?.(e,member)}> 
                     {text} {closeIcon} 
                 </div>
-            )
+            );
         });
+
         return (
             <div className="members">
                 {members_elements}

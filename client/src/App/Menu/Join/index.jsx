@@ -20,7 +20,8 @@ export default class Join extends Component {
             game_proxy.json = gameJSON;
 
             let game = game_proxy.object;
-            game.members.push(user_proxy.object);
+            let user = user_proxy.object;
+            game.members.set(user.id, user);
             game_proxy.object = game;
             
             socket.emit('update', game_proxy.json);

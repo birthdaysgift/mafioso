@@ -18,9 +18,7 @@ export default class Game extends Component {
 
         socket.on('update', (gameJSON) => {
             game_proxy.json = gameJSON;
-            user_proxy.object = game_proxy.object.members.find(
-                m => m.id === user_proxy.object.id
-            );
+            user_proxy.object = game_proxy.object.members.get(user_proxy.object.id)
             this.setState({game: game_proxy.object, user: user_proxy.object});
         });
 
@@ -31,9 +29,7 @@ export default class Game extends Component {
                 this.context.setRoute(['menu', 'new']);
             } else {
                 let game = game_proxy.object;
-                let index = game.members.findIndex((m) => m.id === userID);
-                if ( index === -1) return; 
-                game.members.splice(index, 1)
+                game.members.delete(userID);
                 game_proxy.object = game;
                 this.setState({game: game});
             }

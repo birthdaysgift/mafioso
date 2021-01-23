@@ -22,7 +22,8 @@ export default class Create extends Component {
             let game = game_proxy.object;
             game.id = gameID;
             game.host = user;
-            game.members = [user];
+            game.members = new Map();
+            game.members.set(user.id, user);
             game.state = GAME_STATE.LOBBY;
             game_proxy.object = game;
 

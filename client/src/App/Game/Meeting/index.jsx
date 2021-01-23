@@ -21,15 +21,15 @@ export default class Meeting extends Component {
 
     componentDidUpdate = (prevProps) => {
         if ( this.state.user.id === this.state.game.host.id ) {
-            let everybodyReady = this.state.game.members.every(
-                m => m.state === USER_STATE.READY
-            );
-            if ( everybodyReady ) {
-                let game = this.state.game;
-                game.state = GAME_STATE.NIGHT;
-                game_proxy.object = game;
-                socket.emit('update', game_proxy.json);
-            }
+            for (const member of this.state.game.members.values()) {
+                if (member.state !== USER_STATE.READY) return;
+            } 
+
+            // runs only if all members are ready
+            let game = this.state.game;
+            game.state = GAME_STATE.NIGHT;
+            game_proxy.object = game;
+            socket.emit('update', game_proxy.json);
         }
     }
 
@@ -41,8 +41,7 @@ export default class Meeting extends Component {
         } else if ( user.state === USER_STATE.NOT_READY) {
             user.state = USER_STATE.READY;
         }
-        let userIndex =  game.members.findIndex(m => m.id === user.id);
-        game.members[userIndex] = user;
+        game.members.set(user.id, user);
         game_proxy.object = game;
         socket.emit('update', game_proxy.json);
     }
@@ -52,8 +51,6 @@ export default class Meeting extends Component {
     }
 
     render() {
-        let user = this.state.user;
-        let game = this.state.game;
         let readyButtonText = (this.state.user.state === USER_STATE.READY) 
                                 ? 'Not Ready' : 'Ready';
         let roleButtonText = this.state.showRole ? 'Hide Role' : 'Show Role';
