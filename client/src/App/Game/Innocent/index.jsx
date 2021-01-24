@@ -63,6 +63,7 @@ export default class Innocent extends Component {
                 <div className="hint">Choose a suspect!</div>
                 <MembersList 
                     members={this.state.game.members} 
+                    showVotes={true}
                     showCondition={this.showCondition}
                     highlightCondition={this.highlightCondition}
                     onMemberClick={this.handleMemberClick}/>

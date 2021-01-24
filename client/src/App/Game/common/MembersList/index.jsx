@@ -15,11 +15,14 @@ export default class MembersList extends Component {
             let text = <div className="text">{member.name}</div>;
             let entryClass = this.props.highlightCondition?.(member)
                                 ? 'entry active' : 'entry';
+            let votes = (this.props.showVotes)
+                    ? <div className="votes">{member.receivedVotes.size}</div>
+                    : null;
             if (this.showCondition(member)) {
                 members_elements.push(
                     <div className={entryClass} key={id} 
                         onClick={e => this.props.onMemberClick?.(e,member)}> 
-                        {text} {closeIcon} 
+                        {text} {closeIcon} {votes}
                     </div>
                 );
             }
