@@ -26,6 +26,29 @@ export default class Mafia extends Component {
         }
     }
 
+    componentDidUpdate = () => {
+        let user = this.state.user;
+        let game = this.state.game;
+        if (user.state === USER_STATE.READY && user.vote) {
+            game.members.get(user.vote).state = USER_STATE.DEAD;
+            game.members.get(user.vote).receivedVotes = new Set();
+            game.members.get(user.id).vote = undefined;
+            game.state = GAME_STATE.DAY;
+            if (game.members.get(user.vote).role === USER_ROLE.MAFIA) {
+                game.mafiaAlive--;
+            } else {
+                game.innocentAlive--;
+            }
+            game.members.forEach(member => {
+                if (member.state !== USER_STATE.DEAD) {
+                    member.state = USER_STATE.NOT_READY;
+                }
+            });
+            game_proxy.object = game;
+            socket.emit('update', game_proxy.json);
+        }
+    }
+
     highlightCondition = (member) => member.receivedVotes.has(this.state.user.id);
 
     handleMemberClick = (event, member) => {
@@ -52,19 +75,13 @@ export default class Mafia extends Component {
     handleConfirmClick = () => {
         let user = this.state.user;
         let game = this.state.game;
-        if (user.vote) {
-            game.members.get(user.vote).state = USER_STATE.DEAD;
-            game.members.get(user.vote).receivedVotes = new Set();
-            game.members.get(user.id).vote = undefined;
-            game.state = GAME_STATE.DAY;
-            if (game.members.get(user.vote).role === USER_ROLE.MAFIA) {
-                game.mafiaAlive--;
-            } else {
-                game.innocentAlive--;
-            }
-            game_proxy.object = game;
-            socket.emit('update', game_proxy.json);
+        if (game.members.get(user.id).state === USER_STATE.NOT_READY) {
+            game.members.get(user.id).state = USER_STATE.READY;
+        } else {
+            game.members.get(user.id).state = USER_STATE.NOT_READY;
         }
+        game_proxy.object = game;
+        socket.emit('update', game_proxy.json);
     };
 
     render() {
@@ -77,7 +94,10 @@ export default class Mafia extends Component {
                         members={this.props.game.members}
                         onMemberClick={this.handleMemberClick}
                         highlightCondition={this.highlightCondition}/>
-                    <Button text='Confirm' onClick={this.handleConfirmClick}/>
+                    <Button 
+                        text={this.state.user.state === USER_STATE.NOT_READY 
+                                ? 'Confirm' : 'Cancel'}
+                        onClick={this.handleConfirmClick}/>
                 </div>
             )
         } else {
