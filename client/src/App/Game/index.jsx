@@ -6,6 +6,7 @@ import socket from '../common/socket';
 
 import Lobby from './Lobby';
 import Day from './Day';
+import Innocent from './Innocent';
 import Meeting from './Meeting';
 import Night from './Night';
 import Mafia from './Mafia';
@@ -49,6 +50,7 @@ export default class Game extends Component {
             case STATE.NIGHT: return <Night game={this.state.game} user={this.state.user}/>
             case STATE.MAFIA: return <Mafia game={this.state.game} user={this.state.user}/>
             case STATE.DAY: return <Day game={this.state.game} user={this.state.user}/>
+            case STATE.INNOCENT: return <Innocent game={this.state.game} user={this.state.user}/>
         }
     }
 }
