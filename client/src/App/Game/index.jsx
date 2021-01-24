@@ -26,7 +26,7 @@ export default class Game extends Component {
 
         socket.on('user disconnected', (userID, gameID) => {
             if (userID === user_proxy.object.id 
-                    || userID === game_proxy.object.host.id) {
+                    || userID === game_proxy.object.hostID) {
                 game_proxy.object = {};
                 this.context.setRoute(['menu', 'new']);
             } else {

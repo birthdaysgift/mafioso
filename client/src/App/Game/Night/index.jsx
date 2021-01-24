@@ -11,7 +11,7 @@ export default class Night extends Component {
     constructor(props) {
         super(props);
 
-        if (this.props.user.id === this.props.game.host.id) {
+        if (this.props.user.id === this.props.game.hostID) {
             (new Audio(audio)).play();
 
             this.timeoutID = setTimeout(() => {

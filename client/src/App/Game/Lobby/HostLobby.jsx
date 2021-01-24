@@ -75,8 +75,8 @@ export default class HostLobby extends Component {
     handleMemberClick = (e, member) => {
         let user = user_proxy.object;
         let game = game_proxy.object;
-        if ( user.id !== game.host.id ) return;
-        if ( member.id === game.host.id ) return;
+        if ( user.id !== game.hostID ) return;
+        if ( member.id === game.hostID ) return;
         this.disconnectUser(member.id, game.id);
     }
 

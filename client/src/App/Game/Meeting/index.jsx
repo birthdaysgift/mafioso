@@ -20,7 +20,7 @@ export default class Meeting extends Component {
     }
 
     componentDidUpdate = (prevProps) => {
-        if ( this.state.user.id === this.state.game.host.id ) {
+        if ( this.state.user.id === this.state.game.hostID ) {
             for (const member of this.state.game.members.values()) {
                 if (member.state !== USER_STATE.READY) return;
             } 

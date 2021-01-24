@@ -16,7 +16,7 @@ export default class Lobby extends Component {
         this.state = {game: this.props.game, user: this.props.user};
     }
     render() {
-        if (this.state.user.id === this.state.game.host.id) {
+        if (this.state.user.id === this.state.game.hostID) {
             return <HostLobby game={this.state.game}/>;
         } else {
             return <ClientLobby game={this.state.game}/>

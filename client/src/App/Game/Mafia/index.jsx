@@ -21,7 +21,7 @@ export default class Mafia extends Component {
 
         this.state = {game: this.props.game, user: this.props.user};
 
-        if ( this.props.user.id === this.props.game.host.id ){
+        if ( this.props.user.id === this.props.game.hostID ){
             (new Audio(audio)).play();
         }
     }
