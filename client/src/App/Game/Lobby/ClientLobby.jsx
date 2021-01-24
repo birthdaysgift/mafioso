@@ -8,9 +8,7 @@ import game_proxy from '../../common/game';
 import socket from '../../common/socket';
 import user_proxy from '../../common/user';
 
-import './style.less';
-
-export default class Lobby extends Component {
+export default class ClientLobby extends Component {
     static contextType = RoutingContext;
     static getDerivedStateFromProps = props => ({game: props.game});
 

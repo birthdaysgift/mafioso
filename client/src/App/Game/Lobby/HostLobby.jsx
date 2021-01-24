@@ -11,7 +11,6 @@ import socket from '../../common/socket';
 import user_proxy, { STATE as USER_STATE } from '../../common/user';
 
 import audio from './waltz.mp3';
-import './style.less';
 
 export default class HostLobby extends Component {
     static contextType = RoutingContext;
