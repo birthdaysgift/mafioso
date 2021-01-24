@@ -52,6 +52,8 @@ export default class Mafia extends Component {
         }
     }
 
+    showCondition = (member) =>  member.state !== USER_STATE.DEAD;
+
     highlightCondition = (member) => member.receivedVotes.has(this.state.user.id);
 
     handleMemberClick = (event, member) => {
@@ -99,6 +101,7 @@ export default class Mafia extends Component {
                 <div className='hint'>Choose a victim!</div>
                 <MembersList 
                     members={this.props.game.members}
+                    showCondition={this.showCondition}
                     onMemberClick={this.handleMemberClick}
                     highlightCondition={this.highlightCondition}/>
                 <Button 
