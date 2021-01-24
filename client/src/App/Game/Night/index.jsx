@@ -14,7 +14,7 @@ export default class Night extends Component {
         if (this.props.user.id === this.props.game.host.id) {
             (new Audio(audio)).play();
 
-            setTimeout(() => {
+            this.timeoutID = setTimeout(() => {
                 let game = game_proxy.object;
                 game.state = GAME_STATE.MAFIA;
                 game_proxy.object = game;
@@ -22,6 +22,8 @@ export default class Night extends Component {
             }, 7000);
         }
     }
+
+    componentWillUnmount = () => clearTimeout(this.timeoutID);
 
     render() {
         return <NightCover counter={5} />;
