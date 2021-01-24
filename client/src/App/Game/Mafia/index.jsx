@@ -56,6 +56,7 @@ export default class Mafia extends Component {
             game.members.get(user.vote).state = USER_STATE.DEAD;
             game.members.get(user.id).vote = undefined;
             game.state = GAME_STATE.DAY;
+            game.innocentAlive--;
             game_proxy.object = game;
             socket.emit('update', game_proxy.json);
         }

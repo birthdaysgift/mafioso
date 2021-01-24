@@ -56,6 +56,8 @@ export default class HostLobby extends Component {
             member.vote = undefined;
             index++;
         });
+        game.mafiaAlive = 1;
+        game.innocentAlive = game.members.size - game.mafiaAlive;
         game.state = GAME_STATE.MEETING;
         game_proxy.object = game;
         socket.emit('update', game_proxy.json);

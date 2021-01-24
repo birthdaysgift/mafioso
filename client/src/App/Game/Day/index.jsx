@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 
 import Dead from '../Dead';
+import InnocentWin from '../InnocentWin';
+import MafiaWin from '../MafiaWin';
 import { STATE as USER_STATE } from '../../common/user';
 
 import audio_mafia from './mafia_asleep.ogg';
@@ -20,6 +22,8 @@ export default class Day extends Component {
     }
 
     render() {
+        if (this.props.game.innocentAlive === 0) return <MafiaWin/>
+        if (this.props.game.mafiaAlive === 0) return <InnocentWin/>
         if (this.props.user.state === USER_STATE.DEAD) return <Dead/>
         else return <h1>Day!</h1>;
     }
