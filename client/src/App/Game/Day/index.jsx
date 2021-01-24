@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 
-import Dead from '../Dead';
-import InnocentWin from '../InnocentWin';
-import MafiaWin from '../MafiaWin';
+import Dead from '../common/Dead';
+import InnocentWin from '../common/InnocentWin';
+import MafiaWin from '../common/MafiaWin';
 import { STATE as USER_STATE } from '../../common/user';
 
 import audio_mafia from './mafia_asleep.ogg';
