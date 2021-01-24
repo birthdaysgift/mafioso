@@ -54,6 +54,7 @@ export default class Mafia extends Component {
         let game = this.state.game;
         if (user.vote) {
             game.members.get(user.vote).state = USER_STATE.DEAD;
+            game.members.get(user.vote).receivedVotes = new Set();
             game.members.get(user.id).vote = undefined;
             game.state = GAME_STATE.DAY;
             if (game.members.get(user.vote).role === USER_ROLE.MAFIA) {
