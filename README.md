@@ -1,4 +1,4 @@
-# ![](https://raw.githubusercontent.com/birthdaysgift/mafioso/master/client/src/logo/logo50x50.png "Mafioso") Mafioso
+# ![](https://raw.githubusercontent.com/birthdaysgift/mafioso/master/client/src/App/common/logo/logo50x50.png "Mafioso") Mafioso
 
 [Mafioso](http://195.133.1.11:3000/) is an online helper for your Mafia party games.
 
