@@ -27,7 +27,7 @@ export default class Meeting extends Component {
 
             // runs only if all members are ready
             let game = this.state.game;
-            game.state = GAME_STATE.NIGHT;
+            game.state = GAME_STATE.SUNSET;
             game.members.forEach(member => member.state = USER_STATE.NOT_READY);
             game_proxy.object = game;
             socket.emit('update', game_proxy.json);

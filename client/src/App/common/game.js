@@ -34,9 +34,9 @@ const game_proxy = {
 const STATE = {
     LOBBY: 'lobby',
     MEETING: 'meeting',
-    NIGHT: 'night',
+    SUNSET: 'sunset',
     MAFIA: 'mafia',
-    DAY: 'day',
+    DAWN: 'dawn',
     INNOCENT: 'innocent'
 }
 

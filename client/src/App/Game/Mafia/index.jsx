@@ -36,7 +36,7 @@ export default class Mafia extends Component {
             game.members.get(user.vote).state = USER_STATE.DEAD;
             game.members.get(user.vote).receivedVotes = new Set();
             game.members.get(user.id).vote = undefined;
-            game.state = GAME_STATE.DAY;
+            game.state = GAME_STATE.DAWN;
             if (game.members.get(user.vote).role === USER_ROLE.MAFIA) {
                 game.mafiaAlive--;
             } else {

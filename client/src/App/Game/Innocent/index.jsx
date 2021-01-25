@@ -59,7 +59,7 @@ export default class Innocent extends Component {
                 game.innocentAlive--;
             }
         }
-        game.state = GAME_STATE.NIGHT;
+        game.state = GAME_STATE.SUNSET;
         game.members.forEach(member => {
             if (member.state !== USER_STATE.DEAD) {
                 member.state = USER_STATE.NOT_READY;

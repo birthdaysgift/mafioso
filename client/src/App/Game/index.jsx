@@ -5,10 +5,10 @@ import user_proxy from '../common/user';
 import socket from '../common/socket';
 
 import Lobby from './Lobby';
-import Day from './Day';
+import Sunset from './Sunset';
 import Innocent from './Innocent';
 import Meeting from './Meeting';
-import Night from './Night';
+import Dawn from './Dawn';
 import Mafia from './Mafia';
 
 export default class Game extends Component {
@@ -47,9 +47,9 @@ export default class Game extends Component {
         switch(this.state.game.state) {
             case STATE.LOBBY: return <Lobby game={this.state.game} user={this.state.user}/>
             case STATE.MEETING: return <Meeting game={this.state.game} user={this.state.user}/>
-            case STATE.NIGHT: return <Night game={this.state.game} user={this.state.user}/>
+            case STATE.SUNSET: return <Sunset game={this.state.game} user={this.state.user}/>
             case STATE.MAFIA: return <Mafia game={this.state.game} user={this.state.user}/>
-            case STATE.DAY: return <Day game={this.state.game} user={this.state.user}/>
+            case STATE.DAWN: return <Dawn game={this.state.game} user={this.state.user}/>
             case STATE.INNOCENT: return <Innocent game={this.state.game} user={this.state.user}/>
         }
     }
