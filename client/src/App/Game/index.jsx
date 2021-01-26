@@ -46,8 +46,18 @@ export default class Game extends Component {
     }
 
     render() {
-        if (this.state.game.mafiaAlive === 0) return <InnocentWin/>;
-        if (this.state.game.innocentAlive === 0) return <MafiaWin/>;
+        if (this.state.game.mafiaAlive === 0) {
+            game_proxy.object = {};
+            return <InnocentWin 
+                        hostID={this.state.game.hostID} 
+                        userID={this.state.user.id}/>;
+        }
+        if (this.state.game.innocentAlive === 0) {
+            game_proxy.object = {};
+            return <MafiaWin 
+                        hostID={this.state.game.hostID} 
+                        userID={this.state.user.id}/>;
+        } 
 
         switch(this.state.game.state) {
             case STATE.LOBBY: return <Lobby game={this.state.game} user={this.state.user}/>
