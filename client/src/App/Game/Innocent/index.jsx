@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 
 import Button from '../../common/Button';
 import Dead from '../common/Dead';
-import InnocentWin from '../common/InnocentWin';
-import MafiaWin from '../common/MafiaWin';
 import MembersList from '../common/MembersList';
 import { STATE as USER_STATE, ROLE as USER_ROLE } from '../../common/user';
 import game_proxy, { STATE as GAME_STATE } from '../../common/game';
@@ -107,8 +105,6 @@ export default class Innocent extends Component {
     };
 
     render() {
-        if (this.props.game.innocentAlive === 0) return <MafiaWin/>
-        if (this.props.game.mafiaAlive === 0) return <InnocentWin/>
         if (this.props.user.state === USER_STATE.DEAD) return <Dead/>
 
         else return (

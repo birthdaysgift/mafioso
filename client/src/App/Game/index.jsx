@@ -5,6 +5,8 @@ import user_proxy from '../common/user';
 import socket from '../common/socket';
 
 import Lobby from './Lobby';
+import InnocentWin from './common/InnocentWin';
+import MafiaWin from './common/MafiaWin';
 import Sunset from './Sunset';
 import Innocent from './Innocent';
 import Meeting from './Meeting';
@@ -44,6 +46,9 @@ export default class Game extends Component {
     }
 
     render() {
+        if (this.state.game.mafiaAlive === 0) return <InnocentWin/>;
+        if (this.state.game.innocentAlive === 0) return <MafiaWin/>;
+
         switch(this.state.game.state) {
             case STATE.LOBBY: return <Lobby game={this.state.game} user={this.state.user}/>
             case STATE.MEETING: return <Meeting game={this.state.game} user={this.state.user}/>
